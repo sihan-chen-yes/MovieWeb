@@ -4,7 +4,7 @@ from django.http.response import JsonResponse
 # Create your views here.
 
 user = "root"
-password = "61lyx520837"
+password = "123"
 database = "movie"
 host = "localhost"
 
