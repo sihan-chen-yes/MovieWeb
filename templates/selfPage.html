@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">  <!--  -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>selfPage</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+    {% load static %}
+    <link type="text/css" rel="stylesheet" href="{% static "css/selfPage.css" %}">
+
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
+    <style>
+        span{
+    color: #ccc;
+    margin-right: 15px;
+    vertical-align: middle;
+    display: inline-block;
+        }
+
+        li {
+    text-align: -webkit-match-parent;
+    display: list-item;
+        }
+    </style>
+
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <!-- 先不管这个header -->
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html"> <span class="glyphicon glyphicon-shopping-cart"></span>  电影网站</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav" style="margin-top: 3px">
+                <li><a href="index.html"> <span class="glyphicon glyphicon-home"></span>  首页</a></li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="找点新鲜玩意..." id="searchInput">
+                </div>
+                <input type="button" class="btn btn-default" onclick="jumpSearch()" value="Submit">
+            </form>
+            <div class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'movieSquare' %}">广场</a></li>
+                <li class="dropdown" id="UserDropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="UserName">
+                        <span>我的</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'selfPage' %}">个人主页</a></li>
+                        <li><a href="{% url 'login' %}" onclick="delCookie()">退出登录</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" ></a></li>
+            </div>
+        </div><!-- /.navbar-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="header-container">
+
+	<style>
+    .common-layer-cover{position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: 10001;background: rgba(0,0,0,0.5);}
+    .common-layer-cover .set-bg-pop{position: absolute; width: 540px; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 2px; background-color: #FFF;}
+    .tip-wrap{position: relative; padding: 14px 20px; border-bottom: 4px solid #f7f7f7;}
+    .tip-wrap .set-bg-tab{font-size: 14px; font-weight: 500; color: #333; text-align: center;}
+    .tip-wrap .set-bg-tab a{position: relative; font-weight: 300;}
+    .tip-wrap .set-bg-tab a.selected{font-weight: 500;}
+    .tip-wrap .set-bg-tab a.selected:after{content: ""; position: absolute; width: 20px; height: 4px; background-color: #e74949; left: 50%; transform: translateX(-50%); bottom: -14px;}
+    .tip-wrap .set-bg-tab a.custom{margin-right: 40px;}
+    .tip-wrap .tip-title{font-size: 14px; font-weight: 600px; color: #333;}
+    .tip-wrap .dialog-close{position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer;}
+    .tip-wrap .dialog-close i:before{font-size: 14px; color: #000;}
+    .tip-wrap .dialog-close i:hover:before{color: #666;}
+    .set-bg-pop-drag{width: 100%;background-color: #fff;height: 30px;cursor: move;vertical-align: middle;}
+    .set-bg-pop-drag span {margin-left: -7px;margin-top: 5px;font-size: 14px;}
+
+    .set-bg-pop-content{position: relative; padding: 20px;}
+    .set-bg-main{overflow: hidden; height: 319px; overflow-y: auto; background-color: #f7f7f7;}
+    .set-bg-main::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,0)}
+    .set-bg-main::-webkit-scrollbar{display:none}
+    .set-bg-main .set-bg-2{padding: 0 20px;}
+    .bgd-list{margin-right: -25px;*padding-bottom: 30px;}
+    .bgd-list li{cursor: pointer;border: 2px solid #EFEFEF;border-radius: 2px;width: 153px;height: 104px;margin: 0 20px 20px 0 ; float: left;background-color: #f9f9f9; box-sizing: border-box;}
+    .bgd-list li:nth-of-type(3n){margin-right: 0;}
+    .bgd-list li.selected{border-color: #e74b3b;}
+    .bgd-list li img{width: 100%;height: 100%;}
+    .set-bg-pre{height: 116px;background-color: rgba(0, 0, 0, 0.1);text-align: center; margin-top: 88px; overflow: hidden; position: relative; background-repeat: no-repeat; background-size: cover; background-position: center;}
+    .set-bg-pre .bg-cover{position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(0,0,0,.4);}
+    .set-bg-pre .loading-cover{position: absolute; width: 100%; height: 100%; top: 0; left: 0;}
+    .set-bg-pre img{max-height: 100%;}
+    .upload-tip{font-size: 12px; font-weight: 300; color: #999; text-align: center; padding-top: 10px;}
+    .set-bg-btn{height: 160px;}
+    .tc{text-align: center;margin-top: 20px;}
+    .button-group{display: block; width: 100px; height: 36px; line-height: 36px; text-align: center; font-size: 14px; font-weight: 500; color: #fff; border-radius: 2px; margin: 30px auto 0;}
+    .uploadify-button{background: #e74b3b;border:none;margin-left: 0;}
+    .uploadify-queue-item *{display: none;}
+    .uploadify-queue-item .uploadify-progress{display: block; position: absolute; width: 400px; height: 4px; border-radius: 2px; background-color: rgba(255, 255, 255, 0.4); top: 50%; left: 50%; transform: translate(-50%, -50%); border: none;}
+    .uploadify-queue-item .uploadify-progress .uploadify-progress-bar{display: block; border-radius: 2px; background-color: #fff;}
+    #id-upload-bg{width: 100%; height: 100%;}
+    #id-upload-bg .bg-cover{position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(0,0,0,.4);}
+    #file_upload_1-button{position: absolute; width: 100%; height: 100%; top: 0; left: 0; padding: 0; margin: 0; border-radius: 0; background-color: rgba(0,0,0,0); font-size: 16px; font-weight: 500; color: #fff; line-height: 116px;}
+</style>
+
+
+
+<div class="new" id="selfInfo">
+	<div class="banner-container">
+		<div class="banner-wrap">
+			<div class="banner-linear">
+				<!-- <img class="banner-img" src="https://cs.xinpianchang.com/app/user/html/stars/css/skin27/bg-big.jpg"> -->
+
+				<!-- <div class="bannerbg" ></div>
+				 -->
+				<span class="avator-wrap-s">
+					<img src="https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789">
+									</span>
+			</div>
+		</div>
+	</div>
+	<div class="creator-info-wrap">
+		<div class="creator-info">
+			<div class="btn-wrap">
+
+
+			</div>
+			<p class="creator-name fs_26 fw_600 c_b_26">这里是您的个人主页:)
+
+                <a class="user-settings" v-on:click="edit"></a>
+							</p>
+
+		</div>
+	</div>
+	<div class="index-tab">
+
+		<ul class="tab-list">
+
+			<li class="last select"><a class="fs_16 fw_300 c_b_26">资料</a></li>
+		</ul>
+		<span class="red-underline"></span>  <!--这个红色之后修改一下 -->
+	</div>
+
+
+<!--
+		<div class="banner-wrap">
+			<div class="banner-linear">    -->
+				<!-- <img class="banner-img" src="https://cs.xinpianchang.com/app/user/html/stars/css/skin27/bg-big.jpg"> -->
+
+				<!-- <div class="bannerbg" ></div>
+				 -->
+<!--				<span class="avator-wrap-s">
+					<img src="https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789">
+									</span>
+			</div>
+		</div>
+-->
+
+
+
+<div class="tab-container" style="width:800px;">
+		<div class="creator-profiles fs_14 clearfix">
+				<div class="name">
+                   <!-- <label>昵称：[[ name ]]</label>  -->
+
+			        <span class="title">昵称：</span>
+			        <span class="con"><span class="c_b_9">[[name]]</span></span>
+                </div>
+            <div></div>
+                <div class="">
+			        <span class="title">性别：</span>
+			        <span class="con"><span class="c_b_9">[[gender]]</span></span>
+		        </div>
+            <div></div>
+                <div class="name">
+			        <span class="title">邮箱：</span>
+			        <span class="con"><span class="c_b_9">[[email]]</span></span>
+		        </div>
+            <div></div>
+                <div class="name">
+			        <span class="title">电话：</span>
+			        <span class="con"><span class="c_b_9">[[phone]]</span></span>
+		        </div>
+
+                   </div>
+</div>
+
+
+        <div style="text-align:center">
+
+<div class="" style="margin-top:30px">
+
+    <div style="padding: 0 0 30px 0;text-align:center;">
+        <h3><b>您的收藏</b></h3>
+    </div>
+    <div class="box2" style="margin-left:355px">
+        <ul>
+
+            <li class="" v-for="movie in movies" style="margin-bottom:190px;margin-left:-100px">
+                <div class="com" style="margin-bottom:30px;padding:20px 0 0 0">
+                <a v-on:click="toMoviePage(movie.film_id)"><img v-bind:src="movie.picture" style="width:120px;height:170px"></a>
+                    <div style="font-size:16px;padding:5px 0 40px 0">
+                <p><a v-on:click="toMoviePage(movie.film_id)">[[movie.film_name]]</a></p>
+                    </div>
+                    </div>
+            </li>
+
+        </ul>
+        </div>
+    </div>
+
+                   </div>
+
+
+
+
+
+
+
+<!--后面可以把那边热榜/收藏夹加过来，到时候copy就行-->
+<script>
+        var vm = new Vue({
+            el:"#selfInfo",
+            delimiters:["[[","]]"],
+            data:{
+                gender:null,
+                email:null,
+                phone:null,
+                allowed:false,
+                name:null,
+                movies:[],
+            },
+            mounted:function () {
+                this.show();
+                this.showAll();
+            },
+            methods:{
+                show() {
+                    axios.get("{% url 'show' %}",{
+                            params:{
+                                id:sessionStorage.getItem("id")
+                            }
+                        }).then(response=>{
+                            this.movies = response.data["film_info"]
+                            this.gender = response.data["gender"]
+                            this.email = response.data["email"]
+                            this.phone = response.data["phone"]
+                            this.name = response.data["name"]
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
+                edit() {
+                    window.location.href = "{% url 'userEdit' %}"
+                },
+                toMoviePage(film_id) {
+                    window.sessionStorage.setItem("film_id",film_id)
+                    window.location.href = "{% url 'moviePage' %}"
+                },
+            }
+        })
+</script>
+</body>
+</html>

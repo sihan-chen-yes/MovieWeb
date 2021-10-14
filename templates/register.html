@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UserRegister</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    {% load static %}
+    <link type="text/css" rel="stylesheet" href="{% static "css/login.css" %}">
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
+</head>
+<body>
+
+<div class="banner"></div>
+<div class="banner-mask"></div>
+<div class="login user-center-wrapper">
+<div class="login-text">
+       用户注册
+</div>
+
+<div id="register" class="login-form">
+    <div class="form-item">
+        <input type="text" name="" class="login-input" id="user" placeholder="请输入账号" v-model="id">
+    </div>
+
+    <div class="form-item">
+        <input type="text" name="" class="login-input" id="name" placeholder="请输入用户名" v-model="name">
+    </div>
+
+    <div class="form-item">
+        <input type="password" name="" class="login-input" id="psw" placeholder="请输入密码" v-model="pwd">
+    </div>
+
+    <div class="form-item">
+        <input type="password" name="" class="login-input" id="confirm" placeholder="请再次输入密码" v-model="pwdAgain">
+    </div>
+
+    <button type="button" class="login-btn" v-on:click="reg">
+        注册
+    </button>
+
+    <button type="button" class="login-btn" v-on:click="back">
+        返回
+    </button>
+</div>
+</div>
+<script>
+        var vm = new Vue({
+            el:"#register",
+            data:{
+                allowed:false,
+                idWrong:false,
+                nameWrong:false,
+                id:null,
+                name:null,
+                pwd:null,
+                pwdAgain:null,
+            },
+            methods:{
+                back() {
+                    window.location.href = "{% url 'login'%}"
+                },
+                reg() {
+                    if (this.id === null) {
+                        alert("请输入账号！")
+                    } else if (this.name === null) {
+                        alert("请输入用户名！")
+                    } else if (this.pwd === null) {
+                        alert("请输入密码！")
+                    } else if (this.pwdAgain === null) {
+                        alert("请再次输入密码！")
+                    } else if (this.pwd != this.pwdAgain) {
+                        alert("两次输入的密码不一致！")
+                    } else {
+                        axios.get("{% url 'registerApply' %}",{
+                            params:{
+                                id:this.id,
+                                name:this.name,
+                                pwd:this.pwd
+                            }
+                        }).then(response=>{
+                            this.allowed = response.data["allowed"]
+                            this.idWrong = response.data["idWrong"]
+                            this.nameWrong = response.data["nameWrong"]
+                            if (this.allowed === true) {
+                                alert("注册成功！请登录")
+                                window.location.href = "{% url 'login'%}"
+                            } else if (this.idWrong === true) {
+                                alert("账号已存在！")
+                            } else if (this.nameWrong === true) {
+                                alert("用户名已存在！")
+                            }
+                        }),err=>{
+                            console.log(err);
+                        };
+                    }
+                }
+            }
+        })
+</script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>moviePage</title>
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+        	{% load static %}
+<!--    <link type="text/css" rel="stylesheet" href="{% static "css/movieSquare_base.css" %}">-->
+	<link type="text/css" rel="stylesheet" href="{% static "css/moviePage.css" %}">
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <style>
+        .content_wrapper{
+            margin-top: 80px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html"> <span class="glyphicon glyphicon-shopping-cart"></span>  电影网站</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav" style="margin-top: 3px">
+                <li><a href="index.html"> <span class="glyphicon glyphicon-home"></span>  首页</a></li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="找点新鲜玩意..." id="searchInput">
+                </div>
+                <input type="button" class="btn btn-default" onclick="jumpSearch()" value="Submit">
+            </form>
+            <div class="nav navbar-nav navbar-right">
+                <li><a href="{% url 'movieSquare' %}">广场</a></li>
+                <li class="dropdown" id="UserDropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="UserName">
+                        <span>我的</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'selfPage' %}">个人主页</a></li>
+                        <li><a href="{% url 'login' %}" onclick="delCookie()">退出登录</a></li>
+                    </ul>
+                </li>
+                <li><a href="#" ></a></li>
+            </div>
+        </div><!-- /.navbar-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+<div class="content_wrapper" id="movieInfo">
+<div class="row">
+<div class="left col-xs-offset-2 col-xs-1" style="margin-top : 40px">
+    <div data-v-c38922e8="" class="m_coverpicbox">
+    <div data-v-c38922e8="" class="img_box"><a data-v-c38922e8="" href="/267290/posters_and_images" title="长津湖">
+        <img src="" id="picture"></a>
+        </div> <!---->
+    </div> <!----> <!---->
+</div>
+
+<div class="right col-xs-offset-2 col-xs-5" style="margin-top : -10px">
+<div data-v-b574f948="" class="m_head">
+    <div data-v-b574f948="" class="clearfix"><h2 data-v-b574f948="" style="margin-left : -32px">
+      [[movieInfo.film_name]]
+      <span data-v-b574f948="" class="m_year">
+        <a data-v-b574f948="" style="font-size: 34px;">([[movieInfo.film_date]])</a>
+      </span>
+    </h2> <p data-v-b574f948="" class="m_enname" style="margin-left : -30px;margin-top: 20px;">
+        评分:[[movieInfo.film_score]]，共有[[movieInfo.film_score_people]]人评分
+
+        <!--如果已经收藏可以取消收藏-->
+<!--        <span><button disabled>已收藏</button></span>-->
+        <span><button v-on:click="cancelCollect" class="btn-sm btn-info" style="float:right;margin-left:10px">取消收藏</button></span>
+            <span><button v-on:click="collect" class="btn-sm btn-info" style="float:right">收藏</button></span></p></div>
+<!--    <div data-v-b574f948="" class="otherbox">-->
+<!--        <span data-v-b574f948="">176分钟 </span>-->
+<!--        <span data-v-b574f948=""><a data-v-b574f948="" href="http://film.mtime.com/search?type=genreTypes&amp;word=剧情" target="_blank">剧情/</a>-->
+<!--            <a data-v-b574f948="" href="http://film.mtime.com/search?type=genreTypes&amp;word=战争" target="_blank">战争/</a>-->
+<!--            <a data-v-b574f948="" href="http://film.mtime.com/search?type=genreTypes&amp;word=历史" target="_blank">历史</a></span>-->
+<!--        <a data-v-b574f948="" href="/267290/details">2021年9月30日</a><span data-v-b574f948="">中国</span>上映-->
+<!--      &lt;!&ndash;&ndash;&gt;</div>-->
+</div>
+
+<dl data-v-1b3bf9ac="" class="info_l">
+<!--    <dd data-v-1b3bf9ac=""><strong data-v-1b3bf9ac="">导演：</strong>-->
+<!--    <a data-v-1b3bf9ac="" href="http://people.mtime.com/892816/" target="_blank">陈凯歌</a><a data-v-1b3bf9ac="" href="http://people.mtime.com/892903/" target="_blank">徐克</a>-->
+<!--    <a data-v-1b3bf9ac="" href="http://people.mtime.com/892901/" target="_blank">林超贤</a>-->
+<!--    </dd>-->
+
+<!--    <dd data-v-1b3bf9ac="" class="writers_name" style="margin-bottom:20px;margin-top:-20px">-->
+<!--        <span><button v-on:click="collect" class="btn btn-default">收藏</button></span>-->
+<!--        &lt;!&ndash;如果已经收藏可以取消收藏&ndash;&gt;-->
+<!--&lt;!&ndash;        <span><button disabled>已收藏</button></span>&ndash;&gt;-->
+<!--        <span><button v-on:click="cancelCollect" class="btn btn-default">取消收藏</button></span>-->
+<!--</dd>-->
+
+    <dd data-v-1b3bf9ac="" style="margin-top:-20px;margin-bottom:10px;font-size:18px">
+        <strong data-v-1b3bf9ac="">上映时间：</strong>
+        <a data-v-1b3bf9ac="">
+          [[movieInfo.film_date]]
+          <i data-v-1b3bf9ac="" class="line"></i></a>
+    </dd> <!---->
+
+
+    <dd data-v-1b3bf9ac="" style="font-size:18px">
+        <strong data-v-1b3bf9ac="" >上映地区：</strong>
+        <a data-v-1b3bf9ac="" >
+          [[movieInfo.film_area]]
+          <i data-v-1b3bf9ac="" class="line"></i></a>
+    </dd> <!---->
+
+
+<!--    <dd data-v-1b3bf9ac="" class="companies">-->
+<!--    <strong data-v-1b3bf9ac="">出品公司：</strong>-->
+<!--        <a data-v-1b3bf9ac="" href="http://film.mtime.com/company/79349/" target="_blank">北京博纳影业集团有限公司</a>-->
+<!--        <a data-v-1b3bf9ac="" href="http://film.mtime.com/company/2344/" target="_blank">中国人民解放军八一电影制片厂</a>-->
+<!--        <a data-v-1b3bf9ac="" href="http://film.mtime.com/company/37847/" target="_blank">华夏电影发行有限责任公司</a></dd>-->
+
+<!--    <dd data-v-1b3bf9ac=""><strong data-v-1b3bf9ac="">更多片名：</strong> <span data-v-1b3bf9ac="">冰雪长津湖</span></dd>-->
+
+    <dt data-v-1b3bf9ac="" style="margin-bottom:20px;margin-top:20px">
+        <strong style="margin-bottom:40px;margin-top:20px;font-size:18px">简介：</strong>
+        <p data-v-1b3bf9ac="" class="" style="font-weight:lighter;text-indent:2em;line-height:200%;margin-top:6px">[[movieInfo.introduction]]</p>
+<!--        <p data-v-1b3bf9ac="" class="more">-->
+<!--            <a data-v-1b3bf9ac="" href="/267290/plots">-->
+<!--            更多剧情-->
+<!--            <i data-v-1b3bf9ac="" class="gt"></i></a></p>-->
+    </dt>
+
+    <dt data-v-1b3bf9ac="" style="margin-bottom:-20px;margin-top:20px;">
+        <strong style="font-size:18px">预告片：</strong>
+<!--        <p data-v-1b3bf9ac="" class="more">-->
+<!--            <a data-v-1b3bf9ac="" href="/267290/plots">-->
+<!--            更多剧情-->
+<!--            <i data-v-1b3bf9ac="" class="gt"></i></a></p>-->
+    </dt>
+
+        <dd data-v-1b3bf9ac="" class="companies">
+
+       <video width="320" height="240" controls id="video">
+      <source src="" type="video/mp4">
+      <object data="movie.mp4" width="320" height="240">
+        <embed src="movie.swf" width="320" height="240">
+      </object>
+    </video>
+        </dd>
+</dl>
+</div>
+</div>
+<!--    <p>[[movieInfo.film_name]]</p>-->
+<!--    <img src=""  width="300" height="450" id="picture">-->
+
+<!--<div>-->
+<!--    <p>-->
+
+<!--&lt;!&ndash;        <span>评分：[[movieInfo.film_score]]</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        <span>共有[[movieInfo.film_score_people]]人评分</span>&ndash;&gt;-->
+<!--&lt;!&ndash;下面两组按钮分情况显示&ndash;&gt;-->
+<!--        &lt;!&ndash;如果没收藏点击可以收藏本电影，在自己的收藏夹可显示&ndash;&gt;-->
+<!--        <span><button v-on:click="collect">收藏</button></span>-->
+
+<!--        &lt;!&ndash;如果已经收藏可以取消收藏&ndash;&gt;-->
+<!--        <span><button disabled>已收藏</button></span>-->
+<!--        <span><button v-on:click="cancelCollect">取消收藏</button></span>-->
+<!--    </p>-->
+
+<!--            <p>-->
+<!--         上映时间：[[movieInfo.film_date]]-->
+<!--        <span>/</span>-->
+<!--        <span>上映地区：[[movieInfo.film_area]]</span>-->
+<!--        </p>-->
+<!--    <hr/>-->
+<!--    <h3>简介</h3>-->
+<!--    <p>-->
+<!--        [[movieInfo.introduction]]-->
+<!--    </p>-->
+<!--</div>-->
+
+
+<!--    <div>-->
+<!--    <h3>预告片</h3>-->
+<!--    <video width="320" height="240" controls id="video">-->
+<!--      <source src="" type="video/mp4">-->
+<!--      <object data="movie.mp4" width="320" height="240">-->
+<!--        <embed src="movie.swf" width="320" height="240">-->
+<!--      </object>-->
+<!--    </video>-->
+
+<!--</div>-->
+
+
+</div>
+<script>
+        var vm = new Vue({
+            el:"#movieInfo",
+            delimiters:["[[","]]"],
+            data:{
+                movieInfo:{},
+                allowed:false,
+            },
+            mounted:function () {
+                this.show();
+            },
+
+            methods:{
+                show() {
+                    axios.get("{% url 'showMovie' %}",{
+                            params:{
+                                film_id:sessionStorage.getItem("film_id")
+                            }
+                        }).then(response=>{
+                            this.movieInfo = response.data
+                            document.getElementById("picture").src = this.movieInfo.picture
+                            document.getElementById("video").src = this.movieInfo.video
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
+                collect() {
+                    axios.get("{% url 'collect' %}",{
+                            params:{
+                                film_id:sessionStorage.getItem("film_id"),
+                                id:sessionStorage.getItem("id")
+                            }
+                        }).then(response=>{
+                            this.allowed = response.data
+                            if (this.allowed === true) {
+                                alert("收藏成功！")
+                            } else {
+                                alert("该电影您已收藏！")
+                            }
+                            this.allowed = false
+                            }),err=>{
+                                console.log(err);
+                            };
+                },
+                cancelCollect() {
+                    axios.get("{% url 'cancelCollect' %}",{
+                            params:{
+                                film_id:sessionStorage.getItem("film_id"),
+                                id:sessionStorage.getItem("id")
+                            }
+                        }).then(response=>{
+                            this.allowed = response.data
+                            if (this.allowed === true) {
+                                alert("取消收藏成功！")
+                            } else {
+                                alert("该电影您并未收藏！")
+                            }
+                            this.allowed = false
+                        }),err=>{
+                            console.log(err);
+                        };
+                }
+            }
+        })
+</script>
+<!--后面可以把那边热榜/收藏夹加过来，到时候copy就行-->
+</body>
+</html>

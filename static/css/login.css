@@ -1,0 +1,120 @@
+
+    body {
+        font-family: "HelveticaNeue-Thin", "Helvetica Neue Thin", "Helvetica Neue", "Open Sans Light", Helvetica, Arial, "Lucida Grande", sans-serif; 
+        background-image: url('https://assets.wuyuan.io/common-template/header/all/img/bg-pattern.svg');
+        background-color: #f8f8f8;
+        height: 100%;
+    }
+    body [lang=zh-cn] {
+        font-family: "Open Sans", "Helvetica Neue", "Microsoft Yahei", sans-serif !important;
+    }
+
+    .banner {
+        background-image: url('/static/image/cover2.png');
+        background-position: 100% 0;
+        background-size: 110%;
+        position: absolute;
+        z-index: 0;
+        width: 100%;
+        min-width: 1080px;
+        top: 0;
+        height: 100%;
+    }
+
+    .banner-mask {
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        position: absolute;
+        opacity: 0.02;
+        background-color: #000;
+    }
+
+    .logo {
+      z-index: 3;
+      position: absolute;
+      top: 172px;
+      left: 50%;
+      margin-left: -48px;
+      text-align: left;
+      display: inline-block;
+      cursor: pointer;
+      width: 198px;
+      user-select: none;
+      cursor: pointer;
+      height: 26px;
+      width: 96px;
+      background-image: url('https://assets.wuyuan.io/common-template/img/all/logo-900.png');
+      background-size: 100%;
+      background-repeat: no-repeat;
+  }
+
+  .login-text{
+      top: 172px;
+      left: 50%;
+      text-align: center;
+      margin-top: 150px;
+      color:#f8f8f8;
+      font-size:xx-large;
+      font-weight: bolder;
+
+  }
+
+  .login,html{
+  height:100%
+  }
+
+  .login-btn,.register span,button{
+  cursor:pointer
+  }
+
+  .bg-des,.center,.error-tip,.login,.login-form,.login-title{position:absolute}body{width:100%;min-height:100%}body,div{padding:0;margin:0}
+
+  .user-center-wrapper,.user-center-wrapper *,.user-center-wrapper :after,.user-center-wrapper :before{box-sizing:border-box}
+
+  .user-center-wrapper{border-radius:4px}
+
+  .center{top:50%;left:50%;transform:translate(-50%,0);margin-top:-250px}
+
+  .login-input{border:1px solid #cfdede;padding:10px 15px;background-color:#fff;outline:0;margin-bottom:5px;border-radius:2px}
+
+  .login-btn,.login-input:focus{border:1px solid #0070ee}
+
+  .login-input.error{border:1px solid red}
+
+  .login-btn{padding:10px 0;background:#0070ee;color:#fff;outline:0;border-radius:2px;-webkit-transition:color .1s ease;transition:color .1s ease}
+
+  .login-btn:focus,.login-btn:hover{background:#fff;border:1px solid #0070ee;color:#0070ee}
+
+  .user-center-wrapper a{text-decoration:none;color:#4183c4}.user-center-wrapper a:hover{color:#0070ee;text-decoration:none}
+
+  .error-tip{top:-5px;left:0;padding:10px 20px;border:1px solid red;width:100%;overflow:hidden;border-radius:5px;color:red;transform:translate(0,-100%)}
+
+  .login{z-index:3;width:38.2%;min-width:420px;border-radius:0;background:rgba(0,0,0,.5);opacity:.9;left:50%;transform:translate(-50%,0);-ms-transform:translate(-50%,0)}body .banner{min-width:unset;background-size:cover}body .logo{top:19.1%;z-index:333;width:128px;margin-left:-64px;height:40px}@media screen and (max-width:480px){.login{width:100%}body .logo{top:100px}}
+
+  .login-title{margin-top:-96px;color:#fff;font-weight:900;font-size:24px;width:100%;text-align:center;display:none}
+
+  .login-form{text-align:center;width:61.8%;top:38.2%;left:19.1%}
+
+  .login .login-input{width:100%;color:#eee;border:none;font-size:16px;padding:16px}
+
+  .login .login-btn{width:40%;color: #000000;border:none;font-size:14px;padding:10px;font-weight: bold;margin-block: 40px;margin-inline: 10px}
+
+  .login .login-input{background:rgba(0,0,0,.5);text-align:center}
+
+  .login .login-input i{margin-right:-20px}
+
+  .login .login-btn{background: #bf9261
+  }
+
+  .login .login-btn:hover{color:#0070ee;background-color: #ffffff
+  }
+
+  #captcha+label,.login-input+label{display:none;text-align:left;width:80%;margin:0 auto;word-break:break-all;color:red;font-size:14px}
+
+  #captcha.error+label,.login-input.error+label{display:block}.form-item{margin-bottom:20px}.register{color:#ddd;text-align:center;width:80%;font-size:14px;margin:0 auto}
+
+  .register a{color:#eee;text-decoration:none;margin-right:22px}.register a:first-child{float:left}.register a:hover{text-decoration:underline}
+
+  .register span{float:right;color:#ddd;margin-top:2px}.register span:before{margin-right:4px}.bg-des{right:8px;bottom:8px;color:#aaa;font-style:italic;z-index:333;font-weight:400;font-size:13px;font-family:sans-serif}
