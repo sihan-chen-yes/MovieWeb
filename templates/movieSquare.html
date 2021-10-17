@@ -194,6 +194,15 @@
                     this.isSearching = true;
                     //keyword是传到后台的值
                     //结果返回到searchMovies上，上面会显示
+                    axios.get("{% url 'searchMovieByName' %}",{
+                            params:{
+                                keyword:this.keyword
+                            }
+                        }).then(response=>{
+                            this.searchMovies = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
                 },
 
                 normalShow() {

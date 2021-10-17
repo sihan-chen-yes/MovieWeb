@@ -253,12 +253,25 @@ def cancelCollect(request):
 
 def searchMovieByName(request):
     '''根据输入的电影名模糊搜索'''
-    film_name = request.GET.get("film_name")
+    film_name = request.GET.get("keyword")
+    film_name = "%" + film_name + "%"
     db = pymysql.connect(user=user,password=password,database=database,host=host)
     cursor = db.cursor()
-    sql = "select * from film_info where film_name like ''%s''" % (film_name)
+    sql = "select * from film_info where film_name like '%s'" % (film_name)
     cursor.execute(sql)
     results = cursor.fetchall()
-    data = results
+    data = []
+    for film in results:
+        data.append({
+            "film_id": film[0],
+            "film_name": film[1],
+            "film_date": film[2],
+            "film_area": film[3],
+            "film_score": film[4],
+            "film_score_people": film[5],
+            "introduction": film[6],
+            "picture": film[7],
+            "video": film[8]
+        })
     db.close()
     return JsonResponse(data,safe=False)
