@@ -286,7 +286,6 @@ def searchMovieByName(request):
 def insertData(sql):
     db = pymysql.connect(user=user, password=password, database=database, host=host)
     cursor = db.cursor()
-    cursor.execute(sql)
     try:
         cursor.execute(sql)
         db.commit()
@@ -352,6 +351,7 @@ def addTopic(request):
     return JsonResponse(data,safe=False)
 
 def addBroadcast(request):
+    print("fuck")
     topic_id = request.GET.get("topic_id")
     user_id = request.GET.get("user_id")
     broadcast_text = request.GET.get("broadcast_text")
