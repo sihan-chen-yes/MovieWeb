@@ -1,6 +1,7 @@
 import pymysql
 from django.shortcuts import render
 from django.http.response import JsonResponse
+import pandas as pd
 # Create your views here.
 
 user = "root"
@@ -342,7 +343,7 @@ def addTopic(request):
     user_id = request.GET.get("user_id")
     title = request.GET.get("title")
     topic_text = request.GET.get("topic_text")
-    topic_time = request.GET.get("topic_time")
+    topic_time = pd.to_datetime(request.GET.get("topic_time"))
     sql = "insert into topic_list(film_id,user_id,title,topic_text,topic_time) values('%s','%s','%s','%s','%s')" % \
           (film_id,user_id,title,topic_text,topic_time)
     insertData(sql)
@@ -354,7 +355,7 @@ def addBroadcast(request):
     topic_id = request.GET.get("topic_id")
     user_id = request.GET.get("user_id")
     broadcast_text = request.GET.get("broadcast_text")
-    broadcast_time = request.GET.get("broadcast_time")
+    broadcast_time = pd.to_datetime(request.GET.get("broadcast_time"))
     sql = "insert into broadcast_list(topic_id, user_id, broadcast_text, broadcast_time) values('%s','%s','%s','%s')" % \
           (topic_id, user_id, broadcast_text, broadcast_time)
     insertData(sql)
