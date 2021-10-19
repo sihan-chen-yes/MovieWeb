@@ -16,5 +16,14 @@ urlpatterns = [
     path('movieSquare/moviePage/showMovie',views.showMovie,name="showMovie"),
     path('movieSquare/moviePage/collect',views.collect,name="collect"),
     path('movieSquare/moviePage/cancelCollect',views.cancelCollect,name="cancelCollect"),
+
+    path('movieSquare/moviePage/showTopics', views.showTopics, name="showTopics"),
+    path('movieSquare/moviePage/topicPage', views.topicPage, name="topicPage"),
+    path('movieSquare/moviePage/topicPage/addBroadcast', views.addBroadcast, name="addBroadcast"),
+    path('movieSquare/moviePage/topicCreatingPage', views.topicCreatingPage, name="topicCreatingPage"),
+    path('movieSquare/moviePage/topicCreatingPage/addTopic', views.addTopic, name="addTopic"),
+    path('movieSquare/moviePage/topicPage/showSingleTopic', views.showSingleTopic, name="showSingleTopic"),
+    path('movieSquare/moviePage/topicPage/showBroadcasts', views.showBroadcasts, name="showBroadcasts"),
+
     path('searchMovieByName',views.searchMovieByName,name="searchMovieByName"),
 ]
