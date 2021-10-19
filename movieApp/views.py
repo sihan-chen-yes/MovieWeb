@@ -27,6 +27,12 @@ def movieSuqare(request):
 def moviePage(request):
     return render(request,"moviePage.html")
 
+def topicPage(request):
+    return render(request,"topicPage.html")
+
+def topicCreatingPage(request):
+    return render(request,"topicCreatingPage.html")
+
 def loginCheck(request):
     '''登陆校验'''
     id = request.GET.get("id")
@@ -275,3 +281,18 @@ def searchMovieByName(request):
         })
     db.close()
     return JsonResponse(data,safe=False)
+
+def showTopics(request):
+    pass
+
+def showBroadcasts(request):
+    pass
+
+def showSingleTopic(request):
+    pass
+
+def addTopic(request):
+    pass
+
+def addBroadcast(request):
+    pass

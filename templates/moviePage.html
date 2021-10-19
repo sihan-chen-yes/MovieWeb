@@ -161,48 +161,27 @@
 </dl>
 </div>
 </div>
-<!--    <p>[[movieInfo.film_name]]</p>-->
-<!--    <img src=""  width="300" height="450" id="picture">-->
 
-<!--<div>-->
-<!--    <p>-->
-
-<!--&lt;!&ndash;        <span>评分：[[movieInfo.film_score]]</span>&ndash;&gt;-->
-<!--&lt;!&ndash;        <span>共有[[movieInfo.film_score_people]]人评分</span>&ndash;&gt;-->
-<!--&lt;!&ndash;下面两组按钮分情况显示&ndash;&gt;-->
-<!--        &lt;!&ndash;如果没收藏点击可以收藏本电影，在自己的收藏夹可显示&ndash;&gt;-->
-<!--        <span><button v-on:click="collect">收藏</button></span>-->
-
-<!--        &lt;!&ndash;如果已经收藏可以取消收藏&ndash;&gt;-->
-<!--        <span><button disabled>已收藏</button></span>-->
-<!--        <span><button v-on:click="cancelCollect">取消收藏</button></span>-->
-<!--    </p>-->
-
-<!--            <p>-->
-<!--         上映时间：[[movieInfo.film_date]]-->
-<!--        <span>/</span>-->
-<!--        <span>上映地区：[[movieInfo.film_area]]</span>-->
-<!--        </p>-->
-<!--    <hr/>-->
-<!--    <h3>简介</h3>-->
-<!--    <p>-->
-<!--        [[movieInfo.introduction]]-->
-<!--    </p>-->
-<!--</div>-->
-
-
-<!--    <div>-->
-<!--    <h3>预告片</h3>-->
-<!--    <video width="320" height="240" controls id="video">-->
-<!--      <source src="" type="video/mp4">-->
-<!--      <object data="movie.mp4" width="320" height="240">-->
-<!--        <embed src="movie.swf" width="320" height="240">-->
-<!--      </object>-->
-<!--    </video>-->
-
-<!--</div>-->
-
-
+<!--    这里放moviePage下面所有的话题     -->
+    <div>
+        <ol>
+            <li v-for="topic in topics">
+                <div>
+                    [[topic.user_id]]
+                </div>
+                <div>
+                    <a v-on:click="toTopicPage(topic.topic_id)">[[topic.title]]</a>
+                </div>
+                <div>
+                    [[topic.topic_text]]
+                </div>
+                <div>
+                    [[topic.topic_time]]
+                </div>
+            </li>
+        </ol>
+    </div>
+    <button v-on:click="toTopicCreating(movieInfo.film_id)">添加新的话题</button>
 </div>
 <script>
         var vm = new Vue({
@@ -210,13 +189,29 @@
             delimiters:["[[","]]"],
             data:{
                 movieInfo:{},
+                topics:[],
                 allowed:false,
             },
             mounted:function () {
                 this.show();
+                this.showTopics();
             },
 
             methods:{
+                toTopicCreating(film_id) {
+                    window.sessionStorage.setItem("film_id",film_id)
+                    window.location.href = "{% url 'topicCreatingPage' %}"
+                },
+
+                toTopicPage(topic_id) {
+                    window.sessionStorage.setItem("topic_id",topic_id)
+                    window.location.href = "{% url 'topicPage' %}"
+                },
+                showTopics() {
+                    //传入本页的film_id
+                    //topics数组接收返回值即可显示
+                },
+
                 show() {
                     axios.get("{% url 'showMovie' %}",{
                             params:{
@@ -268,6 +263,7 @@
                 }
             }
         })
+
 </script>
 <!--后面可以把那边热榜/收藏夹加过来，到时候copy就行-->
 </body>
