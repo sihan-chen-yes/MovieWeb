@@ -208,10 +208,18 @@
                     window.location.href = "{% url 'topicPage' %}"
                 },
                 showTopics() {
+                    axios.get("{% url 'showTopics' %}",{
+                            params:{
+                                film_id:sessionStorage.getItem("film_id")
+                            }
+                        }).then(response=>{
+                            this.topics = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
                     //传入本页的film_id
                     //topics数组接收返回值即可显示
                 },
-
                 show() {
                     axios.get("{% url 'showMovie' %}",{
                             params:{
