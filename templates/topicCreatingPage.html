@@ -2,21 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>topicCreatingPage</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
 </head>
 <body>
 
+<div id="createTopic">
+    <input v-model="title">
+    <textarea v-model="topic_text"></textarea>
+    <button v-on:click="addTopic()">添加新的话题</button>
+</div>
 
 <script>
     var vm = new Vue({
             el:"#createTopic",
             data:{
-
+                title: "",
+                topic_text: "",
+                topic_time: new Date(),
             },
 
             methods:{
-                this.addTopic() {
+                addTopic() {
+                    console.log(this.title);
+                    console.log(this.topic_text);
+                    console.log(this.topic_time);
+                    console.log(sessionStorage.getItem("film_id"));
+                    console.log(sessionStorage.getItem("id"));
+                    axios.get("{% url 'addTopic' %}",{
+                            params:{
+                                film_id:sessionStorage.getItem("film_id"), //电影id
+                                user_id:sessionStorage.getItem("id"), //用户id
+                                title: this.title,
+                                topic_time: this.topic_time,
+                                topic_text: this.topic_text
+                            }
+                        }).then(response=>{
 
+                        }),err=>{
+
+                        };
+                    this.topic_text = "";
+                    this.title = "";
                 }  //增加话题
             }
         })

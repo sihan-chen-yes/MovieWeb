@@ -2,21 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>topicPage</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
 </head>
 <body>
+
+<div id="showTopics">
+    <div>
+        <p>[[topicInfo.user_id]]</p>
+        <p>[[topicInfo.title]]</p>
+        <p>[[topicInfo.topic_text]]</p>
+        <p>[[topicInfo.topic_time]]</p>
+    </div>
+
+    <div>
+        <ul>
+            <li v-for="broadcast in broadcasts">
+                <p>[[broadcast.user_id]]</p>
+                <p>[[broadcast.broadcast_text]]</p>
+                <p>[[broadcast.broadcast_time]]</p>
+            </li>
+        </ul>
+    </div>
+
+    <textarea v-model="broadcast_text">
+
+    </textarea>
+    <button v-on:click="addBroadcast()">回复</button>
+</div>
 
 <script>
     var vm = new Vue({
             el:"#showTopics",
+            delimiters:["[[","]]"],
             data:{
-
+                topicInfo: {},
+                broadcasts: [],
+                broadcast_text: "",
+                broadcast_time: new Date(),
             },
 
             mounted: function(){
-                this.showSingleTopic()  //展示本话题的信息
-                this.showBroadcasts() //展示所有广播的内容
-            }
+                this.showSingleTopic();  //展示本话题的信息
+                this.showBroadcasts(); //展示所有广播的内容
+            },
 
             methods:{
                 showSingleTopic() {
@@ -28,7 +63,19 @@
                 },
 
                 addBroadcast() {
+                    axios.get("{% url 'addBroadcast' %}",{
+                            params:{
+                                topic_id:sessionStorage.getItem("topic_id"), //话题id
+                                user_id:sessionStorage.getItem("id"), //用户id
+                                broadcast_text: this.broadcast_text,
+                                broadcast_time: this.broadcast_time
+                            }
+                        }).then(response=>{
 
+                        }),err=>{
+
+                        };
+                    this.broadcast_text = "";
                 }
 
             }

@@ -170,7 +170,7 @@
                     [[topic.user_id]]
                 </div>
                 <div>
-                    [[topic.title]]
+                    <a v-on:click="toTopicPage(topic.topic_id)">[[topic.title]]</a>
                 </div>
                 <div>
                     [[topic.topic_text]]
@@ -181,7 +181,7 @@
             </li>
         </ol>
     </div>
-
+    <button v-on:click="toTopicCreating(movieInfo.film_id)">添加新的话题</button>
 </div>
 <script>
         var vm = new Vue({
@@ -198,6 +198,15 @@
             },
 
             methods:{
+                toTopicCreating(film_id) {
+                    window.sessionStorage.setItem("film_id",film_id)
+                    window.location.href = "{% url 'topicCreatingPage' %}"
+                },
+
+                toTopicPage(topic_id) {
+                    window.sessionStorage.setItem("topic_id",topic_id)
+                    window.location.href = "{% url 'topicPage' %}"
+                },
                 showTopics() {
                     //传入本页的film_id
                     //topics数组接收返回值即可显示
