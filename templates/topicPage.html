@@ -55,13 +55,28 @@
 
             methods:{
                 showSingleTopic() {
+                    axios.get("{% url 'showSingleTopic' %}",{
+                            params:{
+                                topic_id:sessionStorage.getItem("topic_id"), //话题id
+                            }
+                        }).then(response=>{
+                            this.topicInfo = response.data
+                        }),err=>{
 
+                        };
                 },
 
                 showBroadcasts() {
+                    axios.get("{% url 'showBroadcasts' %}",{
+                            params:{
+                                topic_id:sessionStorage.getItem("topic_id"), //话题id
+                            }
+                        }).then(response=>{
+                            this.broadcasts = response.data
+                        }),err=>{
 
+                        };
                 },
-
                 addBroadcast() {
                     axios.get("{% url 'addBroadcast' %}",{
                             params:{
@@ -77,7 +92,6 @@
                         };
                     this.broadcast_text = "";
                 }
-
             }
         })
 </script>

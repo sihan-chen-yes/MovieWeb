@@ -282,17 +282,82 @@ def searchMovieByName(request):
     db.close()
     return JsonResponse(data,safe=False)
 
+def insertData(sql):
+    db = pymysql.connect(user=user, password=password, database=database, host=host)
+    cursor = db.cursor()
+    cursor.execute(sql)
+    try:
+        cursor.execute(sql)
+        db.commit()
+    except:
+        db.rollback()
+    db.close()
+
+def select(sql):
+    db = pymysql.connect(user=user,password=password,database=database,host=host)
+    cursor = db.cursor()
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    db.close()
+    return results
+
+def generateDictData(result,name_list):
+    dict = {}
+    for i in range(len(result)):
+        dict[name_list[i]] = result[i]
+    return dict
+
 def showTopics(request):
-    pass
+    film_id = request.GET.get("film_id")
+    sql = "select * from topic_list where film_id = '%s'" % (film_id)
+    results = select(sql)
+    data = []
+    name_list = ["topic_id","film_id","user_id","title","topic_text","topic_time"]
+    for result in results:
+        data.append(generateDictData(result,name_list))
+    return JsonResponse(data,safe=False)
 
 def showBroadcasts(request):
-    pass
+    topic_id = request.GET.get("topic_id")
+    sql = "select * from broadcast_list where topic_id = '%s'" % (topic_id)
+    results = select(sql)
+    data = []
+    name_list = ["broadcast_id","topic_id","user_id","broadcast_text","broadcast_time"]
+    for result in results:
+        data.append(generateDictData(result,name_list))
+    return JsonResponse(data,safe=False)
 
 def showSingleTopic(request):
-    pass
+    topic_id = request.GET.get("topic_id")
+    sql = "select * from topic_list where topic_id = '%s'" % (topic_id)
+    results = select(sql)
+    name_list = ["topic_id","film_id","user_id","title","topic_text","topic_time"]
+    for result in results:
+        data = generateDictData(result,name_list)
+        break
+    return JsonResponse(data,safe=False)
 
 def addTopic(request):
-    pass
+    film_id = request.GET.get("film_id")
+    user_id = request.GET.get("user_id")
+    title = request.GET.get("title")
+    topic_text = request.GET.get("topic_text")
+    topic_time = request.GET.get("topic_time")
+    sql = "insert into topic_list(film_id,user_id,title,topic_text,topic_time) values('%s','%s','%s','%s','%s')" % \
+          (film_id,user_id,title,topic_text,topic_time)
+    insertData(sql)
+    # op success
+    data = True
+    return JsonResponse(data,safe=False)
 
 def addBroadcast(request):
-    pass
+    topic_id = request.GET.get("topic_id")
+    user_id = request.GET.get("user_id")
+    broadcast_text = request.GET.get("broadcast_text")
+    broadcast_time = request.GET.get("broadcast_time")
+    sql = "insert into broadcast_list(topic_id, user_id, broadcast_text, broadcast_time) values('%s','%s','%s','%s')" % \
+          (topic_id, user_id, broadcast_text, broadcast_time)
+    insertData(sql)
+    #op success
+    data = True
+    return JsonResponse(data,safe=False)
