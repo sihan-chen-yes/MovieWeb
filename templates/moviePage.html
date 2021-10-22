@@ -178,6 +178,9 @@
                 <div>
                     [[topic.topic_time]]
                 </div>
+                <div v-if="user_id == topic.user_id">
+                    <button v-on:click="deleteTopic(topic.topic_id)">删除</button>
+                </div>
             </li>
         </ol>
     </div>
@@ -191,6 +194,8 @@
                 movieInfo:{},
                 topics:[],
                 allowed:false,
+                user_id:window.sessionStorage.getItem("id"),
+                topic_id:''
             },
             mounted:function () {
                 this.show();
@@ -198,6 +203,18 @@
             },
 
             methods:{
+                deleteTopic(topic_id){
+                        axios.get("{% url 'deleteTopic' %}",{
+                            params:{
+                                topic_id: topic_id
+                            }
+                        }).then(response=>{
+                            this.topics = response.data
+                            this.topic_id = ''
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
                 toTopicCreating(film_id) {
                     window.sessionStorage.setItem("film_id",film_id)
                     window.location.href = "{% url 'topicCreatingPage' %}"
