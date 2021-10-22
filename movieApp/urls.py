@@ -24,6 +24,8 @@ urlpatterns = [
     path('movieSquare/moviePage/topicCreatingPage/addTopic', views.addTopic, name="addTopic"),
     path('movieSquare/moviePage/topicPage/showSingleTopic', views.showSingleTopic, name="showSingleTopic"),
     path('movieSquare/moviePage/topicPage/showBroadcasts', views.showBroadcasts, name="showBroadcasts"),
+    path('movieSquare/moviePage/deleteTopic', views.deleteTopic, name="deleteTopic"),
+    path('movieSquare/moviePage/topicPage/deleteBroadcast', views.deleteBroadcast, name="deleteBroadcast"),
 
     path('searchMovieByName',views.searchMovieByName,name="searchMovieByName"),
     path('moviePage/score',views.score,name="score"),
