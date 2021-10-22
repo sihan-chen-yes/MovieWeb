@@ -26,4 +26,10 @@ urlpatterns = [
     path('movieSquare/moviePage/topicPage/showBroadcasts', views.showBroadcasts, name="showBroadcasts"),
 
     path('searchMovieByName',views.searchMovieByName,name="searchMovieByName"),
+    path('moviePage/score',views.score,name="score"),
+    path('movieSquare/showMovieRanks',views.showMovieRanks,name="showMovieRanks"),
+    path('movieSquare/showWorkers',views.showWokers,name="showWorkers"),
+    path('selfPage/showPersonalThemes',views.showPersonalThemes,name="showPersonalThemes"),
+    path('moviePage/showMovieThemes',views.showMovieThemes,name="showMovieThemes"),
+    path('movieSquare/showRecommendedMovies',views.showRecommendedMovies,name="showRecommendedMovies"),
 ]
