@@ -94,6 +94,28 @@
 <!--        <a data-v-b574f948="" href="/267290/details">2021年9月30日</a><span data-v-b574f948="">中国</span>上映-->
 <!--      &lt;!&ndash;&ndash;&gt;</div>-->
 </div>
+    	<div class="panel panel-default">
+		  <div class="panel-heading" style="font-size: 2rem;">电影评分&nbsp;：</div>
+		  <div class="panel-body">
+		  	  		  <input name="starNum" id="starNum" type="hidden">
+                      <div class="starability-container">
+	                       <fieldset class="starability-slot">
+		                        <input type="radio" id="rate_1_0_1_5" name="starLevel" value=1 />
+		                        <label for="rate_1_0_1_5" title="5星"></label>
+		                        <input type="radio" id="rate_1_0_1_4" name="starLevel" value=2 />
+		                        <label for="rate_1_0_1_4" title="4星"></label>
+		                        <input type="radio" id="rate_1_0_1_3" name="starLevel" value=3 />
+		                        <label for="rate_1_0_1_3" title="3星"></label>
+		                        <input type="radio" id="rate_1_0_1_2" name="starLevel" value=4 />
+		                        <label for="rate_1_0_1_2" title="2星"></label>
+		                        <input type="radio" id="rate_1_0_1_1" name="starLevel" value=5 />
+		                        <label for="rate_1_0_1_1" title="1星"></label>
+	                       </fieldset>
+                      </div>
+                      <span style="font-size: 2rem;line-height: 2.9rem;padding: 1rem;font-style: oblique;" id="starStr"></span>
+		  </div>
+            <button v-on:click="score()">提交评分</button>
+		</div>
 
 <dl data-v-1b3bf9ac="" class="info_l">
 <!--    <dd data-v-1b3bf9ac=""><strong data-v-1b3bf9ac="">导演：</strong>-->
@@ -187,6 +209,9 @@
     <button v-on:click="toTopicCreating(movieInfo.film_id)">添加新的话题</button>
 </div>
 <script>
+
+
+
         var vm = new Vue({
             el:"#movieInfo",
             delimiters:["[[","]]"],
@@ -200,9 +225,27 @@
             mounted:function () {
                 this.show();
                 this.showTopics();
+                $('[name="starLevel"]').bind("click",function(){
+		                $("#starNum").val($(this)[0].value)
+	            });
             },
 
             methods:{
+                score(){
+                    var score = $('#starNum').val()
+                    console.log(score)
+                    axios.get("{% url 'score' %}",{
+                            params:{
+                                film_id:sessionStorage.getItem("film_id"),
+                                user_id:sessionStorage.getItem("id"),
+                                score_number: score
+                            }
+                        }).then(response=>{
+
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
                 deleteTopic(topic_id){
                         axios.get("{% url 'deleteTopic' %}",{
                             params:{
