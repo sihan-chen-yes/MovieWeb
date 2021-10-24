@@ -85,20 +85,20 @@
             <div v-if="isSearching">
                     <ul class="index-list clearfix">
                     <li class="clearfix" data-id="63114" v-for="movie in searchMovies" style="">
-                        <a v-on:click="toMoviePage(movie.film_id)" class="index-img" style="width:200px;height:280px;padding: 27px 15px 0 0">
-                            <img v-bind:src="movie.picture">
+                        <a v-on:click="toMoviePage(movie.film_info.film_id)" class="index-img" style="width:200px;height:280px;padding: 27px 15px 0 0">
+                            <img v-bind:src="movie.film_info.picture">
                         </a>
                         <div class="index-text">
-                            <h1><a v-on:click="toMoviePage(movie.film_id)" >[[movie.film_name]]</a>
-                                <a class="mark mark-blue curp">[[movie.film_date]]</a>																						</h1>
+                            <h1><a v-on:click="toMoviePage(movie.film_info.film_id)" >[[movie.film_info.film_name]]</a>
+                                <a class="mark mark-blue curp">[[movie.film_info.film_date]]</a>																						</h1>
                                 <div class="index-con" style="margin-top:15px;margin-bottom:10px">
-                                    上映地区：<a class="user">[[movie.film_area]]</a>
-                                    <span style="float:right;margin-right:80px">[[movie.film_score]].[[movie.film_score]]</span>
+                                    上映地区：<a class="user">[[movie.film_info.film_area]]</a>
+                                    <span style="float:right;margin-right:80px">[[movie.film_info.film_score]]</span>
                                 </div>
-                                <div class="index-intro" style="text-indent:2em;font-size:14px;line-height:200%">[[movie.introduction]]</div>
+                                <div class="index-intro" style="text-indent:2em;font-size:14px;line-height:200%">[[movie.film_info.introduction]]</div>
                                 <div class="index-like clearfix">
                                     <div>
-                                        <span style="float:right">共有[[movie.film_score_people]]人评分</span>
+                                        <span style="float:right">共有[[movie.film_info.film_score_people]]人评分</span>
                                     </div>
                                 </div>
                         </div>
@@ -109,20 +109,20 @@
             <div v-else>
                     <ul class="index-list clearfix" id="post-list">
                     <li class="clearfix" data-id="63114" v-for="movie in movies" style="">
-                        <a v-on:click="toMoviePage(movie.film_id)" class="index-img" style="width:200px;height:280px;padding: 27px 15px 0 0">
-                            <img v-bind:src="movie.picture">
+                        <a v-on:click="toMoviePage(movie.film_info.film_id)" class="index-img" style="width:200px;height:280px;padding: 27px 15px 0 0">
+                            <img v-bind:src="movie.film_info.picture">
                         </a>
                         <div class="index-text">
-                            <h1><a v-on:click="toMoviePage(movie.film_id)" >[[movie.film_name]]</a>
-                                <a class="mark mark-blue curp">[[movie.film_date]]</a>																						</h1>
+                            <h1><a v-on:click="toMoviePage(movie.film_info.film_id)" >[[movie.film_info.film_name]]</a>
+                                <a class="mark mark-blue curp">[[movie.film_info.film_date]]</a>																						</h1>
                                 <div class="index-con" style="margin-top:15px;margin-bottom:10px">
-                                    上映地区：<a class="user">[[movie.film_area]]</a>
-                                    <span style="float:right;margin-right:80px">[[movie.film_score]].[[movie.film_score]]</span>
+                                    上映地区：<a class="user">[[movie.film_info.film_area]]</a>
+                                    <span style="float:right;margin-right:80px">[[movie.film_info.film_score]]</span>
                                 </div>
-                                <div class="index-intro" style="text-indent:2em;font-size:14px;line-height:200%">[[movie.introduction]]</div>
+                                <div class="index-intro" style="text-indent:2em;font-size:14px;line-height:200%">[[movie.film_info.introduction]]</div>
                                 <div class="index-like clearfix">
                                     <div>
-                                        <span style="float:right">共有[[movie.film_score_people]]人评分</span>
+                                        <span style="float:right">共有[[movie.film_info.film_score_people]]人评分</span>
                                     </div>
                                 </div>
                         </div>
@@ -169,7 +169,7 @@
             methods:{
                 showAll() {
                     axios.get("{% url 'showAllMovies' %}").then(response=>{
-                            this.movies = response.data["film_info"]
+                            this.movies = response.data
                         }),err=>{
                             console.log(err);
                         };
@@ -214,7 +214,6 @@
                     this.isSearching = false;
                     //点返回键正常显示，这里不用传值
                 }
-
             }
         });
 </script>

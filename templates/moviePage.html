@@ -67,7 +67,7 @@
 <div class="left col-xs-offset-2 col-xs-1" style="margin-top : 40px">
     <div data-v-c38922e8="" class="m_coverpicbox">
     <div data-v-c38922e8="" class="img_box"><a data-v-c38922e8="">
-        <img src="" id="picture"></a>
+        <img v-bind:src="movieInfo.film_info.picture"></a>
         </div> <!---->
     </div> <!----> <!---->
 </div>
@@ -75,12 +75,12 @@
 <div class="right col-xs-offset-2 col-xs-5" style="margin-top : -10px">
 <div data-v-b574f948="" class="m_head">
     <div data-v-b574f948="" class="clearfix"><h2 data-v-b574f948="" style="margin-left : -32px">
-      [[movieInfo.film_name]]
+      [[movieInfo.film_info.film_name]]
       <span data-v-b574f948="" class="m_year">
-        <a data-v-b574f948="" style="font-size: 34px;">([[movieInfo.film_date]])</a>
+        <a data-v-b574f948="" style="font-size: 34px;">([[movieInfo.film_info.film_date]])</a>
       </span>
     </h2> <p data-v-b574f948="" class="m_enname" style="margin-left : -30px;margin-top: 20px;">
-        评分:[[movieInfo.film_score]]，共有[[movieInfo.film_score_people]]人评分
+        评分:[[movieInfo.film_info.film_score]]，共有[[movieInfo.film_info.film_score_people]]人评分
 
         <!--如果已经收藏可以取消收藏-->
 <!--        <span><button disabled>已收藏</button></span>-->
@@ -96,27 +96,25 @@
 </div>
 <!--    	<div class="panel panel-default">-->
 		  <div class="panel-body" style="margin-top:-25px;float:right;margin-right:-14px">
-
-		  	  		  <input name="starNum" id="starNum" type="hidden">
               <div class="panel-heading" style="font-size: 16px;float:left;margin-right:-15px;margin-top:-3px">电影评分&nbsp;：</div>
+		  	  		  <input name="starNum" id="starNum" type="hidden">
                       <div class="starability-container">
 	                       <fieldset class="starability-slot">
-		                        <input type="radio" id="rate_1_0_1_5" name="starLevel" value=5 />
-		                        <label for="rate_1_0_1_5" title="5星"></label>
-		                        <input type="radio" id="rate_1_0_1_4" name="starLevel" value=4 />
+		                        <input type="radio" id="rate_1_0_1_5" name="starLevel" value=5 v-on:click="initScoreBind(5)" />
+		                        <label for="rate_1_0_1_5" title="5星" ></label>
+		                        <input type="radio" id="rate_1_0_1_4" name="starLevel" value=4 v-on:click="initScoreBind(4)"/>
 		                        <label for="rate_1_0_1_4" title="4星"></label>
-		                        <input type="radio" id="rate_1_0_1_3" name="starLevel" value=3 />
+		                        <input type="radio" id="rate_1_0_1_3" name="starLevel" value=3 v-on:click="initScoreBind(3)"/>
 		                        <label for="rate_1_0_1_3" title="3星"></label>
-		                        <input type="radio" id="rate_1_0_1_2" name="starLevel" value=2 />
+		                        <input type="radio" id="rate_1_0_1_2" name="starLevel" value=2 v-on:click="initScoreBind(2)"/>
 		                        <label for="rate_1_0_1_2" title="2星"></label>
-		                        <input type="radio" id="rate_1_0_1_1" name="starLevel" value=1 />
+		                        <input type="radio" id="rate_1_0_1_1" name="starLevel" value=1 v-on:click="initScoreBind(1)"/>
 		                        <label for="rate_1_0_1_1" title="1星"></label>
 	                       </fieldset>
                       </div>
                       <span style="font-size: 2rem;line-height: 2.9rem;padding: 1rem;font-style: oblique;" id="starStr"></span>
 
                           <button v-on:click="score()" style="font-size:13px;margin-bottom:30px;margin-left:-10px;padding:5px 5px 5px 5px" class="btn-md btn-info">提交评分</button>
-
 
 		  </div>
 <!--		</div>-->
@@ -137,7 +135,7 @@
     <dd data-v-1b3bf9ac="" style="margin-top:-20px;margin-bottom:10px;font-size:18px">
         <strong data-v-1b3bf9ac="">上映时间：</strong>
         <a data-v-1b3bf9ac="">
-          [[movieInfo.film_date]]
+          [[movieInfo.film_info.film_date]]
           <i data-v-1b3bf9ac="" class="line"></i></a>
     </dd> <!---->
 
@@ -145,7 +143,7 @@
     <dd data-v-1b3bf9ac="" style="font-size:18px">
         <strong data-v-1b3bf9ac="" >上映地区：</strong>
         <a data-v-1b3bf9ac="" >
-          [[movieInfo.film_area]]
+          [[movieInfo.film_info.film_area]]
           <i data-v-1b3bf9ac="" class="line"></i></a>
     </dd> <!---->
 
@@ -160,7 +158,7 @@
 
     <dt data-v-1b3bf9ac="" style="margin-bottom:20px;margin-top:20px">
         <strong style="margin-bottom:40px;margin-top:20px;font-size:18px">简介：</strong>
-        <p data-v-1b3bf9ac="" class="" style="font-weight:lighter;text-indent:2em;line-height:200%;margin-top:6px">[[movieInfo.introduction]]</p>
+        <p data-v-1b3bf9ac="" class="" style="font-weight:lighter;text-indent:2em;line-height:200%;margin-top:6px">[[movieInfo.film_info.introduction]]</p>
 <!--        <p data-v-1b3bf9ac="" class="more">-->
 <!--            <a data-v-1b3bf9ac="" href="/267290/plots">-->
 <!--            更多剧情-->
@@ -178,7 +176,7 @@
         <dd data-v-1b3bf9ac="" class="companies">
 
        <video width="320" height="240" controls id="video">
-      <source src="" type="video/mp4">
+      <source v-bind:src="movieInfo.film_info.video" type="video/mp4">
       <object data="movie.mp4" width="320" height="240">
         <embed src="movie.swf" width="320" height="240">
       </object>
@@ -188,8 +186,73 @@
 </div>
 </div>
 
+
+    <div>
+        <p>主题：</p>
+        <ol>
+            <li v-for="theme in themes">
+                <div>
+                    [[theme.theme_name]]
+                </div>
+            </li>
+        </ol>
+    </div>
+
+    <div>
+        <p>导演：</p>
+        <ol>
+            <li v-for="director in workers.directors" style="float:left">
+                <div>
+                    <a><img v-bind:src="director.worker_picture"></a>
+                </div>
+
+                <div>
+                    <a v-on:click="toWorkerPage(director.worker_id)">[[director.worker_name]]</a>
+                </div>
+            </li>
+        </ol>
+    </div>
+
+
+    <div>
+        <p>编剧：</p>
+        <ol>
+            <li v-for="writer in workers.writers" style="float:left">
+                <div>
+                    <a><img v-bind:src="writer.worker_picture"></a>
+                </div>
+
+                <div>
+                    <a v-on:click="toWorkerPage(writer.worker_id)">[[writer.worker_name]]</a>
+                </div>
+            </li>
+        </ol>
+    </div>
+
+    <div>
+        <p>演员：</p>
+        <ol>
+            <li v-for="actor in workers.actors" style="float:left">
+                <div>
+                    <a><img v-bind:src="actor.worker_picture"></a>
+                </div>
+
+                <div>
+                    <a v-on:click="toWorkerPage(actor.worker_id)">[[actor.worker_name]]</a>
+                </div>
+            </li>
+        </ol>
+    </div>
+
+
+<!--    这里放主题-->
+
+
+
+
 <!--    这里放moviePage下面所有的话题     -->
     <div>
+         <p>话题：</p>
         <ol>
             <li v-for="topic in topics">
                 <div>
@@ -224,17 +287,45 @@
                 topics:[],
                 allowed:false,
                 user_id:window.sessionStorage.getItem("id"),
-                topic_id:''
+                topic_id:'',
+                workers:[],
+                themes:[]
             },
             mounted:function () {
                 this.show();
                 this.showTopics();
-                $('[name="starLevel"]').bind("click",function(){
-		                $("#starNum").val($(this)[0].value)
-	            });
+                this.showWorkers();
+                this.showMovieThemes();
             },
 
             methods:{
+                initScoreBind(radio) {
+                    document.getElementById("starNum").value = radio
+                    console.log(radio)
+                    console.log(document.getElementById("starNum").value)
+                },
+                showMovieThemes() {
+                    axios.get("{% url 'showMovieThemes' %}",{
+                            params:{
+                                film_id:sessionStorage.getItem("film_id")
+                            }
+                        }).then(response=>{
+                            this.themes = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
+                showWorkers() {
+                    axios.get("{% url 'showWorkers' %}",{
+                            params:{
+                                film_id:sessionStorage.getItem("film_id")
+                            }
+                        }).then(response=>{
+                            this.workers = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
                 score(){
                     var score = $('#starNum').val()
                     console.log(score)
@@ -271,6 +362,10 @@
                     window.sessionStorage.setItem("topic_id",topic_id)
                     window.location.href = "{% url 'topicPage' %}"
                 },
+                toWorkerPage(worker_id) {
+                    window.sessionStorage.setItem("worker_id",worker_id)
+                    window.location.href = "{% url 'workerPage' %}"
+                },
                 showTopics() {
                     axios.get("{% url 'showTopics' %}",{
                             params:{
@@ -291,8 +386,6 @@
                             }
                         }).then(response=>{
                             this.movieInfo = response.data
-                            document.getElementById("picture").src = this.movieInfo.picture
-                            document.getElementById("video").src = this.movieInfo.video
                         }),err=>{
                             console.log(err);
                         };

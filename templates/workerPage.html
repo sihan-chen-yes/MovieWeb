@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>workerPage</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+</head>
+<body>
+
+<div id="workerInfo">
+<div>[[workerInfo.worker_id]]</div>
+    <img v-bind:src="workerInfo.worker_picture">
+    <div>[[workerInfo.worker_introduction]]</div>
+</div>
+
+
+<script>
+    var vm = new Vue({
+        el:"#workerInfo",
+        delimiters:["[[","]]"],
+        data:{
+            workerInfo:{}
+        },
+        mounted:function(){
+            this.showSingleWorker();
+        },
+
+        methods:{
+            showSingleWorker(){
+                axios.get("{% url 'showSingleWorker' %}",{
+                        params:{
+                            film_id:sessionStorage.getItem("worker_id")
+                        }
+                    }).then(response=>{
+                        this.workerInfo = response.data
+                        console.log(this.workerInfo)
+                    }),err=>{
+                        console.log(err);
+                    };
+            }
+        }
+    })
+
+</script>
+</body>
+</html>
