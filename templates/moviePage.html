@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>moviePage</title>
 
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
         	{% load static %}
-<!--    <link type="text/css" rel="stylesheet" href="{% static "css/movieSquare_base.css" %}">-->
 	<link type="text/css" rel="stylesheet" href="{% static "css/moviePage.css" %}">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
@@ -35,16 +35,16 @@
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav" style="margin-top: 3px">
+            <ul class="nav navbar-nav" style="margin-top: 3px;width:80px;background-color:black">
                 <li><a href="index.html"> <span class="glyphicon glyphicon-home"></span>  首页</a></li>
             </ul>
-            <form class="navbar-form navbar-left" role="search">
+            <form class="navbar-form navbar-left" role="search" style="width:400px;">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="找点新鲜玩意..." id="searchInput">
                 </div>
                 <input type="button" class="btn btn-default" onclick="jumpSearch()" value="Submit">
             </form>
-            <div class="nav navbar-nav navbar-right">
+            <div class="nav navbar-nav navbar-right" style="width:130px;background-color:black">
                 <li><a href="{% url 'movieSquare' %}">广场</a></li>
                 <li class="dropdown" id="UserDropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="UserName">
@@ -66,7 +66,7 @@
 <div class="row">
 <div class="left col-xs-offset-2 col-xs-1" style="margin-top : 40px">
     <div data-v-c38922e8="" class="m_coverpicbox">
-    <div data-v-c38922e8="" class="img_box"><a data-v-c38922e8="" href="/267290/posters_and_images" title="长津湖">
+    <div data-v-c38922e8="" class="img_box"><a data-v-c38922e8="">
         <img src="" id="picture"></a>
         </div> <!---->
     </div> <!----> <!---->
@@ -94,28 +94,32 @@
 <!--        <a data-v-b574f948="" href="/267290/details">2021年9月30日</a><span data-v-b574f948="">中国</span>上映-->
 <!--      &lt;!&ndash;&ndash;&gt;</div>-->
 </div>
-    	<div class="panel panel-default">
-		  <div class="panel-heading" style="font-size: 2rem;">电影评分&nbsp;：</div>
-		  <div class="panel-body">
+<!--    	<div class="panel panel-default">-->
+		  <div class="panel-body" style="margin-top:-25px;float:right;margin-right:-14px">
+
 		  	  		  <input name="starNum" id="starNum" type="hidden">
+              <div class="panel-heading" style="font-size: 16px;float:left;margin-right:-15px;margin-top:-3px">电影评分&nbsp;：</div>
                       <div class="starability-container">
 	                       <fieldset class="starability-slot">
-		                        <input type="radio" id="rate_1_0_1_5" name="starLevel" value=1 />
+		                        <input type="radio" id="rate_1_0_1_5" name="starLevel" value=5 />
 		                        <label for="rate_1_0_1_5" title="5星"></label>
-		                        <input type="radio" id="rate_1_0_1_4" name="starLevel" value=2 />
+		                        <input type="radio" id="rate_1_0_1_4" name="starLevel" value=4 />
 		                        <label for="rate_1_0_1_4" title="4星"></label>
 		                        <input type="radio" id="rate_1_0_1_3" name="starLevel" value=3 />
 		                        <label for="rate_1_0_1_3" title="3星"></label>
-		                        <input type="radio" id="rate_1_0_1_2" name="starLevel" value=4 />
+		                        <input type="radio" id="rate_1_0_1_2" name="starLevel" value=2 />
 		                        <label for="rate_1_0_1_2" title="2星"></label>
-		                        <input type="radio" id="rate_1_0_1_1" name="starLevel" value=5 />
+		                        <input type="radio" id="rate_1_0_1_1" name="starLevel" value=1 />
 		                        <label for="rate_1_0_1_1" title="1星"></label>
 	                       </fieldset>
                       </div>
                       <span style="font-size: 2rem;line-height: 2.9rem;padding: 1rem;font-style: oblique;" id="starStr"></span>
+
+                          <button v-on:click="score()" style="font-size:13px;margin-bottom:30px;margin-left:-10px;padding:5px 5px 5px 5px" class="btn-md btn-info">提交评分</button>
+
+
 		  </div>
-            <button v-on:click="score()">提交评分</button>
-		</div>
+<!--		</div>-->
 
 <dl data-v-1b3bf9ac="" class="info_l">
 <!--    <dd data-v-1b3bf9ac=""><strong data-v-1b3bf9ac="">导演：</strong>-->

@@ -656,7 +656,7 @@ i {
 	padding:0;
 	border:none
 }
-.starability-slot>ipnut {
+.starability-slot>input {
 	position:absolute;
 	margin-right:-100%;
 	opacity:0

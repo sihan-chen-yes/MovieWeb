@@ -1,8 +1,14 @@
 
     body {
-        font-family: "HelveticaNeue-Thin", "Helvetica Neue Thin", "Helvetica Neue", "Open Sans Light", Helvetica, Arial, "Lucida Grande", sans-serif; 
-        background-image: url('https://assets.wuyuan.io/common-template/header/all/img/bg-pattern.svg');
-        background-color: #f8f8f8;
+        font-family: "HelveticaNeue-Thin", "Helvetica Neue Thin", "Helvetica Neue", "Open Sans Light", Helvetica, Arial, "Lucida Grande", sans-serif;
+        background-image: url('/static/image/p1.webp');
+        background-position: 100% 0;
+        background-size: 100%;
+        position: absolute;
+        z-index: 0;
+        width: 100%;
+        min-width: 1080px;
+        top: 0;
         height: 100%;
     }
     body [lang=zh-cn] {
@@ -10,7 +16,7 @@
     }
 
     .banner {
-        background-image: url('/static/image/cover2.png');
+        background-image: url('/static/image/p1.webp');
         background-position: 100% 0;
         background-size: 100%;
         position: absolute;
