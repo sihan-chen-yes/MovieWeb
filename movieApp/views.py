@@ -134,11 +134,7 @@ def showAllMovies(request=None):
     results = select(sql)
     for result in results:
         film_id = result[0]
-        film = {}
-        film["film_info"] = generateDictData(result,film_info_name_list)
-        film["workers"] = showWorkers(request=None,film_id=film_id)
-        film["themes"] = showMovieThemes(request=None,film_id=film_id)
-        data.append(film)
+        data.append(showMovie(request=None,film_id=film_id))
     if request:
         return JsonResponse(data, safe=False)
     else:
@@ -153,9 +149,8 @@ def showMovie(request=None,film_id=None):
     sql = "select * from film_info where film_id = '%s'" % (film_id)
     results = select(sql)
     assert len(results) == 1
-    data = {}
+    data = showWorkers(request=None,film_id=film_id)
     data["film_info"] = generateDictData(results[0],film_info_name_list)
-    data["workers"] = showWorkers(request=None,film_id=film_id)
     data["themes"] = showMovieThemes(request=None,film_id=film_id)
     if request:
         return JsonResponse(data,safe=False)
@@ -263,11 +258,7 @@ def searchMovieByName(request):
     data = []
     for result in results:
         film_id = result[0]
-        film = {}
-        film["film_info"] = generateDictData(result,film_info_name_list)
-        film["workers"] = showWorkers(request=None,film_id=film_id)
-        film["themes"] = showMovieThemes(request=None,film_id=film_id)
-        data.append(film)
+        data.append(showMovie(request=None,film_id=film_id))
     return JsonResponse(data,safe=False)
 
 def insertData(sql):
@@ -472,17 +463,45 @@ def showWorkers(request=None,film_id=None):
         film_id = request.GET.get("film_id")
     else:
         assert film_id
-    sql = "select film_worker.worker_id,worker_name,worker_type,worker_picture,worker_introduction from film_worker,worker_list " \
-          "where film_id = '%s' and film_worker.worker_id = worker_list.worker_id" % (film_id)
-    results = select(sql)
-    name_list = ["worker_id", "worker_name","worker_type","worker_picture","worker_introduction"]
-    data = []
-    for result in results:
-        data.append(generateDictData(result, name_list))
+    data = {}
+    data["directors"] = showDirector(film_id)
+    data["actors"] = showActor(film_id)
+    data["writers"] = showWriter(film_id)
     if request:
         return JsonResponse(data, safe=False)
     else:
         return data
+
+def showDirector(film_id):
+    sql = "select film_director.worker_id,worker_name,worker_picture,worker_introduction " \
+          "from film_director,worker_list " \
+          "where film_id = '%s' and film_director.worker_id = worker_list.worker_id" % (film_id)
+    results = select(sql)
+    directors = []
+    for result in results:
+        directors.append(generateDictData(result,worker_list_name_list))
+    return directors
+
+
+def showActor(film_id):
+    sql = "select film_actor.worker_id,worker_name,worker_picture,worker_introduction " \
+          "from film_actor,worker_list " \
+          "where film_id = '%s' and film_actor.worker_id = worker_list.worker_id" % (film_id)
+    results = select(sql)
+    actors = []
+    for result in results:
+        actors.append(generateDictData(result, worker_list_name_list))
+    return actors
+
+def showWriter(film_id):
+    sql = "select film_writer.worker_id,worker_name,worker_picture,worker_introduction " \
+          "from film_writer,worker_list " \
+          "where film_id = '%s' and film_writer.worker_id = worker_list.worker_id" % (film_id)
+    results = select(sql)
+    writers = []
+    for result in results:
+        writers.append(generateDictData(result, worker_list_name_list))
+    return writers
 
 def showSingleWorker(request):
     '''显示单个影人信息'''
