@@ -169,7 +169,7 @@
             methods:{
                 showAll() {
                     axios.get("{% url 'showAllMovies' %}").then(response=>{
-                            this.movies = response.data["film_info"]
+                            this.movies = response.data
                         }),err=>{
                             console.log(err);
                         };
@@ -214,7 +214,6 @@
                     this.isSearching = false;
                     //点返回键正常显示，这里不用传值
                 }
-
             }
         });
 </script>
