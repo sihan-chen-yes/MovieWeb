@@ -34,6 +34,9 @@ def topicPage(request):
 def topicCreatingPage(request):
     return render(request,"topicCreatingPage.html")
 
+def workerPage(request):
+    return render(request,"workerPage.html")
+
 def loginCheck(request):
     '''登陆校验'''
     id = request.GET.get("id")

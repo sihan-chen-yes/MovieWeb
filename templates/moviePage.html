@@ -67,7 +67,8 @@
 <div class="row">
 <div class="left col-xs-offset-2 col-xs-1" style="margin-top : 40px">
     <div data-v-c38922e8="" class="m_coverpicbox">
-    <div data-v-c38922e8="" class="img_box"><a data-v-c38922e8="" href="/267290/posters_and_images" title="长津湖">
+    <div data-v-c38922e8="" class="img_box">
+        <a data-v-c38922e8="" href="/267290/posters_and_images" title="长津湖">
         <img src="" id="picture"></a>
         </div> <!---->
     </div> <!----> <!---->
@@ -189,8 +190,45 @@
 </div>
 </div>
 
+
+    <div>
+        <p>主题：</p>
+        <ol>
+            <li v-for="theme in themes">
+                <div>
+                    [[theme.theme_name]]
+                </div>
+            </li>
+        </ol>
+    </div>
+
+    <div>
+        <p>影人信息：</p>
+        <ol>
+            <li v-for="worker in workers">
+                <div>
+                    <a><img v-bind:src="worker.worker_picture"></a>
+                </div>
+
+                <div>
+                    <a v-on:click="toWorkerPage(worker.worker_id)">[[worker.worker_name]]</a>
+                </div>
+
+                <div>
+                    [[worker.work_type]]
+                </div>
+            </li>
+        </ol>
+    </div>
+
+<!--    这里放主题-->
+
+
+
+
 <!--    这里放moviePage下面所有的话题     -->
     <div>
+         <p>话题：</p>
         <ol>
             <li v-for="topic in topics">
                 <div>
@@ -225,7 +263,9 @@
                 topics:[],
                 allowed:false,
                 user_id:window.sessionStorage.getItem("id"),
-                topic_id:''
+                topic_id:'',
+                workers:[{worker_name:"sss"}],
+                themes:[]
             },
             mounted:function () {
                 this.show();
@@ -236,6 +276,28 @@
             },
 
             methods:{
+                showMovieThemes() {
+                    axios.get("{% url 'showMovieThemes' %}",{
+                            params:{
+                                film_id:sessionStorage.getItem("film_id")
+                            }
+                        }).then(response=>{
+                            this.themes = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
+                showWorkers() {
+                    axios.get("{% url 'showWorkers' %}",{
+                            params:{
+                                film_id:sessionStorage.getItem("film_id")
+                            }
+                        }).then(response=>{
+                            this.workers = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
                 score(){
                     var score = $('#starNum').val()
                     console.log(score)
@@ -271,6 +333,10 @@
                 toTopicPage(topic_id) {
                     window.sessionStorage.setItem("topic_id",topic_id)
                     window.location.href = "{% url 'topicPage' %}"
+                },
+                toWorkerPage(worker_id) {
+                    window.sessionStorage.setItem("worker_id",worker_id)
+                    window.location.href = "{% url 'workerPage' %}"
                 },
                 showTopics() {
                     axios.get("{% url 'showTopics' %}",{
