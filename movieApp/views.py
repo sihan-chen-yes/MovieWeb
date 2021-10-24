@@ -8,6 +8,12 @@ user = "root"
 password = "123"
 database = "movie"
 host = "localhost"
+#表头
+topic_list_name_list = ["topic_id","film_id","user_id","title","topic_text","topic_time"]
+broadcast_list_name_list = ["broadcast_id","topic_id","user_id","broadcast_text","broadcast_time"]
+film_info_name_list = ["film_id","film_name","film_date",
+                       "film_area","film_score","film_score_people","introduction","picture","video"]
+worker_list_name_list = ["worker_id","worker_name","worker_picture","worker_introduction"]
 
 #分别定位到不同的html页面
 def login(request):
@@ -121,50 +127,40 @@ def edit(request):
     db.close()
     return JsonResponse(data, safe=False)
 
-def showAllMovies(request):
-    '''显示film_info中的所有电影'''
-    data = {}
-    data["film_info"] = []
-    db = pymysql.connect(user=user,password=password,database=database,host=host)
-    cursor = db.cursor()
+def showAllMovies(request=None):
+    '''显示所有电影信息'''
+    data = []
     sql = "select * from film_info"
-    cursor.execute(sql)
-    results = cursor.fetchall()
+    results = select(sql)
     for result in results:
-        data["film_info"].append({
-            "film_id":result[0],
-            "film_name":result[1],
-            "film_date":result[2],
-            "film_area":result[3],
-            "film_score":result[4],
-            "film_score_people":result[5],
-            "introduction":result[6],
-            "picture":result[7],
-            "video":result[8]
-        })
-    db.close()
-    return JsonResponse(data, safe=False)
+        film_id = result[0]
+        film = {}
+        film["film_info"] = generateDictData(result,film_info_name_list)
+        film["workers"] = showWorkers(request=None,film_id=film_id)
+        film["themes"] = showMovieThemes(request=None,film_id=film_id)
+        data.append(film)
+    if request:
+        return JsonResponse(data, safe=False)
+    else:
+        return data
 
-def showMovie(request):
+def showMovie(request=None,film_id=None):
     '''根据电影id显示该电影信息'''
-    film_id = request.GET.get("film_id")
-    data = {}
-    db = pymysql.connect(user=user,password=password,database=database,host=host)
-    cursor = db.cursor()
+    if request:
+        film_id = request.GET.get("film_id")
+    else:
+        assert film_id
     sql = "select * from film_info where film_id = '%s'" % (film_id)
-    cursor.execute(sql)
-    film = cursor.fetchone()
-    data["film_id"] = film[0]
-    data["film_name"] = film[1]
-    data["film_date"] = film[2]
-    data["film_area"] = film[3]
-    data["film_score"] = film[4]
-    data["film_score_people"] = film[5]
-    data["introduction"] = film[6]
-    data["picture"] = film[7]
-    data["video"] = film[8]
-    db.close()
-    return JsonResponse(data,safe=False)
+    results = select(sql)
+    assert len(results) == 1
+    data = {}
+    data["film_info"] = generateDictData(results[0],film_info_name_list)
+    data["workers"] = showWorkers(request=None,film_id=film_id)
+    data["themes"] = showMovieThemes(request=None,film_id=film_id)
+    if request:
+        return JsonResponse(data,safe=False)
+    else:
+        return data
 
 def show(request):
     '''显示用户收藏的电影以及用户信息'''
@@ -282,15 +278,11 @@ def searchMovieByName(request):
         })
     db.close()
     return JsonResponse(data,safe=False)
-topic_list_name_list = ["topic_id","film_id","user_id","title","topic_text","topic_time"]
-broadcast_list_name_list = ["broadcast_id","topic_id","user_id","broadcast_text","broadcast_time"]
-film_info_name_list = ["film_id","film_name","film_date",
-                       "film_area","film_score","film_score_people","introduction","picture"]
+
 def insertData(sql):
     '''插入信息'''
     db = pymysql.connect(user=user, password=password, database=database, host=host)
     cursor = db.cursor()
-    mark = False
     try:
         cursor.execute(sql)
         db.commit()
@@ -314,7 +306,6 @@ def delete(sql):
     '''删除信息'''
     db = pymysql.connect(user=user, password=password, database=database, host=host)
     cursor = db.cursor()
-    mark = False
     try:
         cursor.execute(sql)
         db.commit()
@@ -329,7 +320,6 @@ def update(sql):
     '''更新信息'''
     db = pymysql.connect(user=user, password=password, database=database, host=host)
     cursor = db.cursor()
-    mark = False
     try:
         cursor.execute(sql)
         db.commit()
@@ -343,6 +333,7 @@ def update(sql):
 def generateDictData(result,name_list):
     '''根据sql结果和列名生成字典'''
     dict = {}
+    assert len(result) == len(name_list)
     for i in range(len(result)):
         dict[name_list[i]] = result[i]
     return dict
@@ -426,31 +417,50 @@ def score(request):
     sql = "select * from user_score where user_id = '%s' and film_id = '%s'" % (user_id,film_id)
     results = select(sql)
     if results:
+        sql = "select score_number from user_score where film_id = '%s' and user_id = '%s'" % (film_id,user_id)
+        results = select(sql)
+        assert len(results) == 1
+        origin_score = results[0][0]
         sql = "update user_score set score_number = '%s' where user_id = '%s' and film_id = '%s'" \
-              % (user_id,film_id)
+              % (score_number,user_id,film_id)
+        mark = update(sql)
+        if not mark:
+            msg = "更新user_score失败"
+            return JsonResponse(data=msg, safe=False)
+        # 更新电影信息
+        sql = "select film_score,film_score_people from film_info where film_id = '%s'" % (film_id)
+        results = select(sql)
+        assert len(results) == 1
+        result = results[0]
+        film_score = result[0]
+        film_score_people = result[1]
+        total_score = film_score * film_score_people
+        total_score = total_score - origin_score + float(score_number)
+        film_score = total_score / film_score_people
+        sql = "update film_info set film_score = '%s',film_score_people = '%s' where film_id = '%s'" \
+              % (film_score, film_score_people, film_id)
         mark = update(sql)
     else:
         sql = "insert into user_score (user_id,film_id,score_number) values('%s','%s','%s')" \
               % (user_id,film_id,score_number)
         mark = insertData(sql)
-    if not mark:
-        msg = "更新user_score失败"
-        return JsonResponse(data=msg,safe=False)
-    mark = False
-    #更新电影信息
-    sql = "select film_score,film_score_people from film_info where film_id = '%s'" % (film_id)
-    results = select(sql)
-    assert len(results) == 1
-    result = results[0]
-    film_score = result[0]
-    film_score_people = result[1]
-    total_score = film_score * film_score_people
-    total_score += float(score_number)
-    film_score_people += 1
-    film_score = total_score / film_score_people
-    sql = "update film_info set film_score = '%s',film_score_people = '%s' where film_id = '%s'" \
-              % (film_id)
-    mark = update(sql)
+        if not mark:
+            msg = "更新user_score失败"
+            return JsonResponse(data=msg, safe=False)
+        # 更新电影信息
+        sql = "select film_score,film_score_people from film_info where film_id = '%s'" % (film_id)
+        results = select(sql)
+        assert len(results) == 1
+        result = results[0]
+        film_score = result[0]
+        film_score_people = result[1]
+        total_score = film_score * film_score_people
+        total_score += float(score_number)
+        film_score_people += 1
+        film_score = total_score / film_score_people
+        sql = "update film_info set film_score = '%s',film_score_people = '%s' where film_id = '%s'" \
+              % (film_score, film_score_people, film_id)
+        mark = update(sql)
     return JsonResponse(mark,safe=False)
 
 def showMovieRanks(request):
@@ -465,17 +475,32 @@ def showMovieRanks(request):
     data.sort(key=lambda x:x["film_score"],reverse=True)
     return JsonResponse(data,safe=False)
 
-def showWokers(request):
-    '''显示影人信息'''
-    film_id = request.GET.get("film_id")
-    sql = "select film_worker.worker_id,worker_name,worker_type from film_worker,worker_list " \
+def showWorkers(request=None,film_id=None):
+    '''显示与特定电影有关的所有影人信息'''
+    if request:
+        film_id = request.GET.get("film_id")
+    else:
+        assert film_id
+    sql = "select film_worker.worker_id,worker_name,worker_type,worker_picture,worker_introduction from film_worker,worker_list " \
           "where film_id = '%s' and film_worker.worker_id = worker_list.worker_id" % (film_id)
     results = select(sql)
-    name_list = ["worker_id", "worker_name","worker_type"]
+    name_list = ["worker_id", "worker_name","worker_type","worker_picture","worker_introduction"]
     data = []
     for result in results:
         data.append(generateDictData(result, name_list))
-    return JsonResponse(data, safe=False)
+    if request:
+        return JsonResponse(data, safe=False)
+    else:
+        return data
+
+def showSingleWorker(request):
+    '''显示单个影人信息'''
+    worker_id = request.GET.get("worker_id")
+    sql = "select * from worker_list where worker_id = '%s'" %(worker_id)
+    results = select(sql)
+    assert len(results) == 1
+    data = generateDictData(results[0],worker_list_name_list)
+    return JsonResponse(data,safe=False)
 
 def showPersonalThemes(request):
     '''显示个人主题'''
@@ -489,9 +514,12 @@ def showPersonalThemes(request):
         data.append(generateDictData(result, name_list))
     return JsonResponse(data, safe=False)
 
-def showMovieThemes(request):
-    '''显示电影主题'''
-    film_id = request.GET.get("film_id")
+def showMovieThemes(request=None,film_id=None):
+    '''显示与特定电影有关的主题'''
+    if request:
+        film_id = request.GET.get("film_id")
+    else:
+        assert film_id
     sql = "select film_theme.theme_id,theme_name from film_theme,theme_list " \
           "where film_id = '%s' and film_theme.theme_id = theme_list.theme_id" % (film_id)
     results = select(sql)
@@ -499,11 +527,20 @@ def showMovieThemes(request):
     data = []
     for result in results:
         data.append(generateDictData(result,name_list))
-    return JsonResponse(data,safe=False)
+    if request:
+        return JsonResponse(data,safe=False)
+    else:
+        return data
 
 def showRecommendedMovies(request):
     '''根据用户的偏好主题推荐电影'''
     user_id = request.GET.get("user_id")
-
+    sql = "select film_id from user_theme,film_theme " \
+          "where user_id = '%s' and user_theme.theme_id = film_theme.theme_id" %(user_id)
+    results = select(sql)
+    data = []
+    for film_id in results:
+        data.append(showMovie(request=None,film_id=film_id))
+    return JsonResponse(data,safe=False)
 
 
