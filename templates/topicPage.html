@@ -27,6 +27,9 @@
                 <p>[[broadcast.user_id]]</p>
                 <p>[[broadcast.broadcast_text]]</p>
                 <p>[[broadcast.broadcast_time]]</p>
+                <div v-if="broadcast.user_id == user_id">
+                    <button v-on:click="deleteBroadcast(broadcast.broadcast_id)">删除</button>
+                </div>
             </li>
         </ul>
     </div>
@@ -46,6 +49,8 @@
                 broadcasts: [],
                 broadcast_text: "",
                 broadcast_time: new Date(),
+                user_id:window.sessionStorage.getItem("id"),
+                broadcast_id:''
             },
 
             mounted: function(){
@@ -54,6 +59,18 @@
             },
 
             methods:{
+                deleteBroadcast(broadcast_id){
+                        axios.get("{% url 'deleteBroadcast' %}",{
+                            params:{
+                                broadcast_id: broadcast_id
+                            }
+                        }).then(response=>{
+                            this.broadcasts = response.data
+                            this.broadcast_id = ''
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
                 showSingleTopic() {
                     axios.get("{% url 'showSingleTopic' %}",{
                             params:{
