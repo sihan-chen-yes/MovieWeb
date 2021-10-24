@@ -11,6 +11,7 @@ urlpatterns = [
     path('showAllMovies',views.showAllMovies,name="showAllMovies"),
     path('selfPage/show',views.show,name="show"),
     path('selfPage',views.selfPage,name="selfPage"),
+    path('workerPage', views.workerPage, name="workerPage"),
     path('movieSquare',views.movieSuqare,name="movieSquare"),
     path('movieSquare/moviePage',views.moviePage,name="moviePage"),
     path('movieSquare/moviePage/showMovie',views.showMovie,name="showMovie"),
