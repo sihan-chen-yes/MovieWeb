@@ -39,6 +39,7 @@
                         }
                     }).then(response=>{
                         this.workerInfo = response.data
+                        console.log(this.workerInfo)
                     }),err=>{
                         console.log(err);
                     };

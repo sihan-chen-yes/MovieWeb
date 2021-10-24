@@ -24,6 +24,7 @@ urlpatterns = [
     path('movieSquare/moviePage/showTopics', views.showTopics, name="showTopics"),
 
     path('movieSquare/moviePage/topicPage', views.topicPage, name="topicPage"),
+    path('movieSquare/moviePage/workerPage', views.workerPage, name="workerPage"),
     path('movieSquare/moviePage/topicPage/addBroadcast', views.addBroadcast, name="addBroadcast"),
     path('movieSquare/moviePage/topicCreatingPage', views.topicCreatingPage, name="topicCreatingPage"),
     path('movieSquare/moviePage/topicCreatingPage/addTopic', views.addTopic, name="addTopic"),
@@ -40,4 +41,7 @@ urlpatterns = [
     path('selfPage/showPersonalThemes',views.showPersonalThemes,name="showPersonalThemes"),
     path('moviePage/showMovieThemes',views.showMovieThemes,name="showMovieThemes"),
     path('movieSquare/showRecommendedMovies',views.showRecommendedMovies,name="showRecommendedMovies"),
+
+    path('movieSquare/moviePage/workerPage/showSingleWorker', views.showSingleWorker, name="showSingleWorker"),
+
 ]
