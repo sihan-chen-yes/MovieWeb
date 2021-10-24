@@ -65,6 +65,11 @@
 
             methods:{
                 addTopic() {
+                    if(this.title == ""){
+                        alert("请输入话题标题")
+                    }else if(this.topic_text == ""){
+                        alert("请输入话题内容")
+                    }else{
                     console.log(this.title);
                     console.log(this.topic_text);
                     console.log(this.topic_time);
@@ -83,8 +88,10 @@
                         }),err=>{
 
                         };
+                        }
                     this.topic_text = "";
                     this.title = "";
+                    console.log("i am here");
                 }  //增加话题
             }
         })

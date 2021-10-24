@@ -35,7 +35,7 @@
             showSingleWorker(){
                 axios.get("{% url 'showSingleWorker' %}",{
                         params:{
-                            film_id:sessionStorage.getItem("worker_id")
+                            worker_id:sessionStorage.getItem("worker_id")
                         }
                     }).then(response=>{
                         this.workerInfo = response.data
