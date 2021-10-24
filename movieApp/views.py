@@ -5,7 +5,7 @@ import pandas as pd
 # Create your views here.
 
 user = "root"
-password = "61lyx520837"
+password = "123"
 database = "movie"
 host = "localhost"
 #表头
@@ -39,6 +39,9 @@ def topicPage(request):
 
 def topicCreatingPage(request):
     return render(request,"topicCreatingPage.html")
+
+def workerPage(request):
+    return render(request,"workerPage.html")
 
 def loginCheck(request):
     '''登陆校验'''
