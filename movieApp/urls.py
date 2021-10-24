@@ -13,12 +13,18 @@ urlpatterns = [
     path('selfPage',views.selfPage,name="selfPage"),
     path('movieSquare',views.movieSuqare,name="movieSquare"),
     path('movieSquare/moviePage',views.moviePage,name="moviePage"),
+    path('movieSquare/workerPage', views.workerPage, name="workerPage"),
     path('movieSquare/moviePage/showMovie',views.showMovie,name="showMovie"),
     path('movieSquare/moviePage/collect',views.collect,name="collect"),
     path('movieSquare/moviePage/cancelCollect',views.cancelCollect,name="cancelCollect"),
 
+    path('movieSquare/moviePage/showActor', views.showActor, name="showActor"),
+    path('movieSquare/moviePage/showDirector', views.showDirector, name="showDirector"),
+    path('movieSquare/moviePage/showWriter', views.showWriter, name="showWriter"),
     path('movieSquare/moviePage/showTopics', views.showTopics, name="showTopics"),
+
     path('movieSquare/moviePage/topicPage', views.topicPage, name="topicPage"),
+    path('movieSquare/moviePage/workerPage', views.workerPage, name="workerPage"),
     path('movieSquare/moviePage/topicPage/addBroadcast', views.addBroadcast, name="addBroadcast"),
     path('movieSquare/moviePage/topicCreatingPage', views.topicCreatingPage, name="topicCreatingPage"),
     path('movieSquare/moviePage/topicCreatingPage/addTopic', views.addTopic, name="addTopic"),
@@ -35,4 +41,7 @@ urlpatterns = [
     path('selfPage/showPersonalThemes',views.showPersonalThemes,name="showPersonalThemes"),
     path('moviePage/showMovieThemes',views.showMovieThemes,name="showMovieThemes"),
     path('movieSquare/showRecommendedMovies',views.showRecommendedMovies,name="showRecommendedMovies"),
+
+    path('movieSquare/moviePage/workerPage/showSingleWorker', views.showSingleWorker, name="showSingleWorker"),
+
 ]
