@@ -6,18 +6,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>topicCreatingPage</title>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+            	{% load static %}
+	<link type="text/css" rel="stylesheet" href="{% static "css/topicCreatingPage.css" %}">
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <style>
+
+    </style>
+
 </head>
+
 <body>
 
-<div id="createTopic">
-    <input v-model="title">
-    <textarea v-model="topic_text"></textarea>
-    <button v-on:click="addTopic()">添加新的话题</button>
+<div class="banner"></div>
+<div class="banner-mask"></div>
+<div class="login user-center-wrapper">
+<div class="login-text">
+       编辑您的话题:)
 </div>
+
+
+<div id="register" class="login-form">
+    <div id="createTopic">
+
+    <div class="form-item" style="margin-top:0px">
+        <input type="text" name="" class="login-input" placeholder="请输入标题" spellcheck="false" v-model="title">
+
+    </div>
+
+    <div class="form-item">
+
+        <textarea class="login-input" v-model="topic_text" placeholder="请表达您的想法"  spellcheck="false" style="height:130px"></textarea>
+    </div>
+
+    <button type="button" class="login-btn"  v-on:click="addTopic()">
+        添加新的话题
+    </button>
+
+        </div>
+
+</div>
+</div>
+
+
+
+
 
 <script>
     var vm = new Vue({

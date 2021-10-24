@@ -5,7 +5,7 @@ import pandas as pd
 # Create your views here.
 
 user = "root"
-password = "lzc011229"
+password = "123"
 database = "movie"
 host = "localhost"
 
