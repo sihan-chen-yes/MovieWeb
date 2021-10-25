@@ -215,6 +215,14 @@
                    </div>
 
 
+    <div>
+        <p>我喜爱的电影主题:</p>
+        <ul>
+            <li v-for="theme in myThemes">[[theme.theme_name]]</li>
+        </ul>
+    </div>
+
+
 
 
 
@@ -232,10 +240,12 @@
                 allowed:false,
                 name:null,
                 movies:[],
+                myThemes:[]
             },
             mounted:function () {
                 this.show();
                 this.showAll();
+                this.showPersonalThemes();
             },
             methods:{
                 show() {
@@ -252,6 +262,17 @@
                         }),err=>{
                             console.log(err);
                         };
+                },
+                showPersonalThemes() {
+                    axios.get("{% url 'showPersonalThemes' %}",{
+                        params: {
+                            user_id:sessionStorage.getItem("id")
+                        }
+                    }).then(response=>{
+                        this.myThemes = response.data;
+                    }),err=>{
+                        console.log(err);
+                    };
                 },
                 edit() {
                     window.location.href = "{% url 'userEdit' %}"
