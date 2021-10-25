@@ -557,4 +557,5 @@ def showRecommendedMovies(request):
         data.append(showMovie(request=None,film_id=film_id))
     return JsonResponse(data,safe=False)
 
-
+def showAllThemes(request):
+    pass

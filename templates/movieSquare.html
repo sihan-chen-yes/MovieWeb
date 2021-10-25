@@ -77,10 +77,10 @@
 
         <div class="col-xs-6 col-xs-offset-2" style="margin-left:320px">
             <div class="index-tab">
-                <a href="" class="sel">热门排行</a>
-                <a href="" id="hot" class=" hot">最新推荐<span></span></a>
-                <a href="" class="">星级精选</a>
-                <a href="" class="">随便看看</a>
+                <a href="" v-on:click="showAll()">随便看看</a>
+                <a href="" v-on:click="showRecommendedMovies()">影片推荐</a>
+                <a>星级精选</a>
+                <a>热门排行</a>
             </div>
             <div v-if="isSearching">
                     <ul class="index-list clearfix">
@@ -173,6 +173,13 @@
                         }),err=>{
                             console.log(err);
                         };
+                },
+                showRecommendedMovies() {
+                    axios.get("{% url 'showRecommendedMovies' %}").then(response=>{
+                        this.movies = response.data
+                    }),err=>{
+                        console.log(err);
+                    };
                 },
                 toSquare() {
                     window.location.href = "{% url 'movieSquare' %}"
