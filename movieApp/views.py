@@ -363,6 +363,7 @@ def addTopic(request):
     sql = "insert into topic_list(film_id,user_id,title,topic_text,topic_time) values('%s','%s','%s','%s','%s')" % \
           (film_id,user_id,title,topic_text,topic_time)
     data = insertData(sql)
+    print("----")
     #successful or not op
     return JsonResponse(data,safe=False)
 
