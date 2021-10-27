@@ -273,7 +273,7 @@
             </li>
         </ol>
     </div>
-    <button v-on:click="toTopicCreating(movieInfo.film_id)">添加新的话题</button>
+    <button v-on:click="toTopicCreating(movieInfo.film_info.film_id)">添加新的话题</button>
 </div>
 <script>
 
@@ -340,6 +340,7 @@
                         }),err=>{
                             console.log(err);
                         };
+                        location.reload();
                 },
                 deleteTopic(topic_id){
                         axios.get("{% url 'deleteTopic' %}",{
@@ -352,12 +353,12 @@
                         }),err=>{
                             console.log(err);
                         };
+                        location.reload();
                 },
                 toTopicCreating(film_id) {
                     window.sessionStorage.setItem("film_id",film_id)
                     window.location.href = "{% url 'topicCreatingPage' %}"
                 },
-
                 toTopicPage(topic_id) {
                     window.sessionStorage.setItem("topic_id",topic_id)
                     window.location.href = "{% url 'topicPage' %}"
