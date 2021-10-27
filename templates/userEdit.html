@@ -313,7 +313,7 @@
                                 id:sessionStorage.getItem("id")
                             }
                         }).then(response=>{
-                            this.allowed = response.data["allowed"]
+                            this.allowed = response.data
                             if (this.allowed == true) {
                                 alert("修改成功！")
                             } else {

@@ -6,6 +6,7 @@ urlpatterns = [
     path('register/',views.register,name="register"),
     path('login/loginCheck/',views.loginCheck,name="loginCheck"),
     path('userEdit/',views.userEdit,name="userEdit"),
+    path('userEdit/showAllThemes',views.showAllThemes,name="showAllThemes"),
     path('register/registerApply',views.registerApply,name="registerApply"),
     path('uesrEdit/edit',views.edit,name="edit"),
     path('showAllMovies',views.showAllMovies,name="showAllMovies"),
