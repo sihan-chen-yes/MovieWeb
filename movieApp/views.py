@@ -556,8 +556,7 @@ def showRecommendedMovies(request):
     return JsonResponse(data,safe=False)
 
 def showAllThemes(request):
-    user_id = request.GET.get("user_id")
-    sql = "select user_theme.theme_id,theme_name from user_theme,theme_list where user_id = '%s'" %(user_id)
+    sql = "select * from theme_list"
     results = select(sql)
     data = []
     for result in results:
