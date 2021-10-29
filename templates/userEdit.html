@@ -303,9 +303,7 @@
                 },
                 showAllThemes() {
                     axios.get("{% url 'showAllThemes' %}",{
-                        params: {
-                            user_id:sessionStorage.getItem("id")
-                        }
+
                     }).then(response=>{
                         this.themes = response.data;
                     }),err=>{
