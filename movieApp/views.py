@@ -564,6 +564,7 @@ def showRecommendedMovies(request):
     data = []
     for film_id in results:
         data.append(showMovie(request=None,film_id=film_id))
+    # print(data)
     return JsonResponse(data,safe=False)
 
 def showAllThemes(request):
