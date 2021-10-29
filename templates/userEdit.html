@@ -248,15 +248,13 @@
                     <span style="margin-inline:5px"></span>
 </div>
 
-
             <form action="" method="get">
 请选择你喜欢的电影主题:)<br /><br />
 <ul>
 <li v-for="theme in themes" style="display:inline;margin-inline:4px;">
-    <label><input name="themeName" type="checkbox" value="[[theme.theme_id]]"/>[[theme.theme_name]]</label>
+    <label><input name="themeName" type="checkbox" :value="theme.theme_id"/>[[theme.theme_name]]</label>
 </li>
 </ul>
-                <button v-on:click="getSelectedThemes()" hidden>我就看看我选了啥，看完就删掉</button>
 </form>
 
         </div>
@@ -303,9 +301,7 @@
                 },
                 showAllThemes() {
                     axios.get("{% url 'showAllThemes' %}",{
-                        params: {
-                            user_id:sessionStorage.getItem("id")
-                        }
+
                     }).then(response=>{
                         this.themes = response.data;
                     }),err=>{
@@ -325,13 +321,15 @@
                 },
                 submit() {
                     this.getSelectedThemes();
+                    console.log("this is " + this.tempThemes);
+                    var list = JSON.stringify(this.tempThemes);
                     axios.get("{% url 'edit' %}",{
                             params:{
                                 gender:this.gender,
                                 email:this.email,
                                 phone:this.phone,
                                 id:sessionStorage.getItem("id"),
-                                themes: this.tempThemes
+                                themes: list
                             }
                         }).then(response=>{
                             this.allowed = response.data

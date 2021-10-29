@@ -175,6 +175,7 @@
                         };
                 },
                 showRecommendedMovies() {
+                    console.log(this.movies);
                     axios.get("{% url 'showRecommendedMovies' %}").then(response=>{
                         this.movies = response.data
                     }),err=>{

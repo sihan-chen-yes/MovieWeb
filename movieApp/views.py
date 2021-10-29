@@ -117,6 +117,11 @@ def edit(request):
     phone = request.GET.get("phone")
     id = request.GET.get("id")
     themes = request.GET.get("themes")
+    tempThemes = themes
+    tempThemes = tempThemes.replace('[','')
+    tempThemes = tempThemes.replace(']','')
+    tempThemes = tempThemes.replace('\"','')
+    themes = tempThemes.split(',')
     sql = "update user_list set gender = '%s',email = '%s',phone = '%s' where user_id = '%s'" % (gender,email,phone,id)
     mark = update(sql)
     if not mark:
