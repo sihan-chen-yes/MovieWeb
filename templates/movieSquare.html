@@ -176,7 +176,11 @@
                 },
                 showRecommendedMovies() {
                     console.log(this.movies);
-                    axios.get("{% url 'showRecommendedMovies' %}").then(response=>{
+                    axios.get("{% url 'showRecommendedMovies' %}",{
+                        params:{
+                            id:sessionStorage.getItem("id")
+                        }
+                    }).then(response=>{
                         this.movies = response.data
                     }),err=>{
                         console.log(err);

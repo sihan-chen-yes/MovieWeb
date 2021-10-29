@@ -117,15 +117,21 @@ def edit(request):
     phone = request.GET.get("phone")
     id = request.GET.get("id")
     themes = request.GET.get("themes")
+    #前端传入是字符串 转化成list
     tempThemes = themes
     tempThemes = tempThemes.replace('[','')
     tempThemes = tempThemes.replace(']','')
     tempThemes = tempThemes.replace('\"','')
     themes = tempThemes.split(',')
+
     sql = "update user_list set gender = '%s',email = '%s',phone = '%s' where user_id = '%s'" % (gender,email,phone,id)
     mark = update(sql)
     if not mark:
         return JsonResponse(mark,saft=False)
+    sql = "delete from user_theme where user_id = '%s'" %(id)
+    mark = delete(sql)
+    if not mark:
+        return JsonResponse(mark,safe=False)
     for theme in themes:
         sql = "insert into user_theme (user_id,theme_id) values ('%s','%s')"%(id,theme)
         mark = insertData(sql)
@@ -551,7 +557,7 @@ def showMovieThemes(request=None,film_id=None):
 
 def showRecommendedMovies(request):
     '''根据用户的偏好主题推荐电影'''
-    user_id = request.GET.get("user_id")
+    user_id = request.GET.get("id")
     sql = "select film_id from user_theme,film_theme " \
           "where user_id = '%s' and user_theme.theme_id = film_theme.theme_id" %(user_id)
     results = select(sql)
