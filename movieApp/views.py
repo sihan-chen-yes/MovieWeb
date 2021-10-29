@@ -2,6 +2,7 @@ import pymysql
 from django.shortcuts import render
 from django.http.response import JsonResponse
 import pandas as pd
+import numpy as np
 # Create your views here.
 
 user = "root"
@@ -560,7 +561,7 @@ def showRecommendedMovies(request):
     user_id = request.GET.get("id")
     sql = "select film_id from user_theme,film_theme " \
           "where user_id = '%s' and user_theme.theme_id = film_theme.theme_id" %(user_id)
-    results = select(sql)
+    results = (np.unique(select(sql))).tolist()
     data = []
     for film_id in results:
         data.append(showMovie(request=None,film_id=film_id))
