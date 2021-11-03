@@ -206,20 +206,19 @@
                 <span class="title">性别：</span>
                 <span style="margin-inline:-140px"></span>
                 <span class="con"><span class="c_b_9">
-<label>
+                        <label>
                         <input type="radio" name="gender" class="a-radio" value="male" v-model="gender">
                         <span class="b-radio"></span>男
-</label>
+                        </label>
                     <span style="margin-inline:10px"></span>
                     <label>
                         <input type="radio" name="gender"  class="a-radio" value="female" v-model="gender">
                         <span class="b-radio"></span>女
-</label>
+                    </label>
                 </span></span>
 
             </div>
             <div class="gender">
-
                     <span style="margin-inline:140px"></span>
 			        <span class="title">邮箱：</span>
                     <span style="margin-inline:-135px"></span>
@@ -227,10 +226,9 @@
                         <input type="email" placeholder="请输入邮箱" v-model="email">
                     </span></span>
                     <span style="margin-inline:5px"></span>
-                </div>
+            </div>
 
             <div class="gender">
-
                     <span style="margin-inline:140px"></span>
 			        <span class="title">电话：</span>
                     <span style="margin-inline:-135px"></span>
@@ -238,10 +236,9 @@
                         <input type="phone" placeholder="请输入电话" v-model="phone">
                     </span></span>
                     <span style="margin-inline:5px"></span>
-                </div>
+            </div>
 
 <div class="gender">
-
     <span style="margin-inline:15px"></span>
 			        <button class="btn-md btn-primary" v-on:click="submit" style="padding:3px 3px 3px 3px">修改个人信息</button>
                     <span style="margin-inline:10px"></span>
@@ -249,35 +246,18 @@
                         <button class="btn-md btn-default" v-on:click="back" style="padding:3px 3px 3px 3px">返回个人主页</button>
                     </span>
                     <span style="margin-inline:5px"></span>
-
-
 </div>
 
+            <form action="" method="get">
+请选择你喜欢的电影主题:)<br /><br />
+<ul>
+<li v-for="theme in themes" style="display:inline;margin-inline:4px;">
+    <label><input name="themeName" type="checkbox" :value="theme.theme_id"/>[[theme.theme_name]]</label>
+</li>
+</ul>
+</form>
 
-
-<!--
-
-
-				<div class="name">
-
-
-			        <span class="title">昵称：</span>
-			        <span class="con"><span class="c_b_9">[[ name ]]</span></span>
-                </div>
-                <div class="gender">
-			        <span class="title">性别：</span>
-			        <span class="con"><span class="c_b_9">[[ gender ]]</span></span>
-		        </div>
-                <div class="gender">
-			        <span class="title">邮箱：</span>
-			        <span class="con"><span class="c_b_9">[[ email ]]</span></span>
-		        </div>
-                <div class="gender">
-			        <span class="title">电话：</span>
-			        <span class="con"><span class="c_b_9">[[ phone ]]</span></span>
-		        </div>
--->
-                   </div>
+        </div>
 </div>
 
 
@@ -298,22 +278,61 @@
                 email:null,
                 phone:null,
                 allowed:false,
-                movies:[]
+                movies:[],
+                themes:[],
+                myThemes:[],
+                tempThemes:[]
             },
             mounted:function () {
                 this.show();
+                this.showAllThemes();
             },
             methods:{
+                getSelectedThemes() {
+                    this.tempThemes = [];
+                    var obj = document.getElementsByName("themeName");
+                    var l = obj.length;
+                    for(var i = 0;i < l;i = i + 1){
+                        if(obj[i].checked){
+                            this.tempThemes.push(obj[i].value);
+                        }
+                    }
+                    console.log(this.tempThemes);
+                },
+                showAllThemes() {
+                    axios.get("{% url 'showAllThemes' %}",{
+
+                    }).then(response=>{
+                        this.themes = response.data;
+                    }),err=>{
+                        console.log(err);
+                    };
+                },
+                showPersonalThemes() {
+                    axios.get("{% url 'showPersonalThemes' %}",{
+                        params: {
+                            user_id:sessionStorage.getItem("id")
+                        }
+                    }).then(response=>{
+                        this.myThemes = response.data;
+                    }),err=>{
+                        console.log(err);
+                    };
+                },
                 submit() {
+                    this.getSelectedThemes();
+                    console.log("this is " + this.tempThemes);
+                    var list = JSON.stringify(this.tempThemes);
                     axios.get("{% url 'edit' %}",{
                             params:{
                                 gender:this.gender,
                                 email:this.email,
                                 phone:this.phone,
-                                id:sessionStorage.getItem("id")
+                                id:sessionStorage.getItem("id"),
+                                themes: list
                             }
                         }).then(response=>{
-                            this.allowed = response.data["allowed"]
+                            this.allowed = response.data
                             if (this.allowed == true) {
                                 alert("修改成功！")
                             } else {

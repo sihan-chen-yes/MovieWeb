@@ -2,6 +2,7 @@ import pymysql
 from django.shortcuts import render
 from django.http.response import JsonResponse
 import pandas as pd
+import numpy as np
 # Create your views here.
 
 user = "root"
@@ -14,6 +15,7 @@ broadcast_list_name_list = ["broadcast_id","topic_id","user_id","broadcast_text"
 film_info_name_list = ["film_id","film_name","film_date",
                        "film_area","film_score","film_score_people","introduction","picture","video"]
 worker_list_name_list = ["worker_id","worker_name","worker_picture","worker_introduction"]
+theme_list_name_list = ["theme_id","theme_name"]
 
 #分别定位到不同的html页面
 def login(request):
@@ -115,20 +117,28 @@ def edit(request):
     email = request.GET.get("email")
     phone = request.GET.get("phone")
     id = request.GET.get("id")
+    themes = request.GET.get("themes")
+    #前端传入是字符串 转化成list
+    tempThemes = themes
+    tempThemes = tempThemes.replace('[','')
+    tempThemes = tempThemes.replace(']','')
+    tempThemes = tempThemes.replace('\"','')
+    themes = tempThemes.split(',')
 
-    db = pymysql.connect(user=user,password=password,database=database,host=host)
-    cursor = db.cursor()
     sql = "update user_list set gender = '%s',email = '%s',phone = '%s' where user_id = '%s'" % (gender,email,phone,id)
-    try:
-        cursor.execute(sql)
-        db.commit()
-    except:
-        db.rollback()
-    data = {
-        "allowed":True
-    }
-    db.close()
-    return JsonResponse(data, safe=False)
+    mark = update(sql)
+    if not mark:
+        return JsonResponse(mark,saft=False)
+    sql = "delete from user_theme where user_id = '%s'" %(id)
+    mark = delete(sql)
+    if not mark:
+        return JsonResponse(mark,safe=False)
+    for theme in themes:
+        sql = "insert into user_theme (user_id,theme_id) values ('%s','%s')"%(id,theme)
+        mark = insertData(sql)
+        if not mark:
+            return JsonResponse(mark,safe=False)
+    return JsonResponse(mark, safe=False)
 
 def showAllMovies(request=None):
     '''显示所有电影信息'''
@@ -548,13 +558,20 @@ def showMovieThemes(request=None,film_id=None):
 
 def showRecommendedMovies(request):
     '''根据用户的偏好主题推荐电影'''
-    user_id = request.GET.get("user_id")
+    user_id = request.GET.get("id")
     sql = "select film_id from user_theme,film_theme " \
           "where user_id = '%s' and user_theme.theme_id = film_theme.theme_id" %(user_id)
-    results = select(sql)
+    results = (np.unique(select(sql))).tolist()
     data = []
     for film_id in results:
         data.append(showMovie(request=None,film_id=film_id))
+    # print(data)
     return JsonResponse(data,safe=False)
 
-
+def showAllThemes(request):
+    sql = "select * from theme_list"
+    results = select(sql)
+    data = []
+    for result in results:
+        data.append(generateDictData(result,theme_list_name_list))
+    return JsonResponse(data,safe=False)
