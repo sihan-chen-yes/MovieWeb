@@ -6,7 +6,7 @@ import numpy as np
 # Create your views here.
 
 user = "root"
-password = "lzc011229"
+password = "123"
 database = "movie"
 host = "localhost"
 #表头
