@@ -5,8 +5,8 @@ import pandas as pd
 import numpy as np
 # Create your views here.
 
-user = "root"
-password = "123"
+db_user = "root"
+db_password = "123"
 database = "movie"
 host = "localhost"
 #表头
@@ -16,6 +16,9 @@ film_info_name_list = ["film_id","film_name","film_date",
                        "film_area","film_score","film_score_people","introduction","picture","video"]
 worker_list_name_list = ["worker_id","worker_name","worker_picture","worker_introduction"]
 theme_list_name_list = ["theme_id","theme_name"]
+user_list_name_list = ["user_id","user_name","gender","email","phone"]
+#no password
+fan_club_name_list = ["club_id","club_name"]
 
 #分别定位到不同的html页面
 def login(request):
@@ -45,70 +48,116 @@ def topicCreatingPage(request):
 def workerPage(request):
     return render(request,"workerPage.html")
 
+def select(sql):
+    '''显示信息'''
+    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
+    cursor = db.cursor()
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    db.close()
+    return results
+
+def delete(sql):
+    '''删除信息'''
+    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
+    cursor = db.cursor()
+    try:
+        cursor.execute(sql)
+        db.commit()
+        mark = True
+    except:
+        db.rollback()
+        mark = False
+    db.close()
+    return mark
+
+def update(sql):
+    '''更新信息'''
+    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
+    cursor = db.cursor()
+    try:
+        cursor.execute(sql)
+        db.commit()
+        mark = True
+    except:
+        db.rollback()
+        mark = False
+    db.close()
+    return mark
+
+def insert(sql):
+    '''插入信息'''
+    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
+    cursor = db.cursor()
+    try:
+        cursor.execute(sql)
+        db.commit()
+        mark = True
+    except:
+        db.rollback()
+        mark = False
+    db.close()
+    return mark
+
+def generateDictData(result,name_list):
+    '''根据sql结果和列名生成字典'''
+    dict = {}
+    assert len(result) == len(name_list)
+    for i in range(len(result)):
+        dict[name_list[i]] = result[i]
+    return dict
+
 def loginCheck(request):
     '''登陆校验'''
     id = request.GET.get("id")
     pwd = request.GET.get("pwd")
 
-    db = pymysql.connect(user=user,password=password,database=database,host=host)
-    cursor = db.cursor()
     sql = "select * from user_list where user_id = '%s'" %(id)
-    cursor.execute(sql)
-    row = cursor.fetchone()
-
+    results = select(sql)
     data = {
         "allowed" : True,
         "idWrong" : False,
         'pwdWrong' : False
     }
-
-    if row:
+    #记录mark
+    if results:
+        row = results[0]
         if pwd != row[2]:
             data["pwdWrong"] = True
             data["allowed"] = False
     else:
         data["allowed"] = False
         data["idWrong"] = True
-    db.close()
     return JsonResponse(data, safe=False)
 
 def registerApply(request):
     '''注册申请'''
     id = request.GET.get("id")
+    name = request.GET.get("name")
+    pwd = request.GET.get("pwd")
 
     data = {
         "allowed": True,
         "idWrong": False,
         "nameWrong":False
     }
-
-    db = pymysql.connect(user=user,password=password,database=database,host=host)
-    cursor = db.cursor()
+    # 记录mark
     sql = "select * from user_list where user_id = '%s'" % (id)
-    cursor.execute(sql)
-    results = cursor.fetchall()
+    results = select(sql)
     if results:
         data["allowed"] = False
         data["idWrong"] = True
         return JsonResponse(data, safe=False)
 
-    name = request.GET.get("name")
     sql = "select * from user_list where user_name = '%s'" % (name)
-    cursor.execute(sql)
-    results = cursor.fetchall()
+    results = select(sql)
     if results:
         data["allowed"] = False
         data["nameWrong"] = True
         return JsonResponse(data, safe=False)
 
-    pwd = request.GET.get("pwd")
     sql = "insert into user_list(user_id,user_name,password) values('%s','%s','%s')" % (id,name,pwd)
-    try:
-        cursor.execute(sql)
-        db.commit()
-    except:
-        db.rollback()
-    db.close()
+    insert(sql)
     return JsonResponse(data, safe=False)
 
 def edit(request):
@@ -135,7 +184,7 @@ def edit(request):
         return JsonResponse(mark,safe=False)
     for theme in themes:
         sql = "insert into user_theme (user_id,theme_id) values ('%s','%s')"%(id,theme)
-        mark = insertData(sql)
+        mark = insert(sql)
         if not mark:
             return JsonResponse(mark,safe=False)
     return JsonResponse(mark, safe=False)
@@ -176,7 +225,7 @@ def show(request):
 
     data = {}
     data["film_info"] = []
-    db = pymysql.connect(user=user,password=password,database=database,host=host)
+    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
     cursor = db.cursor()
     sql = "select * from user_collection where user_id = '%s'" % (id)
     cursor.execute(sql)
@@ -224,7 +273,7 @@ def collect(request):
     user_id = request.GET.get("id")
     film_id = request.GET.get("film_id")
     data = True
-    db = pymysql.connect(user=user,password=password,database=database,host=host)
+    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
     cursor = db.cursor()
     sql = "select * from user_collection where user_id = '%s' and film_id = '%s'" % (user_id,film_id)
     cursor.execute(sql)
@@ -245,7 +294,7 @@ def cancelCollect(request):
     user_id = request.GET.get("id")
     film_id = request.GET.get("film_id")
     data = True
-    db = pymysql.connect(user=user,password=password,database=database,host=host)
+    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
     cursor = db.cursor()
     sql = "select * from user_collection where user_id = '%s' and film_id = '%s'" % (user_id, film_id)
     cursor.execute(sql)
@@ -273,65 +322,6 @@ def searchMovieByName(request):
         film_id = result[0]
         data.append(showMovie(request=None,film_id=film_id))
     return JsonResponse(data,safe=False)
-
-def insertData(sql):
-    '''插入信息'''
-    db = pymysql.connect(user=user, password=password, database=database, host=host)
-    cursor = db.cursor()
-    try:
-        cursor.execute(sql)
-        db.commit()
-        mark = True
-    except:
-        db.rollback()
-        mark = False
-    db.close()
-    return mark
-
-def select(sql):
-    '''显示信息'''
-    db = pymysql.connect(user=user,password=password,database=database,host=host)
-    cursor = db.cursor()
-    cursor.execute(sql)
-    results = cursor.fetchall()
-    db.close()
-    return results
-
-def delete(sql):
-    '''删除信息'''
-    db = pymysql.connect(user=user, password=password, database=database, host=host)
-    cursor = db.cursor()
-    try:
-        cursor.execute(sql)
-        db.commit()
-        mark = True
-    except:
-        db.rollback()
-        mark = False
-    db.close()
-    return mark
-
-def update(sql):
-    '''更新信息'''
-    db = pymysql.connect(user=user, password=password, database=database, host=host)
-    cursor = db.cursor()
-    try:
-        cursor.execute(sql)
-        db.commit()
-        mark = True
-    except:
-        db.rollback()
-        mark = False
-    db.close()
-    return mark
-
-def generateDictData(result,name_list):
-    '''根据sql结果和列名生成字典'''
-    dict = {}
-    assert len(result) == len(name_list)
-    for i in range(len(result)):
-        dict[name_list[i]] = result[i]
-    return dict
 
 def showTopics(request):
     '''显示所有话题'''
@@ -372,8 +362,7 @@ def addTopic(request):
     topic_time = pd.to_datetime(request.GET.get("topic_time"))
     sql = "insert into topic_list(film_id,user_id,title,topic_text,topic_time) values('%s','%s','%s','%s','%s')" % \
           (film_id,user_id,title,topic_text,topic_time)
-    data = insertData(sql)
-    print("----")
+    data = insert(sql)
     #successful or not op
     return JsonResponse(data,safe=False)
 
@@ -385,7 +374,7 @@ def addBroadcast(request):
     broadcast_time = pd.to_datetime(request.GET.get("broadcast_time"))
     sql = "insert into broadcast_list(topic_id, user_id, broadcast_text, broadcast_time) values('%s','%s','%s','%s')" % \
           (topic_id, user_id, broadcast_text, broadcast_time)
-    data = insertData(sql)
+    data = insert(sql)
     #successful or not op
     return JsonResponse(data,safe=False)
 
@@ -439,7 +428,7 @@ def score(request):
     else:
         sql = "insert into user_score (user_id,film_id,score_number) values('%s','%s','%s')" \
               % (user_id,film_id,score_number)
-        mark = insertData(sql)
+        mark = insert(sql)
         if not mark:
             msg = "更新user_score失败"
             return JsonResponse(data=msg, safe=False)
@@ -495,7 +484,6 @@ def showDirector(film_id):
     for result in results:
         directors.append(generateDictData(result,worker_list_name_list))
     return directors
-
 
 def showActor(film_id):
     sql = "select film_actor.worker_id,worker_name,worker_picture,worker_introduction " \
@@ -565,13 +553,166 @@ def showRecommendedMovies(request):
     data = []
     for film_id in results:
         data.append(showMovie(request=None,film_id=film_id))
-    # print(data)
     return JsonResponse(data,safe=False)
 
 def showAllThemes(request):
+    '''显示所有主题'''
     sql = "select * from theme_list"
     results = select(sql)
     data = []
     for result in results:
         data.append(generateDictData(result,theme_list_name_list))
     return JsonResponse(data,safe=False)
+
+def managerRegister(request):
+    '''管理员登陆注册'''
+    manager_id = request.GET.get("manager_id")
+    manager_name = request.GET.get("manager_name")
+    password = request.GET.get("password")
+
+    data = {
+        "allowed": True,
+        "idWrong": False,
+        "nameWrong":False
+    }
+    # 记录mark
+    sql = "select * from manager_list where manager_id = '%s'" % (manager_id)
+    results = select(sql)
+    if results:
+        data["allowed"] = False
+        data["idWrong"] = True
+        return JsonResponse(data, safe=False)
+
+    sql = "select * from manager_list where manager_name = '%s'" % (manager_name)
+    results = select(sql)
+    if results:
+        data["allowed"] = False
+        data["nameWrong"] = True
+        return JsonResponse(data, safe=False)
+
+    sql = "insert into manager_list(manager_id,manager_name,password) values('%s','%s','%s')"\
+          % (manager_id,manager_name,password)
+    insert(sql)
+    return JsonResponse(data, safe=False)
+
+def managerLogin(request):
+    '''管理员登陆校验'''
+    manager_id = request.GET.get("manager_id")
+    password = request.GET.get("password")
+
+    sql = "select * from manager_list where manager_id = '%s'" % (manager_id)
+    results = select(sql)
+    data = {
+        "allowed": True,
+        "idWrong": False,
+        'pwdWrong': False
+    }
+    # 记录mark
+    if results:
+        row = results[0]
+        if password != row[2]:
+            #密码不对
+            data["pwdWrong"] = True
+            data["allowed"] = False
+    else:
+        data["allowed"] = False
+        data["idWrong"] = True
+    return JsonResponse(data, safe=False)
+
+def addMovie(request):
+    pass
+
+def addClub(request):
+    '''添加粉丝团'''
+    worker_id = request.GET.get("worker_id")
+    club_name = request.GET.get("club_name")
+
+    data = {
+        "success":True
+    }
+
+    sql = "select * from fan_club where worker_id = '%s'" % (worker_id)
+    results = select(sql)
+    if results:
+        data["success"] = False
+        return JsonResponse(data,safe=False)
+    sql = "insert into fan_club(worker_id,club_name) values('%s','%s')"%(worker_id,club_name)
+    data["success"] = insert(sql)
+    return JsonResponse(data,safe=False)
+
+def joinClub(request):
+    '''将用户移入粉丝团'''
+    user_id = request.GET.get("user_id")
+    club_id = request.GET.get("club_id")
+    sql = "select * from fan_club where club_id = '%s'" % (club_id)
+    results = select(sql)
+    if not results:
+        mark = False
+        return JsonResponse(mark,safe=False)
+    sql = "insert into user_in_club(user_id,club_id) values('%s','%s')"%(user_id,club_id)
+    mark = insert(sql)
+    return JsonResponse(mark,safe=False)
+
+def quitClub(request):
+    '''将用户移出粉丝团'''
+    user_id = request.GET.get("user_id")
+    club_id = request.GET.get("club_id")
+    sql = "select * from user_in_club where user_id = '%s' and club_id = '%s'" % (user_id,club_id)
+    results = select(sql)
+    if results:
+        sql = "delete from user_in_club where user_id = '%s' and club_id = '%s'" % (user_id,club_id)
+        mark = delete(sql)
+        return JsonResponse(mark,safe=False)
+    else:
+        mark = False
+        return JsonResponse(mark,safe=False)
+
+def showFans(request):
+    '''显示所有粉丝信息 除了密码'''
+    club_id = request.GET.get("club_id")
+    data = []
+    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone " \
+          "from user_in_club,user_list " \
+          "where user_in_club.club_id = '%s' and user_in_club.user_id = user_list.user_id" % (club_id)
+    results = select(sql)
+    for result in results:
+        data.append(generateDictData(result,user_list_name_list))
+    return JsonResponse(data,safe=False)
+
+def showWorker(request):
+    '''显示粉丝团的worker'''
+    club_id = request.GET.get("club_id")
+    sql = "select worker_list.worker_id,worker_list.worker_name,worker_list.worker_picture,worker_list.worker_introduction " \
+          "from worker_list,fan_club " \
+          "where worker_list.worker_id = fan_club.worker_id and fan_club.club_id = '%s'" % (club_id)
+    results = select(sql)
+    assert len(results)
+    for result in results:
+        data = generateDictData(result,worker_list_name_list)
+        return JsonResponse(data,safe=False)
+
+def showClubs(request):
+    '''显示粉丝团所有信息(不包括粉丝)'''
+    data = []
+    sql = "select fan_club.club_id,fan_club.club_name," \
+          "worker_list.worker_id,worker_list.worker_name,worker_list.worker_picture,worker_list.worker_introduction " \
+          "from worker_list,fan_club " \
+          "where worker_list.worker_id = fan_club.worker_id"
+    results = select(sql)
+    for result in results:
+        data.append(generateDictData(result,fan_club_name_list + worker_list_name_list))
+    return JsonResponse(data,safe=False)
+
+def showJoinedClubs(request):
+    '''显示用户已经加入的粉丝团'''
+    user_id = request.GET.get("user_id")
+    data = []
+    sql = "select fan_club.club_id,fan_club.club_name," \
+          "worker_list.worker_id,worker_list.worker_name,worker_list.worker_picture,worker_list.worker_introduction " \
+          "from worker_list,fan_club,user_in_club " \
+          "where user_in_club.user_id = '%s' and user_in_club.club_id = fan_club.club_id " \
+          "and fan_club.worker_id = worker_list.worker_id" % (user_id)
+    results = select(sql)
+    for result in results:
+        data.append(generateDictData(result, fan_club_name_list + worker_list_name_list))
+    return JsonResponse(data, safe=False)
