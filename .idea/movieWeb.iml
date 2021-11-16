@@ -13,10 +13,10 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
-    <content url="file://$MODULE_DIR$/../../../../../codeApp/Anaconda">
-      <excludeFolder url="file://$MODULE_DIR$/../../../../../codeApp/Anaconda" />
+    <content url="file://C:/codeApp/Anaconda">
+      <excludeFolder url="file://C:/codeApp/Anaconda" />
     </content>
+    <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Python 3.8" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
