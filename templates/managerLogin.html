@@ -38,9 +38,11 @@
         登录
     </button>
 
-    <button type="button" class="login-btn" v-on:click="reg">
+    <button type="button" class="login-btn" v-on:click="managerRegister">
         注册
     </button>
+
+    <button v-on:click="user">用户登录</button>
 </div>
 </div>
     </div>
@@ -84,8 +86,12 @@
                         };
                     }
                 },
-                reg() {
-                    window.location.href = "{% url 'managerRegister '%}"
+                managerRegister() {
+                    window.location.href = "{% url 'managerRegister' %}"
+                },
+                user() {
+                    console.log("9988");
+                    window.location.href = "{% url 'login'%}"
                 }
             }
         })
