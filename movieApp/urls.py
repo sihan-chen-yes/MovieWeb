@@ -48,9 +48,9 @@ urlpatterns = [
     path('movieSquare/moviePage/workerPage/showSingleWorker', views.showSingleWorker, name="showSingleWorker"),
 
     path('managerLogin/', views.managerLogin, name="managerLogin"),
-    path('managerRegister/', views.managerRegister, name="managerRegister"),
     #path('managerRegister/', views.managerRegister, name="managerRegister"),
-    path('managerLogin/managerLoginCheck/', views.managerLoginCheck, name="managerLoginCheck"),
-    path('managerRegister/managerRegisterApply', views.managerRegisterApply, name="managerRegisterApply"),
+    path('managerLogin/managerLoginCheck', views.managerLoginCheck, name="managerLoginCheck"),
+    path('managerRegister/', views.managerRegister, name="managerRegister"),
+    path('managerRegister/managerRegisterApply', views.managerRegisterApply, name="managerRegisterApply")
 
 ]
