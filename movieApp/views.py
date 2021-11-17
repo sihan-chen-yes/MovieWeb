@@ -28,6 +28,12 @@ def login(request):
 def register(request):
     return render(request, "register.html")
 
+def managerLogin(request):
+    return render(request, "managerLogin.html")
+
+def managerRegister(request):
+    return render(request, "managerRegister.html")
+
 def userEdit(request):
     return render(request,"userEdit.html")
 
@@ -565,7 +571,7 @@ def showAllThemes(request):
         data.append(generateDictData(result,theme_list_name_list))
     return JsonResponse(data,safe=False)
 
-def managerRegister(request):
+def managerRegisterApply(request):
     '''管理员登陆注册'''
     manager_id = request.GET.get("manager_id")
     manager_name = request.GET.get("manager_name")
@@ -596,7 +602,7 @@ def managerRegister(request):
     insert(sql)
     return JsonResponse(data, safe=False)
 
-def managerLogin(request):
+def managerLoginCheck(request):
     '''管理员登陆校验'''
     manager_id = request.GET.get("manager_id")
     password = request.GET.get("password")
