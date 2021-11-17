@@ -62,6 +62,7 @@
                 title: "",
                 topic_text: "",
                 topic_time: new Date(),
+                symbol: sessionStorage.getItem("symbol")
             },
 
             methods:{
@@ -71,11 +72,6 @@
                     }else if(this.topic_text == ""){
                         alert("请输入话题内容")
                     }else{
-                    console.log(this.title);
-                    console.log(this.topic_text);
-                    console.log(this.topic_time);
-                    console.log(sessionStorage.getItem("film_id"));
-                    console.log(sessionStorage.getItem("id"));
                     axios.get("{% url 'addTopic' %}",{
                             params:{
                                 film_id:sessionStorage.getItem("film_id"), //电影id
@@ -85,15 +81,15 @@
                                 topic_text: this.topic_text
                             }
                         }).then(response=>{
-
+                            this.back();
                         }),err=>{
 
                         };
                         }
-                    this.topic_text = "";
-                    this.title = "";
-                    console.log("i am here");
-                }  //增加话题
+                },
+                back(){
+                    window.location.href = "{% url 'moviePage'%}"
+                }
             }
         })
 </script>
