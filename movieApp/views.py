@@ -55,6 +55,9 @@ def topicCreatingPage(request):
 def workerPage(request):
     return render(request,"workerPage.html")
 
+def fanClub(request):
+    return render(request,"fanClub.html")
+
 def select(sql):
     '''显示信息'''
     db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
@@ -723,3 +726,6 @@ def showJoinedClubs(request):
     for result in results:
         data.append(generateDictData(result, fan_club_name_list + worker_list_name_list))
     return JsonResponse(data, safe=False)
+
+def clubCheck(request):
+    pass

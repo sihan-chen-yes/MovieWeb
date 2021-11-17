@@ -17,7 +17,22 @@
 <div>[[workerInfo.worker_id]]</div>
     <img v-bind:src="workerInfo.worker_picture">
     <div>[[workerInfo.worker_introduction]]</div>
+
+    <div v-if="this.symbol == 'manager'">
+      <button v-on:click="this.showTextarea">
+          添加粉丝团
+      </button>
+    </div>
+
+    <div v-if="this.addClubBoolean == true">
+        <input name="" class="login-input" id="input" placeholder="请为粉丝团取个名称吧:)" v-model="club_name">
+        <button v-on:click="this.addClub">
+            确认
+        </button>
+    </div>
 </div>
+
+
 
 
 <script>
@@ -25,7 +40,11 @@
         el:"#workerInfo",
         delimiters:["[[","]]"],
         data:{
-            workerInfo:{}
+            workerInfo:{},
+            symbol: sessionStorage.getItem("symbol"),
+            addClubBoolean: false,
+            club_name: '',
+            success: false
         },
         mounted:function(){
             this.showSingleWorker();
@@ -40,6 +59,30 @@
                     }).then(response=>{
                         this.workerInfo = response.data
                         console.log(this.workerInfo)
+                    }),err=>{
+                        console.log(err);
+                    };
+            },
+            showTextarea(){
+                this.addClubBoolean = true;
+            },
+
+            addClub(){
+                axios.get("{% url 'addClub' %}",{
+                        params:{
+                            worker_id:sessionStorage.getItem("worker_id"),
+                            club_name: this.club_name
+                        }
+                    }).then(response=>{
+                        this.success = response.data["success"]
+                        if(this.success == true){
+                            alert("添加成功！")
+                        }else{
+                            alert("粉丝团已存在")
+                        }
+                        this.addClubBoolean = false
+                        this.club_name = ''
+                        console.log(this.success)
                     }),err=>{
                         console.log(err);
                     };
