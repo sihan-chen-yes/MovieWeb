@@ -297,6 +297,32 @@ ul li {
 
 </div>
 
+<<<<<<< HEAD
+=======
+<div class="right col-xs-offset-2 col-xs-5" style="margin-top : -10px">
+<div data-v-b574f948="" class="m_head">
+    <div data-v-b574f948="" class="clearfix"><h2 data-v-b574f948="" style="margin-left : -32px">
+      [[movieInfo.film_info.film_name]]
+      <span data-v-b574f948="" class="m_year">
+        <a data-v-b574f948="" style="font-size: 34px;">([[movieInfo.film_info.film_date]])</a>
+      </span>
+    </h2> <p data-v-b574f948="" class="m_enname" style="margin-left : -30px;margin-top: 20px;">
+        评分:[[movieInfo.film_info.film_score]]，共有[[movieInfo.film_info.film_score_people]]人评分
+
+        <!--如果已经收藏可以取消收藏-->
+<!--        <span><button disabled>已收藏</button></span>-->
+        <span><button v-if="this.symbol == 'user'" v-on:click="cancelCollect" class="btn-sm btn-info" style="float:right;margin-left:10px">取消收藏</button></span>
+            <span><button v-if="this.symbol == 'user'"  v-on:click="collect" class="btn-sm btn-info" style="float:right">收藏</button></span></p></div>
+<!--    <div data-v-b574f948="" class="otherbox">-->
+<!--        <span data-v-b574f948="">176分钟 </span>-->
+<!--        <span data-v-b574f948=""><a data-v-b574f948="" href="http://film.mtime.com/search?type=genreTypes&amp;word=剧情" target="_blank">剧情/</a>-->
+<!--            <a data-v-b574f948="" href="http://film.mtime.com/search?type=genreTypes&amp;word=战争" target="_blank">战争/</a>-->
+<!--            <a data-v-b574f948="" href="http://film.mtime.com/search?type=genreTypes&amp;word=历史" target="_blank">历史</a></span>-->
+<!--        <a data-v-b574f948="" href="/267290/details">2021年9月30日</a><span data-v-b574f948="">中国</span>上映-->
+<!--      &lt;!&ndash;&ndash;&gt;</div>-->
+</div>
+<!--    	<div class="panel panel-default">-->
+>>>>>>> 91a18c466dd9f127fd468e9d9ee92190c64bf1dd
 
     <div class="filmplay-detail clearfix" style="width:1200px">
 		<div class="filmplay-detail-left" style="margin-top:30px; float:left; width:730px">
@@ -638,11 +664,11 @@ ul li {
 
 
 
-
 </div>
 
 
                     </div>
+
 <script>
 
 
@@ -657,7 +683,8 @@ ul li {
                 user_id:window.sessionStorage.getItem("id"),
                 topic_id:'',
                 workers:[],
-                themes:[]
+                themes:[],
+                symbol: sessionStorage.getItem("symbol")
             },
             mounted:function () {
                 this.show();
