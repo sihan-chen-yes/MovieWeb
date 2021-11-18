@@ -33,7 +33,7 @@ ul li {
     font: 12px / 1.5 "PingFang SC", "Microsoft YaHei", 微软雅黑, STHeiti, sans-serif;
     padding: 0px;
     margin: 0px;
-    background: white;
+    background: rgb(247, 247, 247);;
 }
 
 
@@ -213,7 +213,7 @@ ul li {
         </div> <!---->
     </div> <!----> <!---->
 
-			<div class="filmplay-info" style="background:rgb(247, 247, 247);float:left;border-style:solid" >
+			<div class="filmplay-info" style="background:white;float:left" >
 
 				<div class="filmplay-info-common left-section authorize-con-parent" style="float:none;">
 					<div class="video-mark">
@@ -221,8 +221,8 @@ ul li {
 																							</div>
 					<span class="authorize-con">不使用原创授权</span>
 					<div class="title-wrap">
-						<h3 class="title fs_26 fw_600 c_b_3 ">[[movieInfo.film_info.film_name]]</h3>
-
+						<h3 class="title fs_26 fw_600 c_b_3 " style="margin-top:-5px">[[movieInfo.film_info.film_name]]</h3>
+                        <span>评分:[[movieInfo.film_info.film_score]]，共有[[movieInfo.film_info.film_score_people]]人评分</span>
 					</div>
 					<div class="filmplay-intro fs_12 fw_300 c_b_9">
 
@@ -251,7 +251,7 @@ ul li {
                       </div>
                       <span style="font-size: 2rem;line-height: 2.9rem;padding: 1rem;font-style: oblique;" id="starStr"></span>
 
-                          <button v-on:click="score()" style="font-size:13px;margin-bottom:30px;margin-left:-200px;padding:5px 5px 5px 5px" class="btn-md btn-info">提交评分</button>
+                          <span v-on:click="score()" style="color:white;font-size:13px;margin-bottom:30px;margin-left:-200px;padding:5px 5px 5px 5px" class="send-comment fs_12 bg-red">提交评分</span>
 
 		  </div>
 					</div>
@@ -294,152 +294,342 @@ ul li {
 	</div>
 
 
-</div>
 
-<div class="content_wrapper" style="margin-top:20px">
-<div class="row" style="background-color:white;">
-<div class="left col-xs-offset-2 col-xs-1" style="margin-top : 40px">
-    <div data-v-c38922e8="" class="m_coverpicbox">
-    <div data-v-c38922e8="" class="img_box"><a data-v-c38922e8="">
-        <img v-bind:src="movieInfo.film_info.picture"></a>
-        </div> <!---->
-    </div> <!----> <!---->
-</div>
-
-<div class="right col-xs-offset-2 col-xs-5" style="margin-top : -10px">
-<div data-v-b574f948="" class="m_head">
-    <div data-v-b574f948="" class="clearfix"><h2 data-v-b574f948="" style="margin-left : -32px">
-      [[movieInfo.film_info.film_name]]
-      <span data-v-b574f948="" class="m_year">
-        <a data-v-b574f948="" style="font-size: 34px;">([[movieInfo.film_info.film_date]])</a>
-      </span>
-    </h2> <p data-v-b574f948="" class="m_enname" style="margin-left : -30px;margin-top: 20px;">
-        评分:[[movieInfo.film_info.film_score]]，共有[[movieInfo.film_info.film_score_people]]人评分
-
-        <!--如果已经收藏可以取消收藏-->
-<!--        <span><button disabled>已收藏</button></span>-->
-        <span><button v-if="this.symbol == 'user'" v-on:click="cancelCollect" class="btn-sm btn-info" style="float:right;margin-left:10px">取消收藏</button></span>
-            <span><button v-if="this.symbol == 'user'"  v-on:click="collect" class="btn-sm btn-info" style="float:right">收藏</button></span></p></div>
-<!--    <div data-v-b574f948="" class="otherbox">-->
-<!--        <span data-v-b574f948="">176分钟 </span>-->
-<!--        <span data-v-b574f948=""><a data-v-b574f948="" href="http://film.mtime.com/search?type=genreTypes&amp;word=剧情" target="_blank">剧情/</a>-->
-<!--            <a data-v-b574f948="" href="http://film.mtime.com/search?type=genreTypes&amp;word=战争" target="_blank">战争/</a>-->
-<!--            <a data-v-b574f948="" href="http://film.mtime.com/search?type=genreTypes&amp;word=历史" target="_blank">历史</a></span>-->
-<!--        <a data-v-b574f948="" href="/267290/details">2021年9月30日</a><span data-v-b574f948="">中国</span>上映-->
-<!--      &lt;!&ndash;&ndash;&gt;</div>-->
-</div>
-<!--    	<div class="panel panel-default">-->
-
-<!--		</div>-->
-
-<dl data-v-1b3bf9ac="" class="info_l">
-<!--    <dd data-v-1b3bf9ac=""><strong data-v-1b3bf9ac="">导演：</strong>-->
-<!--    <a data-v-1b3bf9ac="" href="http://people.mtime.com/892816/" target="_blank">陈凯歌</a><a data-v-1b3bf9ac="" href="http://people.mtime.com/892903/" target="_blank">徐克</a>-->
-<!--    <a data-v-1b3bf9ac="" href="http://people.mtime.com/892901/" target="_blank">林超贤</a>-->
-<!--    </dd>-->
-
-<!--    <dd data-v-1b3bf9ac="" class="writers_name" style="margin-bottom:20px;margin-top:-20px">-->
-<!--        <span><button v-on:click="collect" class="btn btn-default">收藏</button></span>-->
-<!--        &lt;!&ndash;如果已经收藏可以取消收藏&ndash;&gt;-->
-<!--&lt;!&ndash;        <span><button disabled>已收藏</button></span>&ndash;&gt;-->
-<!--        <span><button v-on:click="cancelCollect" class="btn btn-default">取消收藏</button></span>-->
-<!--</dd>-->
-
-    <dd data-v-1b3bf9ac="" style="margin-top:-20px;margin-bottom:10px;font-size:18px">
-        <strong data-v-1b3bf9ac="">上映时间：</strong>
-        <a data-v-1b3bf9ac="">
-          [[movieInfo.film_info.film_date]]
-          <i data-v-1b3bf9ac="" class="line"></i></a>
-    </dd> <!---->
-
-
-    <dd data-v-1b3bf9ac="" style="font-size:18px">
-        <strong data-v-1b3bf9ac="" >上映地区：</strong>
-        <a data-v-1b3bf9ac="" >
-          [[movieInfo.film_info.film_area]]
-          <i data-v-1b3bf9ac="" class="line"></i></a>
-    </dd> <!---->
-
-
-<!--    <dd data-v-1b3bf9ac="" class="companies">-->
-<!--    <strong data-v-1b3bf9ac="">出品公司：</strong>-->
-<!--        <a data-v-1b3bf9ac="" href="http://film.mtime.com/company/79349/" target="_blank">北京博纳影业集团有限公司</a>-->
-<!--        <a data-v-1b3bf9ac="" href="http://film.mtime.com/company/2344/" target="_blank">中国人民解放军八一电影制片厂</a>-->
-<!--        <a data-v-1b3bf9ac="" href="http://film.mtime.com/company/37847/" target="_blank">华夏电影发行有限责任公司</a></dd>-->
-
-<!--    <dd data-v-1b3bf9ac=""><strong data-v-1b3bf9ac="">更多片名：</strong> <span data-v-1b3bf9ac="">冰雪长津湖</span></dd>-->
-
-    <dt data-v-1b3bf9ac="" style="margin-bottom:20px;margin-top:20px">
-        <strong style="margin-bottom:40px;margin-top:20px;font-size:18px">简介：</strong>
-        <p data-v-1b3bf9ac="" class="" style="font-size:14px;font-weight:lighter;text-indent:2em;line-height:200%;margin-top:6px">[[movieInfo.film_info.introduction]]</p>
-<!--        <p data-v-1b3bf9ac="" class="more">-->
-<!--            <a data-v-1b3bf9ac="" href="/267290/plots">-->
-<!--            更多剧情-->
-<!--            <i data-v-1b3bf9ac="" class="gt"></i></a></p>-->
-    </dt>
-
-
-
-        <dd data-v-1b3bf9ac="" class="companies">
-
-
-        </dd>
-</dl>
-</div>
 </div>
 
 
 
+    <div class="filmplay-detail clearfix" style="width:1200px">
+		<div class="filmplay-detail-left" style="margin-top:30px; float:left; width:730px">
+
+
+	<div class="common-comment" id="comment-area">
+
+		<div class="filmplay-info-common left-section authorize-con-parent" style="padding-bottom:45px">
+
+					<div class="title-wrap" style="margin-top:5px; margin-left:10px">
+						<h3 class="title fs_26 fw_600 c_b_3 " style="margin-top:5px">[[movieInfo.film_info.film_name]]的话题区</h3>
+
+					</div>
+
+                    <div class="filmplay-data">
+
+						<div class="filmplay-data-btn fs_12" style="margin-right:20px">
+
+
+                            <span class="pick-wrap share">
+                                <span class="btn xpc-stat border-btn share-btn show-qr c_b_3 v-center share-host" data-event="clickArticleShare">
+                                    <button v-on:click="toTopicCreating(movieInfo.film_info.film_id)" class="icon-share">添加新的话题</button>
+
+
+										<span class="share-counts v-center counts fs_12 fw_300 show" style="font-size:13px">添加新的话题</span>
+								</span>
+								<span class="award-con-wrap fs_12 fw_300">
+									<span class="award-con">分享作品</span>
+								</span>
+							</span>
+
+						</div>
+					</div>
+				</div>
+
+    <div id="comment-anchor"></div>
+    <div class="comment-top">
+        <h3 class="fs_20 fw_600 c_b_3">
+                    <span>评论&nbsp;<span class="total-counts fs_14 c_b_9">2</span></span>
+                            </h3>
+                            <div class="input-wrap">
+                  <a class="avator-wrap" href="/u12431481?from=articleList">
+                  <img class="user-avator head-wrap" src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg" data-userid="12431481">
+                                </a>
+              <div class="input-area clearfix">
+                  <div class="textarea-wrap">
+                    <textarea name="content" id="comment_content" placeholder="请输入评论内容"></textarea>
+                  </div>
+                  <div class="relpy-wrap fs_14 fw_300 c_b_9 dn">回复
+                      <span class="reply-user fw_600"></span>&nbsp;
+                      <span class="reply-con"></span>
+                      <i class="icon-close"></i>
+                  </div>
+                  <span class="send-comment fs_12 bg-red">发表评论</span>
+              </div>
+          </div>
+                      </div>
 
 
 
+    <div class="comment-bottom">
+        <ul class="comment-list">
+        <li v-for="topic in topics">
+			<a href="/u12431481" target="_blank">
+				<span class="head-wrap" data-userid="12431481">
+					<img class="user-avator" src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg">
+				</span>
+			</a>
+			<div class="comment-wrap clearfix">
+				<div class="user-time">
 
+						<span class="user-name fs_14 fw_600 c_b_3">
+							<i class="text">[[topic.user_id]]</i>
+						</span>
 
-    <div>
-        <p>导演：</p>
-        <ol>
-            <li v-for="director in workers.directors" style="float:left">
-                <div>
-                    <a><img v-bind:src="director.worker_picture"></a>
+					<span class="send-time fs_12 fw_300 c_b_9">[[topic.topic_time]]</span>
+				</div>
+
+				<div class="user-name fs_14 fw_600 c_b_3" style="margin-top:7px">
+                    <a v-on:click="toTopicPage(topic.topic_id)">[[topic.title]]</a>
                 </div>
 
-                <div>
-                    <a v-on:click="toWorkerPage(director.worker_id)">[[director.worker_name]]</a>
-                </div>
-            </li>
-        </ol>
+				<div class="comment-con fs_14 fw_300 c_b_3">
+					<i class="top-icon dn">置顶</i>
+					<i class="text">[[topic.topic_text]]</i>
+				</div>
+
+				<div class="comment-btn fs_12 fw_600 c_b_9" data-replyid="1348420">
+
+
+					<span v-if="user_id == topic.user_id">
+						<span class="del-btn hover-show" data-commentid="1348420" v-on:click="deleteTopic(topic.topic_id)">删除</span>
+                	</span>
+
+					<span v-on:click="toTopicPage(topic.topic_id)" class="relpy-btn" data-commentid="1348420">回复</span>
+					<span class="like-btn J_like_comment hide-split">
+						<i class="approve-text"></i>
+						&nbsp;
+					</span>
+				</div>
+			</div>
+		</li>
+
+		</ul>
+        <div class="comment-empty-wrap">
+          <div class="comment-empty author-or-opened fs_16 dn">还没有人发表评论，来第一个发言吧！</div>
+          <div class="comment-empty author-and-closed fs_16 dn">关闭前无评论</div>
+          <div class="comment-empty notauthor-and-closed fs_16 dn">还没有人评论</div>
+        </div>
+        <div class="more-comment fs_14 fw_600 c_b_9 no-more">没有更多了</div>
+    </div>
+</div>
+
+
+
+
+		<!-- 通栏广告 -->
+		<!-- <a class="create-man-banner" href="/activity/filmfest/ts-proposition?utm_source=xpcWeb&utm_medium=tonglan" target="_blank"><img src="https://oss-xpc0.xpccdn.com/Upload/edu/2018/10/095bbc471ee8871.jpg"></a> -->
+	</div>
+
+    <div class="filmplay-detail-right" style="width:370px;margin-top:30px">
+			<!-- <a href="https://edu.xinpianchang.com/subject/163" target="_blank"><img style="width: 100%;margin-bottom: 20px;" src="https://oss-xpc0.xpccdn.com/Upload/edu/2019/11/145dccfd7750607.jpg" alt=""></a> -->
+			<!-- <a href="https://edu.xinpianchang.com/subject/164?from=Pcbanner" target="_blank"><img style="width: 100%;margin-bottom: 20px;" src="https://oss-xpc0.xpccdn.com/Upload/edu/2019/12/095dedb5590d490.jpg" alt=""></a> -->
+
+									<!--创作团队-->
+<div class="user-team" style="background:#fff; margin-bottom:20px;">
+	<div class="filmplay-creator right-section">
+		<div style="margin-top:-10px">
+			<h3 class="fs_20 fw_600" style="margin-top:10px">影职员-导演</h3>
+			
+		</div>
+
+		<ul class="creator-list">
+									<li v-for="director in workers.directors">
+				<a class="head-wrap" data-userid="11024761">
+					<img class="avator lazy-img lazy-img-show" v-bind:src="director.worker_picture">
+										<span class="author-v yellow-v"></span>
+									</a>
+				<div class="creator-info">
+					<a class="name-wrap"  v-on:click="toWorkerPage(director.worker_id)">
+						<span class="name fs_14 fw_600 c_b_3 line-hide-1">[[director.worker_name]]</span>
+					</a>
+					<span class="roles fs_12 fw_300 c_b_9">导演</span>
+				</div>
+					<div  v-on:click="toWorkerPage(director.worker_id)" class="follow-btn fs_12 c_w_f bg-red " data-userid="11024761" data-username="筑梦影视-李东">
+					主页</div>
+							</li>
+								</ul>
+	</div>
+
+
+
+</div>
+
+<div class="user-team" style="background:#fff; margin-bottom:20px;">
+	<div class="filmplay-creator right-section">
+		<div style="margin-top:-10px">
+			<h3 class="fs_20 fw_600" style="margin-top:10px">影职员-编剧</h3>
+
+		</div>
+
+		<ul class="creator-list">
+									<li v-for="writer in workers.writers">
+				<a class="head-wrap" data-userid="11024761">
+					<img class="avator lazy-img lazy-img-show" v-bind:src="writer.worker_picture">
+										<span class="author-v yellow-v"></span>
+									</a>
+				<div class="creator-info">
+					<a class="name-wrap"  v-on:click="toWorkerPage(writer.worker_id)">
+						<span class="name fs_14 fw_600 c_b_3 line-hide-1">[[writer.worker_name]]</span>
+					</a>
+					<span class="roles fs_12 fw_300 c_b_9">编剧</span>
+				</div>
+					<div  v-on:click="toWorkerPage(writer.worker_id)" class="follow-btn fs_12 c_w_f bg-red " data-userid="11024761" data-username="筑梦影视-李东">
+					主页</div>
+							</li>
+								</ul>
+	</div>
+
+</div>
+
+<div class="user-team" style="background:#fff; margin-bottom:20px;">
+	<div class="filmplay-creator right-section">
+		<div style="margin-top:-10px">
+			<h3 class="fs_20 fw_600" style="margin-top:10px">影职员-演员</h3>
+
+		</div>
+
+		<ul class="creator-list">
+									<li v-for="actor in workers.actors">
+				<a class="head-wrap" data-userid="11024761">
+					<img class="avator lazy-img lazy-img-show" v-bind:src="actor.worker_picture">
+										<span class="author-v yellow-v"></span>
+									</a>
+				<div class="creator-info">
+					<a class="name-wrap"  v-on:click="toWorkerPage(actor.worker_id)">
+						<span class="name fs_14 fw_600 c_b_3 line-hide-1">[[actor.worker_name]]</span>
+					</a>
+					<span class="roles fs_12 fw_300 c_b_9">演员</span>
+				</div>
+					<div  v-on:click="toWorkerPage(actor.worker_id)" class="follow-btn fs_12 c_w_f bg-red " data-userid="11024761" data-username="筑梦影视-李东">
+					主页</div>
+							</li>
+								</ul>
+	</div>
+
+
+
+</div>
+
+
+
+						<div class="filmplay-recommend right-section">
+				<div>
+					<h3 class="fs_20 fw_600">创作人其他作品</h3>
+					<a href="/u11024761?from=articlePageOther" class="btn fs_12 fw_600 c_b_3">更多</a>
+				</div>
+				<ul class="recommend-list">
+															<li>
+						<a class="cover-wrap" target="_blank" href="/a11620646?from=articlePageOther">
+							<img class="cover" src="https://oss-xpc0.xpccdn.com/newupload/assets/article/cover/2021/11/6196130739d3b@335w.jpg">
+							<span class="cover-con"></span>
+						</a>
+						<div class="right-con">
+							<div class="article-contanier  fenleiNumber" style="width:100%;">
+								<a target="_blank" href="/a11620646?from=article_right" class="title fs_14 fw_600 c_b_3 line-hide-2">筑梦影视丨李金松&amp;吴欣宇 婚礼MV</a>
+								<div href="javascript:;" class="cate-wrap">
+									<span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">
+																		音乐 - MV																		纪录 - 婚礼																		</span>
+									<!-- 									<span class="i-icon v-center"></span>
+									<span class="fs_12 fw_300 c_b_9">
+									音乐																		 - MV																		</span>
+									 -->
+
+								</div>
+							</div>
+						</div>
+					</li>
+																				<li>
+						<a class="cover-wrap" target="_blank" href="/a11590058?from=articlePageOther">
+							<img class="cover" src="https://oss-xpc0.xpccdn.com/newupload/assets/article/cover/2021/10/617df391b0281@335w.jpg">
+							<span class="cover-con"></span>
+						</a>
+						<div class="right-con">
+							<div class="article-contanier  fenleiNumber" style="width:100%;">
+								<a target="_blank" href="/a11590058?from=article_right" class="title fs_14 fw_600 c_b_3 line-hide-2">筑梦影视丨21.10.27 戴学进&amp;周由 婚礼MV</a>
+								<div href="javascript:;" class="cate-wrap">
+									<span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">
+																		音乐 - MV																		纪录 - 婚礼																		</span>
+									<!-- 									<span class="i-icon v-center"></span>
+									<span class="fs_12 fw_300 c_b_9">
+									音乐																		 - MV																		</span>
+									 -->
+
+								</div>
+							</div>
+						</div>
+					</li>
+																				<li>
+						<a class="cover-wrap" target="_blank" href="/a11590057?from=articlePageOther">
+							<img class="cover" src="https://oss-xpc0.xpccdn.com/newupload/assets/article/cover/2021/10/617df3a1a04d1@335w.jpg">
+							<span class="cover-con"></span>
+						</a>
+						<div class="right-con">
+							<div class="article-contanier  fenleiNumber" style="width:100%;">
+								<a target="_blank" href="/a11590057?from=article_right" class="title fs_14 fw_600 c_b_3 line-hide-2">筑梦影视丨21.10.25 尚青君&amp;张鹤凡 婚礼MV</a>
+								<div href="javascript:;" class="cate-wrap">
+									<span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">
+																		音乐 - MV																		纪录 - 婚礼																		</span>
+									<!-- 									<span class="i-icon v-center"></span>
+									<span class="fs_12 fw_300 c_b_9">
+									音乐																		 - MV																		</span>
+									 -->
+
+								</div>
+							</div>
+						</div>
+					</li>
+																				<li>
+						<a class="cover-wrap" target="_blank" href="/a11590056?from=articlePageOther">
+							<img class="cover" src="https://oss-xpc0.xpccdn.com/newupload/assets/article/cover/2021/10/617df36b6e82e@335w.jpg">
+							<span class="cover-con"></span>
+						</a>
+						<div class="right-con">
+							<div class="article-contanier  fenleiNumber" style="width:100%;">
+								<a target="_blank" href="/a11590056?from=article_right" class="title fs_14 fw_600 c_b_3 line-hide-2">筑梦影视丨21.10.24 冯聪&amp;陈晓玥 婚礼MV</a>
+								<div href="javascript:;" class="cate-wrap">
+									<span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">
+																		音乐 - MV																		纪录 - 婚礼																		</span>
+									<!-- 									<span class="i-icon v-center"></span>
+									<span class="fs_12 fw_300 c_b_9">
+									音乐																		 - MV																		</span>
+									 -->
+
+								</div>
+							</div>
+						</div>
+					</li>
+																																												</ul>
+			</div>
+						<!--			相似作品模块-->
+			<div class="similar filmplay-recommend right-section">
+				<div>
+					<h3 class="fs_20 fw_600">相似作品</h3>
+				</div>
+				<ul class="recommend-list similar-list">
+
+				<li class="sider-li" data-from="ArticlePageSimilar" data-elem="null" data-id="11323010"><span class="cover-wrap"><img class="cover" src="https://oss-xpc0.xpccdn.com/newupload/assets/article/cover/2021/6/60b638e9e6670@335w.jpg"><span class="cover-con"></span></span><div class="right-con"><div class="article-contanier fenleiNumber" style="width:100%;"><span class="title fs_14 fw_600 c_b_3 line-hide-2">2021.05.09李朝阳&amp;吴欢欢丨 婚礼mv</span><div href="javascript:;" class="cate-wrap"><span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">音乐-MV</span></div></div></div></li><li class="sider-li" data-from="ArticlePageSimilar" data-elem="null" data-id="11604517"><span class="cover-wrap"><img class="cover" src="https://oss-xpc0.xpccdn.com/newupload/assets/article/cover/2021/11/6189f4b1ae1bf@335w.jpg"><span class="cover-con"></span></span><div class="right-con"><div class="article-contanier fenleiNumber" style="width:100%;"><span class="title fs_14 fw_600 c_b_3 line-hide-2">2021.11.02郑雁祥&amp;李雅欣MV</span><div href="javascript:;" class="cate-wrap"><span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">音乐-MV</span></div></div></div></li><li class="sider-li" data-from="ArticlePageSimilar" data-elem="null" data-id="11351897"><span class="cover-wrap"><img class="cover" src="https://oss-xpc0.xpccdn.com/newupload/assets/article/cover/2021/6/60cb1ccc5febe@335w.jpg"><span class="cover-con"></span></span><div class="right-con"><div class="article-contanier fenleiNumber" style="width:100%;"><span class="title fs_14 fw_600 c_b_3 line-hide-2">2021.05.28贾学凯&amp;李昕丨婚礼mv</span><div href="javascript:;" class="cate-wrap"><span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">音乐-MV</span></div></div></div></li><li class="sider-li" data-from="ArticlePageSimilar" data-elem="null" data-id="11334627"><span class="cover-wrap"><img class="cover" src="https://oss-xpc0.xpccdn.com/newupload/assets/article/cover/2021/6/60be04bcc0937@335w.jpg"><span class="cover-con"></span></span><div class="right-con"><div class="article-contanier fenleiNumber" style="width:100%;"><span class="title fs_14 fw_600 c_b_3 line-hide-2">2021.5.13李开鑫&amp;崔筱宁丨婚礼mv</span><div href="javascript:;" class="cate-wrap"><span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">音乐-MV</span></div></div></div></li></ul>
+			</div>
+
+			<!-- 热门作品模块 -->
+			<div class="popular filmplay-recommend right-section">
+				<div>
+					<h3 class="fs_20 fw_600">热门作品</h3>
+					<a href="https://www.xinpianchang.com/channel/index/sort-like?from=articlePageHot" target="_blank" class="btn fs_12 fw_600 c_b_3">更多</a>
+				</div>
+				<ul class="recommend-list popular-list">
+
+				<li class="sider-li" data-from="ArticlePageHot" data-elem="null" data-id="11185556"><span class="cover-wrap"><img class="cover" src="https://oss-xpc0.xpccdn.com/uploadfile/article/2021/03/08/6045b2ffd77d5.jpeg@335w.jpg"><span class="cover-con"></span></span><div class="right-con"><div class="article-contanier fenleiNumber" style="width:100%;"><span class="title fs_14 fw_600 c_b_3 line-hide-2">用你我的声音，回答这个时代</span><div href="javascript:;" class="cate-wrap"><span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">宣传片-企业</span></div></div></div></li><li class="sider-li" data-from="ArticlePageHot" data-elem="null" data-id="11104451"><span class="cover-wrap"><img class="cover" src="https://oss-xpc0.xpccdn.com/uploadfile/article/2021/01/04/5ff2c4126cd8a.jpeg@335w.jpg"><span class="cover-con"></span></span><div class="right-con"><div class="article-contanier fenleiNumber" style="width:100%;"><span class="title fs_14 fw_600 c_b_3 line-hide-2">从不现实 开始实现</span><div href="javascript:;" class="cate-wrap"><span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">广告-网络科技</span></div></div></div></li><li class="sider-li" data-from="ArticlePageHot" data-elem="null" data-id="11217818"><span class="cover-wrap"><img class="cover" src="https://oss-xpc0.xpccdn.com/uploadfile/article/2021/03/28/60609e7956a6f.jpeg@335w.jpg"><span class="cover-con"></span></span><div class="right-con"><div class="article-contanier fenleiNumber" style="width:100%;"><span class="title fs_14 fw_600 c_b_3 line-hide-2">GSK 欣安立适. 光影剧</span><div href="javascript:;" class="cate-wrap"><span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">广告-医疗保健</span></div></div></div></li><li class="sider-li" data-from="ArticlePageHot" data-elem="null" data-id="11136048"><span class="cover-wrap"><img class="cover" src="https://oss-xpc0.xpccdn.com/uploadfile/article/2021/01/26/600ff19399903.jpeg@335w.jpg"><span class="cover-con"></span></span><div class="right-con"><div class="article-contanier fenleiNumber" style="width:100%;"><span class="title fs_14 fw_600 c_b_3 line-hide-2">世茂集团半年报创意片</span><div href="javascript:;" class="cate-wrap"><span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">广告-地产金融</span></div></div></div></li><li class="sider-li" data-from="ArticlePageHot" data-elem="null" data-id="11191990"><span class="cover-wrap"><img class="cover" src="https://oss-xpc0.xpccdn.com/uploadfile/article/2021/03/11/6049f87691f66.jpeg@335w.jpg"><span class="cover-con"></span></span><div class="right-con"><div class="article-contanier fenleiNumber" style="width:100%;"><span class="title fs_14 fw_600 c_b_3 line-hide-2">【GUIZHOU】贵州旅行短片Cinematic Video—醉美多彩贵州</span><div href="javascript:;" class="cate-wrap"><span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">旅拍-风光</span></div></div></div></li><li class="sider-li" data-from="ArticlePageHot" data-elem="null" data-id="11184100"><span class="cover-wrap"><img class="cover" src="https://oss-xpc0.xpccdn.com/uploadfile/article/2021/03/07/6044e8aa75fb9.jpeg@335w.jpg"><span class="cover-con"></span></span><div class="right-con"><div class="article-contanier fenleiNumber" style="width:100%;"><span class="title fs_14 fw_600 c_b_3 line-hide-2">千禾《舌根上的男孩》神级反讽广告 导演版</span><div href="javascript:;" class="cate-wrap"><span class="fs_12 fw_300 c_b_9 line-hide-1 createFenlei">广告-餐饮食品</span></div></div></div></li></ul>
+			</div>
+
+
+			<!-- <a target="_blank" href="https://www.xinpianchang.com/activity/creation/id-29"><img style="width: 100%;margin-bottom: 20px;" src="https://oss-xpc0.xpccdn.com/Upload/edu/2019/06/035cf4a8b116aa2.jpg" alt=""></a> -->
+		</div>
+
+
     </div>
 
 
-    <div>
-        <p>编剧：</p>
-        <ol>
-            <li v-for="writer in workers.writers" style="float:left">
-                <div>
-                    <a><img v-bind:src="writer.worker_picture"></a>
-                </div>
 
-                <div>
-                    <a v-on:click="toWorkerPage(writer.worker_id)">[[writer.worker_name]]</a>
-                </div>
-            </li>
-        </ol>
-    </div>
 
-    <div>
-        <p>演员：</p>
-        <ol>
-            <li v-for="actor in workers.actors" style="float:left">
-                <div>
-                    <a><img v-bind:src="actor.worker_picture"></a>
-                </div>
 
-                <div>
-                    <a v-on:click="toWorkerPage(actor.worker_id)">[[actor.worker_name]]</a>
-                </div>
-            </li>
-        </ol>
-    </div>
 
 
 <!--    这里放主题-->
@@ -447,38 +637,13 @@ ul li {
 
 
 
-<!--    这里放moviePage下面所有的话题     -->
-    <div>
-         <p>话题：</p>
-        <ol>
-            <li v-for="topic in topics">
-                <div>
-                    [[topic.user_id]]
-                </div>
-                <div>
-                    <a v-on:click="toTopicPage(topic.topic_id)">[[topic.title]]</a>
-                </div>
-                <div>
-                    [[topic.topic_text]]
-                </div>
-                <div>
-                    [[topic.topic_time]]
-                </div>
-                <div v-if="user_id == topic.user_id">
-                    <button v-on:click="deleteTopic(topic.topic_id)">删除</button>
-                </div>
-            </li>
-        </ol>
-    </div>
-    <button v-on:click="toTopicCreating(movieInfo.film_info.film_id)" v-if="this.symbol == 'user'">添加新的话题</button>
-</div>
-
 
 
 </div>
 
 
                     </div>
+
 <script>
 
 
