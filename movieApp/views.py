@@ -55,6 +55,9 @@ def topicCreatingPage(request):
 def workerPage(request):
     return render(request,"workerPage.html")
 
+def fanClub(request):
+    return render(request,"fanClub.html")
+
 def select(sql):
     '''显示信息'''
     db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
@@ -723,3 +726,14 @@ def showJoinedClubs(request):
     for result in results:
         data.append(generateDictData(result, fan_club_name_list + worker_list_name_list))
     return JsonResponse(data, safe=False)
+
+def clubCheck(request):
+    user_id = request.GET.get("user_id")
+    club_id = request.GET.get("club_id")
+    data = {}
+    data["inClub"] = True
+    sql = "select * from user_in_club where user_id = '%s' and club_id = '%s'" % (user_id,club_id)
+    results = select(sql)
+    if not results:
+        data["inClub"] = False
+    return JsonResponse(data,safe=False)

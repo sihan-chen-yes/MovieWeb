@@ -134,6 +134,16 @@
 
         </div>
 
+        <div>
+            <ol>
+                <li v-for="club in club_info">
+                    <img v-bind:src="club.worker_picture">
+                    <span>[[club.worker_name]]</span>
+                    <a v-on:click="toFanClub(club.club_id)">[[club.club_name]]</a>
+                </li>
+            </ol>
+        </div>
+
         <div class="col-xs-offset-1 col-xs-2">
             <div style="display:none">
                 <h3>电影热榜</h3>
@@ -161,13 +171,22 @@
                 collectedMovies:[],
                 searchMovies:[],
                 keyword: null,
-                isSearching: false
+                isSearching: false,
+                club_info: []
             },
             mounted:function () {
                 this.showAll()
                 this.show()
+                this.showClubs()
             },
             methods:{
+                showClubs() {
+                    axios.get("{% url 'showClubs' %}").then(response=>{
+                            this.club_info = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
                 showAll() {
                     axios.get("{% url 'showAllMovies' %}").then(response=>{
                             this.movies = response.data
@@ -226,7 +245,12 @@
                     console.log(this.isSearching);
                     this.isSearching = false;
                     //点返回键正常显示，这里不用传值
-                }
+                },
+
+                toFanClub(club_id) {
+                    window.sessionStorage.setItem("club_id",club_id)
+                    window.location.href = "{% url 'fanClub' %}"
+                },
             }
         });
 </script>

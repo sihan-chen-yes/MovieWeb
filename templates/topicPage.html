@@ -37,7 +37,7 @@
     <textarea v-model="broadcast_text">
 
     </textarea>
-    <button v-on:click="addBroadcast()">回复</button>
+    <button v-if="this.symbol == 'user'" v-on:click="addBroadcast()">回复</button>
 </div>
 
 <script>
@@ -50,7 +50,8 @@
                 broadcast_text: "",
                 broadcast_time: new Date(),
                 user_id:window.sessionStorage.getItem("id"),
-                broadcast_id:''
+                broadcast_id:'',
+                symbol: sessionStorage.getItem("symbol")
             },
 
             mounted: function(){

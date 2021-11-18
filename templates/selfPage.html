@@ -222,12 +222,20 @@
         </ul>
     </div>
 
+        <div>
+            <p>----------------</p>
+            <p>我加入的粉丝团：</p>
+            <ol>
+                <li v-for="club in joinedClubs">
+                    <img v-bind:src="club.worker_picture">
+                    <span>[[club.worker_name]]</span>
+                    <a v-on:click="toFanClub(club.club_id)">[[club.club_name]]</a>
+                </li>
+            </ol>
+        </div>
 
-
-
-
-
-
+</div>
+</div>
 <!--后面可以把那边热榜/收藏夹加过来，到时候copy就行-->
 <script>
         var vm = new Vue({
@@ -240,13 +248,26 @@
                 allowed:false,
                 name:null,
                 movies:[],
-                myThemes:[]
+                myThemes:[],
+                joinedClubs:[]
             },
             mounted:function () {
                 this.show();
                 this.showPersonalThemes();
+                this.showJoinedClubs();
             },
             methods:{
+                 showJoinedClubs() {
+                    axios.get("{% url 'showJoinedClubs' %}",{
+                            params:{
+                                user_id:sessionStorage.getItem("id")
+                            }
+                        }).then(response=>{
+                            this.joinedClubs = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
                 show() {
                     axios.get("{% url 'show' %}",{
                             params:{
@@ -279,6 +300,10 @@
                 toMoviePage(film_id) {
                     window.sessionStorage.setItem("film_id",film_id)
                     window.location.href = "{% url 'moviePage' %}"
+                },
+                toFanClub(club_id) {
+                    window.sessionStorage.setItem("club_id",club_id)
+                    window.location.href = "{% url 'fanClub' %}"
                 },
             }
         })

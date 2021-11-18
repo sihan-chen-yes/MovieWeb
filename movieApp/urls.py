@@ -14,6 +14,7 @@ urlpatterns = [
     path('showAllMovies',views.showAllMovies,name="showAllMovies"),
     path('selfPage/show',views.show,name="show"),
     path('selfPage',views.selfPage,name="selfPage"),
+    path('selfPage/showJoinedClubs', views.showJoinedClubs, name="showJoinedClubs"),
     path('movieSquare',views.movieSuqare,name="movieSquare"),
     path('movieSquare/moviePage',views.moviePage,name="moviePage"),
     path('movieSquare/workerPage', views.workerPage, name="workerPage"),
@@ -28,6 +29,7 @@ urlpatterns = [
 
     path('movieSquare/moviePage/topicPage', views.topicPage, name="topicPage"),
     path('movieSquare/moviePage/workerPage', views.workerPage, name="workerPage"),
+    path('movieSquare/moviePage/workerPage/addClub', views.addClub, name="addClub"),
     path('movieSquare/moviePage/topicPage/addBroadcast', views.addBroadcast, name="addBroadcast"),
     path('movieSquare/moviePage/topicCreatingPage', views.topicCreatingPage, name="topicCreatingPage"),
     path('movieSquare/moviePage/topicCreatingPage/addTopic', views.addTopic, name="addTopic"),
@@ -41,6 +43,7 @@ urlpatterns = [
     path('moviePage/score',views.score,name="score"),
     path('movieSquare/showMovieRanks',views.showMovieRanks,name="showMovieRanks"),
     path('movieSquare/showWorkers',views.showWorkers,name="showWorkers"),
+    path('movieSquare/showClubs', views.showClubs, name="showClubs"),
     path('selfPage/showPersonalThemes',views.showPersonalThemes,name="showPersonalThemes"),
     path('moviePage/showMovieThemes',views.showMovieThemes,name="showMovieThemes"),
     path('movieSquare/showRecommendedMovies',views.showRecommendedMovies,name="showRecommendedMovies"),
@@ -51,6 +54,12 @@ urlpatterns = [
     #path('managerRegister/', views.managerRegister, name="managerRegister"),
     path('managerLogin/managerLoginCheck', views.managerLoginCheck, name="managerLoginCheck"),
     path('managerRegister/', views.managerRegister, name="managerRegister"),
-    path('managerRegister/managerRegisterApply', views.managerRegisterApply, name="managerRegisterApply")
+    path('managerRegister/managerRegisterApply', views.managerRegisterApply, name="managerRegisterApply"),
 
+    path('fanClub/', views.fanClub, name="fanClub"),
+    path('fanClub/showFans', views.showFans, name="showFans"),
+    path('fanClub/clubCheck', views.clubCheck, name="clubCheck"),
+    path('fanClub/showWorker', views.showWorker, name="showWorker"),
+    path('fanClub/joinClub', views.joinClub, name="joinClub"),
+    path('fanClub/quitClub', views.quitClub, name="quitClub"),
 ]
