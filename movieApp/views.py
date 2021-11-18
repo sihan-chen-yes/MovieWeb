@@ -728,4 +728,12 @@ def showJoinedClubs(request):
     return JsonResponse(data, safe=False)
 
 def clubCheck(request):
-    pass
+    user_id = request.GET.get("user_id")
+    club_id = request.GET.get("club_id")
+    data = {}
+    data["inClub"] = True
+    sql = "select * from user_in_club where user_id = '%s' and club_id = '%s'" % (user_id,club_id)
+    results = select(sql)
+    if not results:
+        data["inClub"] = False
+    return JsonResponse(data,safe=False)
