@@ -99,6 +99,7 @@
                         }
                     }).then(response=>{
                         this.relatedClubs = response.data
+                        console.log(this.relatedClubs)
                     }),err=>{
                         console.log(err);
                     };
