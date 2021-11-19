@@ -520,13 +520,15 @@ def showWriter(film_id):
 
 def showSingleWorker(request=None,worker_id=None):
     '''显示单个影人信息'''
-    if not request:
+    if request:
         worker_id = request.GET.get("worker_id")
     sql = "select * from worker_list where worker_id = '%s'" %(worker_id)
     results = select(sql)
     assert len(results) == 1
     data = generateDictData(results[0],worker_list_name_list)
-    return JsonResponse(data,safe=False)
+    if request:
+        return JsonResponse(data,safe=False)
+    return data
 
 def showPersonalThemes(request):
     '''显示个人主题'''
@@ -790,7 +792,8 @@ def getRelatedWorkerId(worker_id):
     for film_id in film_ids:
         worker_ids += getWorkersOfFilmId(film_id)
     worker_ids = list(set(worker_ids))[:num]
-    worker_ids.remove(worker_id)
+    if worker_id in worker_ids:
+        worker_ids.remove(worker_id)
     return worker_ids
 
 def showRelatedWorkers(request):
@@ -814,7 +817,7 @@ def showClubRelatedMovies(request):
     return JsonResponse(data,safe=False)
 
 def showRelatedClubs(request):
-    '''搜索出粉丝团对应影人 的 所有合作影人 的 粉丝团（不包括自己）'''
+    '''搜索出粉丝团对应影人 所有合作影人 的 粉丝团（不包括自己）'''
     club_id = request.GET.get("club_id")
     sql = "select worker_id from fan_club where club_id = '%s'" % (club_id)
     results = select(sql)
@@ -827,7 +830,9 @@ def showRelatedClubs(request):
               "from fan_club,worker_list " \
               "where fan_club.worker_id = '%s' and fan_club.worker_id = worker_list.worker_id" % (worker_id)
         results = select(sql)
-        assert len(results) == 1
+        assert len(results) <= 1
+        if len(results) == 0:
+            continue
         result = results[0]
         data.append(generateDictData(result,fan_club_name_list + worker_list_name_list[2]))
     return JsonResponse(data,safe=False)
