@@ -7,7 +7,7 @@ import numpy as np
 
 
 db_user = "root"
-db_password = "61lyx520837"
+db_password = "123"
 database = "movie"
 host = "localhost"
 #表头
@@ -518,9 +518,10 @@ def showWriter(film_id):
         writers.append(generateDictData(result, worker_list_name_list))
     return writers
 
-def showSingleWorker(request):
+def showSingleWorker(request=None,worker_id=None):
     '''显示单个影人信息'''
-    worker_id = request.GET.get("worker_id")
+    if not request:
+        worker_id = request.GET.get("worker_id")
     sql = "select * from worker_list where worker_id = '%s'" %(worker_id)
     results = select(sql)
     assert len(results) == 1
@@ -699,7 +700,7 @@ def showWorker(request):
           "from worker_list,fan_club " \
           "where worker_list.worker_id = fan_club.worker_id and fan_club.club_id = '%s'" % (club_id)
     results = select(sql)
-    assert len(results)
+    assert len(results) == 1
     for result in results:
         data = generateDictData(result,worker_list_name_list)
         return JsonResponse(data,safe=False)
@@ -740,3 +741,95 @@ def clubCheck(request):
     if not results:
         data["inClub"] = False
     return JsonResponse(data,safe=False)
+
+def getMoviesOfWorker(worker_id):
+    '''返回与worker有关的电影id(已去重)'''
+    num = 5
+    sql = "select film_id from film_actor where worker_id = '%s'" % (worker_id)
+    film_ids = select(sql)
+    sql = "select film_id from film_director where worker_id = '%s'" % (worker_id)
+    film_ids += select(sql)
+    sql = "select film_id from film_writer where worker_id = '%s'" % (worker_id)
+    film_ids += select(sql)
+    film_ids = list(set(film_ids))[:num]
+    return film_ids
+
+def getWorkersOfFilmId(film_id):
+    '''返回与film_id对应电影下的所有worker(已去重)'''
+    sql = "select worker_id from film_actor where film_id = '%s'" % (film_id)
+    worker_ids = select(sql)
+    sql = "select worker_id from film_director where film_id = '%s'" % (film_id)
+    worker_ids += select(sql)
+    sql = "select worker_id from film_writer where film_id = '%s'" % (film_id)
+    worker_ids += select(sql)
+    worker_ids = list(set(worker_ids))
+    return worker_ids
+
+def getPartialFilmInfo(film_ids):
+    data = []
+    for film_id in film_ids:
+        sql = "select film_id,film_name,introduction,picture from film_info where film_id = '%s'" % (film_id)
+        results = select(sql)
+        assert len(results) == 1
+        result = results[0]
+        data.append(generateDictData(result,film_info_name_list[:2] + film_info_name_list[-3:-1]))
+    return data
+
+def showParticipatedMovies(request):
+    '''搜索出该影人参演的所有电影'''
+    worker_id = request.GET.get("worker_id")
+    film_ids = getMoviesOfWorker(worker_id)
+    data = getPartialFilmInfo(film_ids)
+    return JsonResponse(data,safe=False)
+
+def getRelatedWorkerId(worker_id):
+    '''返回所有与worker合作过的workers(不包括自己)'''
+    num = 10
+    film_ids = getMoviesOfWorker(worker_id)
+    worker_ids = []
+    for film_id in film_ids:
+        worker_ids += getWorkersOfFilmId(film_id)
+    worker_ids = list(set(worker_ids))[:num]
+    worker_ids.remove(worker_id)
+    return worker_ids
+
+def showRelatedWorkers(request):
+    '''搜索出该影人参演的所有电影中包含的影人们（不包括自己）'''
+    worker_id = request.GET.get("worker_id")
+    worker_ids = getRelatedWorkerId(worker_id)
+    data = []
+    for worker_id in worker_ids:
+        data.append(showSingleWorker(request=None,worker_id=worker_id))
+    return JsonResponse(data,safe=False)
+
+def showClubRelatedMovies(request):
+    '''搜索出粉丝团对应影人的所有参演电影'''
+    club_id = request.GET.get("club_id")
+    sql = "select worker_id from fan_club where club_id = '%s'" % (club_id)
+    results = select(sql)
+    assert len(results) == 1
+    worker_id = results[0]
+    film_ids = getMoviesOfWorker(worker_id)
+    data = getPartialFilmInfo(film_ids)
+    return JsonResponse(data,safe=False)
+
+def showRelatedClubs(request):
+    '''搜索出粉丝团对应影人 的 所有合作影人 的 粉丝团（不包括自己）'''
+    club_id = request.GET.get("club_id")
+    sql = "select worker_id from fan_club where club_id = '%s'" % (club_id)
+    results = select(sql)
+    assert len(results) == 1
+    worker_id = results[0]
+    worker_ids = getRelatedWorkerId(worker_id)
+    data = []
+    for worker_id in worker_ids:
+        sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_picture " \
+              "from fan_club,worker_list " \
+              "where fan_club.worker_id = '%s' and fan_club.worker_id = worker_list.worker_id" % (worker_id)
+        results = select(sql)
+        assert len(results) == 1
+        result = results[0]
+        data.append(generateDictData(result,fan_club_name_list + worker_list_name_list[2]))
+    return JsonResponse(data,safe=False)
+
+

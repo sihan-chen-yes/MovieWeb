@@ -31,7 +31,29 @@
         <button v-if="this.inClub == false" v-on:click="joinClub">加入粉丝团</button>
         <button v-else  v-on:click="quitClub">退出粉丝团</button>
     </div>
+
+    <div>
+        <p>参演电影:</p>
+        <ol>
+            <li v-for="movie in clubRelatedMovies">
+                <img v-bind:src="movie.picture">
+                <span>[[movie.film_name]]</span>
+            </li>
+        </ol>
+    </div>
+
+    <div>
+        <p>相关粉丝团:</p>
+        <ol>
+            <li v-for="club in relatedClubs">
+                <img v-bind:src="club.picture">
+                <span>[[club.club_name]]</span>
+            </li>
+        </ol>
+    </div>
 </div>
+
+
 
 
 <script>
@@ -46,15 +68,41 @@
             worker_info: {},
             user_info: [],
             symbol: sessionStorage.getItem("symbol"),
-            inClub: false
+            inClub: false,
+            clubRelatedMovies: [],
+            relatedClubs: []
         },
         mounted:function (){
             this.clubCheck()
             this.showFans()
             this.showWorker()
+            this.showClubRelatedMovies()
+            this.showRelatedClubs()
         },
 
         methods: {
+            showClubRelatedMovies() {
+                axios.get("{% url 'showClubRelatedMovies' %}",{
+                        params:{
+                            club_id:sessionStorage.getItem("club_id")
+                        }
+                    }).then(response=>{
+                        this.clubRelatedMovies = response.data
+                    }),err=>{
+                        console.log(err);
+                    };
+            },
+            showRelatedClubs() {
+                axios.get("{% url 'showRelatedClubs' %}",{
+                        params:{
+                            club_id:sessionStorage.getItem("club_id")
+                        }
+                    }).then(response=>{
+                        this.relatedClubs = response.data
+                    }),err=>{
+                        console.log(err);
+                    };
+            },
             clubCheck() {
                 axios.get("{% url 'clubCheck' %}",{
                         params:{
