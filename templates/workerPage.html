@@ -18,6 +18,27 @@
     <img v-bind:src="workerInfo.worker_picture">
     <div>[[workerInfo.worker_introduction]]</div>
 
+    <div>
+        <p>参演电影：</p>
+        <ol>
+            <li v-for="movie in participatedMovies">
+                <img v-bind:src="movie.picture">
+                <span>[[movie.film_name]]</span>
+            </li>
+        </ol>
+    </div>
+
+    <div>
+        <p>合作艺人：</p>
+        <ol>
+            <li v-for="worker in relatedWorkers">
+                <img v-bind:src="worker.picture">
+                <span>[[worker.worker_name]]</span>
+            </li>
+        </ol>
+    </div>
+
+
     <div v-if="this.symbol == 'manager'">
       <button v-on:click="this.showTextarea">
           添加粉丝团
@@ -44,13 +65,39 @@
             symbol: sessionStorage.getItem("symbol"),
             addClubBoolean: false,
             club_name: '',
-            success: false
+            success: false,
+            participatedMovies: [],
+            relatedWorkers: []
         },
         mounted:function(){
-            this.showSingleWorker();
+            this.showSingleWorker()
+            this.showParticipatedMovies()
+            this.showRelatedWorkers()
         },
 
         methods:{
+             showParticipatedMovies(){
+                axios.get("{% url 'showParticipatedMovies' %}",{
+                        params:{
+                            worker_id:sessionStorage.getItem("worker_id")
+                        }
+                    }).then(response=>{
+                        this.participatedMovies = response.data
+                    }),err=>{
+                        console.log(err);
+                    };
+            },
+            showRelatedWorkers(){
+                axios.get("{% url 'showRelatedWorkers' %}",{
+                        params:{
+                            worker_id:sessionStorage.getItem("worker_id")
+                        }
+                    }).then(response=>{
+                        this.relatedWorkers = response.data
+                    }),err=>{
+                        console.log(err);
+                    };
+            },
             showSingleWorker(){
                 axios.get("{% url 'showSingleWorker' %}",{
                         params:{

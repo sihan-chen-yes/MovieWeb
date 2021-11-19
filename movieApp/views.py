@@ -58,6 +58,9 @@ def workerPage(request):
 def fanClub(request):
     return render(request,"fanClub.html")
 
+def movieAddingPage(request):
+    return render(request, "movieAddingPage.html")
+
 def select(sql):
     '''显示信息'''
     db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)

@@ -18,6 +18,8 @@ urlpatterns = [
     path('movieSquare',views.movieSuqare,name="movieSquare"),
     path('movieSquare/moviePage',views.moviePage,name="moviePage"),
     path('movieSquare/workerPage', views.workerPage, name="workerPage"),
+    path('movieSquare/workerPage/showParticipatedMovies', views.showParticipatedMovies, name="showParticipatedMovies"),
+    path('movieSquare/workerPage/showRelatedWorkers', views.showRelatedWorkers, name="showRelatedWorkers"),
     path('movieSquare/moviePage/showMovie',views.showMovie,name="showMovie"),
     path('movieSquare/moviePage/collect',views.collect,name="collect"),
     path('movieSquare/moviePage/cancelCollect',views.cancelCollect,name="cancelCollect"),
@@ -62,4 +64,8 @@ urlpatterns = [
     path('fanClub/showWorker', views.showWorker, name="showWorker"),
     path('fanClub/joinClub', views.joinClub, name="joinClub"),
     path('fanClub/quitClub', views.quitClub, name="quitClub"),
+    path('fanClub/showClubRelatedMovies', views.showClubRelatedMovies, name="showClubRelatedMovies"),
+    path('fanClub/showRelatedClubs', views.showRelatedClubs, name="showRelatedClubs"),
+
+    path('movieAddingPage/', views.movieAddingPage, name="movieAddingPage"),
 ]
