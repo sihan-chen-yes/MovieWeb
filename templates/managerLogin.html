@@ -70,7 +70,7 @@
                             }
                         }).then(response=>{
                             this.allowed = response.data["allowed"]
-                            this.nameWrong = response.data["nameWrong"]
+                            this.nameWrong = response.data["idWrong"]
                             this.pwdWrong = response.data["pwdWrong"]
                             if (this.allowed === true) {
                                 window.sessionStorage.setItem("id",this.id)

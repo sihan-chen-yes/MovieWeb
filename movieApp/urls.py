@@ -62,4 +62,6 @@ urlpatterns = [
     path('fanClub/showWorker', views.showWorker, name="showWorker"),
     path('fanClub/joinClub', views.joinClub, name="joinClub"),
     path('fanClub/quitClub', views.quitClub, name="quitClub"),
+
+    path('movieAddingPage/', views.movieAddingPage, name="movieAddingPage"),
 ]
