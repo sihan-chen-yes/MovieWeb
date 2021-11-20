@@ -16,6 +16,7 @@ urlpatterns = [
     path('selfPage',views.selfPage,name="selfPage"),
     path('selfPage/showJoinedClubs', views.showJoinedClubs, name="showJoinedClubs"),
     path('movieSquare',views.movieSuqare,name="movieSquare"),
+    path('movieSquare/showMovieRanks', views.showMovieRanks, name="showMovieRanks"),
     path('movieSquare/moviePage',views.moviePage,name="moviePage"),
     path('movieSquare/workerPage', views.workerPage, name="workerPage"),
     path('movieSquare/workerPage/showParticipatedMovies', views.showParticipatedMovies, name="showParticipatedMovies"),
