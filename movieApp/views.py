@@ -7,7 +7,7 @@ import numpy as np
 
 
 db_user = "root"
-db_password = "61lyx520837"
+db_password = "123"
 database = "movie"
 host = "localhost"
 #表头
@@ -60,6 +60,12 @@ def fanClub(request):
 
 def movieAddingPage(request):
     return render(request, "movieAddingPage.html")
+
+def collection(request):
+    return render(request, "collection.html")
+
+def selfClub(request):
+    return render(request, "selfClub.html")
 
 def select(sql):
     '''显示信息'''
