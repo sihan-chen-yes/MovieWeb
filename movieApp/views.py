@@ -17,7 +17,7 @@ film_info_name_list = ["film_id","film_name","film_date",
                        "film_area","film_score","film_score_people","introduction","picture","video"]
 worker_list_name_list = ["worker_id","worker_name","worker_picture","worker_introduction"]
 theme_list_name_list = ["theme_id","theme_name"]
-user_list_name_list = ["user_id","user_name","gender","email","phone"]
+user_list_name_list = ["user_id","user_name","gender","email","phone","user_picture"]
 #no password
 fan_club_name_list = ["club_id","club_name"]
 
@@ -117,6 +117,25 @@ def insert(sql):
         mark = False
     db.close()
     return mark
+
+def transaction(sqls):
+    '''插入 删除 修改 操作的事务'''
+    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
+    cursor = db.cursor()
+    try:
+        for sql in sqls:
+            cursor.execute(sql)
+        db.commit()
+        mark = True
+    except:
+        db.rollback()
+        mark = False
+    db.close()
+    return mark
+
+def addWorker_transaction():
+    #Todo
+    pass
 
 def generateDictData(result,name_list):
     '''根据sql结果和列名生成字典'''
@@ -240,6 +259,7 @@ def showMovie(request=None,film_id=None):
 
 def show(request):
     '''显示用户收藏的电影以及用户信息'''
+    #Todo 太丑了
     id = request.GET.get("id")
 
     data = {}
@@ -289,6 +309,7 @@ def show(request):
     return JsonResponse(data,safe=False)
 
 def collect(request):
+    #Todo 太丑了
     user_id = request.GET.get("id")
     film_id = request.GET.get("film_id")
     data = True
@@ -310,6 +331,7 @@ def collect(request):
     return JsonResponse(data, safe=False)
 
 def cancelCollect(request):
+    #Todo 太丑了
     user_id = request.GET.get("id")
     film_id = request.GET.get("film_id")
     data = True
@@ -342,6 +364,14 @@ def searchMovieByName(request):
         data.append(showMovie(request=None,film_id=film_id))
     return JsonResponse(data,safe=False)
 
+def getTopics():
+    sql = "select * from topic_list"
+    results = select(sql)
+    data = []
+    for result in results:
+        data.append(generateDictData(result, topic_list_name_list))
+    return data
+
 def showTopics(request):
     '''显示所有话题'''
     film_id = request.GET.get("film_id")
@@ -352,6 +382,14 @@ def showTopics(request):
         data.append(generateDictData(result,topic_list_name_list))
     return JsonResponse(data,safe=False)
 
+def getBroadcasts(topic_id):
+    sql = "select * from broadcast_list where topic_id = '%s'" % (topic_id)
+    results = select(sql)
+    data = []
+    for result in results:
+        data.append(generateDictData(result, broadcast_list_name_list))
+    return data
+
 def showBroadcasts(request):
     '''显示所有子话题'''
     topic_id = request.GET.get("topic_id")
@@ -361,6 +399,17 @@ def showBroadcasts(request):
     for result in results:
         data.append(generateDictData(result,broadcast_list_name_list))
     return JsonResponse(data,safe=False)
+
+def getTopicAndBroadcast():
+    num = 1
+    topics = getTopics()
+    assert type(topics) == list
+    for topic,index in enumerate(topics):
+        assert type(topic) == dict
+        topic_id = topic["topic_id"]
+        broadcasts = getBroadcasts(topic_id)
+        topic["broadcasts"] = broadcasts[:num]
+    return topics
 
 def showSingleTopic(request):
     '''显示单个话题'''
@@ -467,7 +516,7 @@ def score(request):
         mark = update(sql)
     return JsonResponse(mark,safe=False)
 
-def showMovieRanks(request):
+def showMovieRanks(request=None):
     '''按照电影评分rank返回电影信息'''
     sql = "select * from film_info"
     results = select(sql)
@@ -477,7 +526,9 @@ def showMovieRanks(request):
         data.append(generateDictData(result,film_info_name_list))
     #按评分降序排列
     data.sort(key=lambda x:x["film_score"],reverse=True)
-    return JsonResponse(data,safe=False)
+    if request:
+        return JsonResponse(data,safe=False)
+    return data
 
 def showWorkers(request=None,film_id=None):
     '''显示与特定电影有关的所有影人信息'''
@@ -494,6 +545,11 @@ def showWorkers(request=None,film_id=None):
     else:
         return data
 
+def getDirectorIds(film_id):
+    sql = "select worker_id from film_director where film_id = '%s'" % (film_id)
+    director_ids = select(sql)
+    return director_ids
+
 def showDirector(film_id):
     sql = "select film_director.worker_id,worker_name,worker_picture,worker_introduction " \
           "from film_director,worker_list " \
@@ -504,6 +560,11 @@ def showDirector(film_id):
         directors.append(generateDictData(result,worker_list_name_list))
     return directors
 
+def getActorIds(film_id):
+    sql = "select worker_id from film_actor where film_id = '%s'" % (film_id)
+    actor_ids = select(sql)
+    return actor_ids
+
 def showActor(film_id):
     sql = "select film_actor.worker_id,worker_name,worker_picture,worker_introduction " \
           "from film_actor,worker_list " \
@@ -513,6 +574,11 @@ def showActor(film_id):
     for result in results:
         actors.append(generateDictData(result, worker_list_name_list))
     return actors
+
+def getWriterIds(film_id):
+    sql = "select worker_id from film_writer where film_id = '%s'" % (film_id)
+    writer_ids = select(sql)
+    return writer_ids
 
 def showWriter(film_id):
     sql = "select film_writer.worker_id,worker_name,worker_picture,worker_introduction " \
@@ -641,8 +707,30 @@ def managerLoginCheck(request):
         data["idWrong"] = True
     return JsonResponse(data, safe=False)
 
-def addMovie(request):
+def addWorker(request):
+    #Todo procedure
+    # worker_name = request.GET.get("worker_name")
+    # worker_picture = request.GET.get("worker_picture")
+    # worker_introduction = request.GET.get("worker_introduction")
+    # film_id = request.GET.get("film_id")
+    # type = request.GET.get("type")
+    # sqls = []
+    # sql = "insert into worker_list (worker_name, worker_picture, worker_introduction) values ('%s','%s','%s')" \
+    #       % (worker_name,worker_picture,worker_introduction)
+    # sqls.append(sql)
+    # if type == "actor":
+    #     sql = "in"
     pass
+
+def uploadPicture(request):
+    user_id = request.GET.get("user_id")
+    user_picture = request.GET.get("user_picture")
+    sql = "select * from user_list where user_id = '%s'" % (user_id)
+    mark = False
+    if select(sql):
+        sql = "update user_list set user_picture = '%s' where user_id = '%s'" % (user_picture,user_id)
+        mark = update(sql)
+    return JsonResponse(mark,safe=False)
 
 def addClub(request):
     '''添加粉丝团'''
@@ -843,4 +931,102 @@ def showRelatedClubs(request):
         data.append(generateDictData(result,fan_club_name_list + [worker_list_name_list[2]]))
     return JsonResponse(data,safe=False)
 
+def searchWorker(request):
+    keyword = request.GET.get("keyword")
+    keyword = "%" + keyword + "%"
+    sql = "select * from woker_list where worker_name like '%s'" % (keyword)
+    results = select(sql)
+    data = []
+    for result in results:
+        data.append(generateDictData(result,worker_list_name_list))
+    return JsonResponse(data,safe=False)
 
+def searchClub(request):
+    keyword = request.GET.get("keyword")
+    keyword = "%" + keyword + "%"
+    sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_name,worker_list.worker_picture " \
+          "from fan_club,woker_list " \
+          "where fan_club.club_name like '%s' and fan_club.worker_id = worker_list.worker_id" % (keyword)
+    results = select(sql)
+    data = []
+    for result in results:
+        data.append(generateDictData(result, fan_club_name_list + worker_list_name_list[1:3]))
+    return JsonResponse(data, safe=False)
+
+def getThemeIds(film_id):
+    sql = "select theme_id from film_theme where film_id = '%s'" % (film_id)
+    theme_ids = select(sql)
+    assert theme_ids
+    return theme_ids
+
+def getFilmIds():
+    sql = "select film_id from film_info"
+    film_ids = select(sql)
+    assert film_ids
+    return film_ids
+
+def judgeSimilarity(judging, tar):
+    cnt = 0
+    for theme_id in judging:
+        if theme_id in tar:
+            cnt += 1
+        if cnt >= 2:
+            return True
+    return False
+
+def showRelatedMovies(request):
+    film_id = request.GET.get("film_id")
+    theme_ids = getThemeIds(film_id)
+    all_film_ids = getFilmIds()
+    data = []
+    for judging_film_id in all_film_ids:
+        if judgeSimilarity(getThemeIds(judging_film_id),theme_ids):
+            data.append(showMovie(request=None,film_id=judging_film_id))
+    return JsonResponse(data,safe=False)
+
+def showRelatedClubOfMovie(request):
+    film_id = request.GET.get("film_id")
+    worker_ids = getDirectorIds(film_id) + getActorIds(film_id) + getWriterIds(film_id)
+    assert worker_ids
+    data = []
+    for worker_id in worker_ids:
+        sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_name,worker_list.worker_picture " \
+              "from fan_club,woker_list " \
+              "where fan_club.worker_id = worker_list.worker_id and worker_list.worker_id = '%s'" % (worker_id)
+        results = select(sql)
+        assert len(results) == 1
+        data.append(generateDictData(results[0],fan_club_name_list + worker_list_name_list[1:3]))
+    return JsonResponse(data,safe=False)
+
+def getClubs():
+    data = []
+    sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_name,worker_list.worker_picture " \
+          "from fan_club,woker_list " \
+          "where fan_club.worker_id = worker_list.worker_id"
+    results = select(sql)
+    for result in results:
+        data.append(generateDictData(result, fan_club_name_list + worker_list_name_list[1:3]))
+    return data
+
+def showAllWorkers(request):
+    data = []
+    sql = "select * from worker_list"
+    results = select(sql)
+    for result in results:
+        data.append(generateDictData(result, worker_list_name_list))
+    return JsonResponse(data, safe=False)
+
+def showFiveClubs(request):
+    num = 5
+    data = getClubs()[-num:]
+    return JsonResponse(data,safe=False)
+
+def showTopFiveMovies(request):
+    num = 5
+    data = showMovieRanks(request=None)[:num]
+    return JsonResponse(data,safe=False)
+
+def showFiveTopics(request):
+    num = 5
+    data = getTopics()[:num]
+    return JsonResponse(data,safe=False)
