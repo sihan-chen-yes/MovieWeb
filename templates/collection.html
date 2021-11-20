@@ -139,11 +139,11 @@
 
 		<ul class="tab-list">
 
-            <li class="last">
+            <li class="select">
 				<a class="fs_16 fw_300 c_b_26" v-on:click="toCollection(this.id)">收藏</a>
 			</li>
 
-			<li class="select">
+			<li class="last">
                 <a class="fs_16 fw_300 c_b_26" v-on:click="toSelfPage(this.id)">资料</a>
             </li>
 
@@ -170,33 +170,68 @@
 -->
 
 
+    <div class="space-container">
 
-<div class="tab-container" style="width:800px;">
-		<div class="creator-profiles fs_14 clearfix">
-				<div class="name">
-                   <!-- <label>昵称：[[ name ]]</label>  -->
+	<div class="article-con">
+		<div class="counts-wrap fs_14 fw_300 c_b_26">
+						<div class="cate-list-wrap choose-bar-v3">
+				<div class="choose-bar-bottom clearfix">
 
-			        <span class="title">昵称：</span>
-			        <span class="con"><span class="c_b_9">[[name]]</span></span>
-                </div>
-            <div></div>
-                <div class="">
-			        <span class="title">性别：</span>
-			        <span class="con"><span class="c_b_9">[[gender]]</span></span>
-		        </div>
-            <div></div>
-                <div class="name">
-			        <span class="title">邮箱：</span>
-			        <span class="con"><span class="c_b_9">[[email]]</span></span>
-		        </div>
-            <div></div>
-                <div class="name">
-			        <span class="title">电话：</span>
-			        <span class="con"><span class="c_b_9">[[phone]]</span></span>
-		        </div>
 
-                   </div>
+
+
+				</div>
+			</div>
+						<!-- <div class="cate-counts-wrap fs_12">作品&nbsp;<span class="counts fw_600">5</span></div> -->
+		</div>
+		<div class="article-wrap" style="margin-top:40px">
+            <ul class="article-list">
+
+                <li class="enter-filmplay" v-for="movie in movies" style="width:240px; margin-right:65px">
+                    <a class="video-cover" v-on:click="toMoviePage(movie.film_id)">
+				        <img class="lazy-img lazy-img-show" v-bind:src="movie.picture" style="width:240px;height:320px">
+
+				        <div class="video-cover-con">
+					        <div class="video-mark">
+
+                                <div class="list-tags"> </div>
+					        </div>
+				        </div>
+				        <div class="video-hover-con">
+					        <div class="fs_12 fw_300 c_w_f desc line-hide-3">[[movie.introduction]]</div>
+					        <p class="fs_12">[[movie.film_date]] 发布</p>
+                        </div>
+			        </a>
+			<div class="video-con">
+				<div class="video-con-top">
+					<a v-on:click="toMoviePage(movie.film_id)"><p class="fs_14 fw_600 c_b_3 line-hide-1" >[[movie.film_name]]</p></a>
+					<div class="new-cate">
+
+						<span class="fs_12 fw_300 c_b_9">
+												[[movie.film_date]]					</span>
+												<span class="i-icon v-center"></span>
+						<span class="fs_12 fw_300 c_b_9">
+						[[movie.film_area]]					</span>
+											</div>
+					<div class="video-view fs_12 fw_300 c_b_9">
+						<span class="fw_300 icon-play-volume">272</span>
+						<span class="fw_300 c_b_9 icon-like">1</span>
+					</div>
+				</div>
+				<div class="user-info">
+
+									</div>
+			</div>
+		</li>
+
+				</ul>
+			<div class="more fs_16 fw_600 c_b_3 no-more">没有更多了</div>
+					</div>
+	</div>
 </div>
+
+
+
 
 
         <div style="text-align:center">
