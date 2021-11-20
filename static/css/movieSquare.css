@@ -1,3 +1,42 @@
+.post-right {
+    width: 270px;
+    float: right;
+}
+
+.post-right-item {
+    padding: 15px 20px 40px;
+    background-color: #FFF;
+    box-shadow: 0 1px 4px rgba(0,0,0,.1);
+    margin-bottom: 20px;
+}
+
+.post-right-title {
+    font-size: 16px;
+    color: #393939;
+    border-left: 4px solid #2689FF;
+    margin-left: -22px;
+    margin-bottom: 15px;
+    padding: 5px 0 5px 18px;
+    text-align: left;
+}
+
+.ori-list {
+    margin-top: -5px;
+}
+
+.body {
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+    font-family: "Open Sans",Arial,"Hiragino Sans GB","Microsoft YaHei","微软雅黑","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif;
+    background-color: #F1F1F1;
+    color: #333;
+    width: 100%;
+    min-height: 100%;
+    background: url(../images/bg.jpg) repeat 0 0 #eaeaea;
+    position: relative;
+}
+
 #post-right-showreel .rotate-item a{opacity: 1; filter: alpha(opacity=100);}
 .container{width: 960px;margin-left: auto;margin-right: auto;padding-top: 80px;padding-bottom: 30px;min-height: 400px; position: relative; z: 1;} */
 /*改版样式*/
