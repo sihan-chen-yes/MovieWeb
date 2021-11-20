@@ -23,8 +23,8 @@
         }
     </style>
 </head>
-<body>
-<div class="offset"  id="movieInfo">
+<body style="background-color: #F1F1F1;">
+<div class="offset" id="movieInfo">
     <div class="index-header">
         <ul class="rotate" style="list-style:none;margin-left:20px">
             <li class="rotate-item rotate-active">
@@ -76,7 +76,7 @@
 
     <div class="content_wrapper">
 
-        <div class="col-xs-6 col-xs-offset-0" style="margin-left:320px">
+        <div class="col-xs-6 col-xs-offset-0" style="margin-left:260px">
             <div class="index-tab">
                 <a v-on:click="showAll()">随便看看</a>
                 <a v-on:click="showRecommendedMovies()">影片推荐</a>
@@ -86,7 +86,7 @@
 
             <div v-if="this.isClub == true">
             <ul class="index-list clearfix">
-                <li class="clearfix" data-id="63114" v-for="club in club_info" style="margin-top:50px">
+                <li class="clearfix" data-id="63114" v-for="club in club_info" style="margin-top:50px;margin-left:20px;margin-right:20px">
                     <a v-on:click="toFanClub(club.club_id)" class="index-img" style="width:200px;height:250px;padding: 27px 15px 0 0">
                         <img v-bind:src="club.worker_picture">
                     </a>
@@ -104,7 +104,7 @@
             <div v-else>
             <div v-if="isSearching">
                     <ul class="index-list clearfix">
-                    <li class="clearfix" data-id="63114" v-for="movie in searchMovies" style="">
+                    <li class="clearfix" data-id="63114" v-for="movie in searchMovies" style="margin-left:20px;margin-right:20px">
                         <a v-on:click="toMoviePage(movie.film_info.film_id)" class="index-img" style="width:200px;height:280px;padding: 27px 15px 0 0">
                             <img v-bind:src="movie.film_info.picture">
                         </a>
@@ -128,7 +128,7 @@
             </div>
             <div v-else>
                     <ul class="index-list clearfix" id="post-list">
-                    <li class="clearfix" data-id="63114" v-for="movie in movies" style="">
+                    <li class="clearfix" data-id="63114" v-for="movie in movies" style="margin-left:20px;margin-right:20px">
                         <a v-on:click="toMoviePage(movie.film_info.film_id)" class="index-img" style="width:200px;height:280px;padding: 27px 15px 0 0">
                             <img v-bind:src="movie.film_info.picture">
                         </a>

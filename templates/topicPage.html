@@ -5,39 +5,162 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>topicPage</title>
+            	{% load static %}
+	<link type="text/css" rel="stylesheet" href="{% static "css/moviePage.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% static "css/filmplay_new.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% static "css/common.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% static "css/movieSquare.css" %}">
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
 </head>
-<body>
+<body style="background-color: #F1F1F1;">
+
 
 <div id="showTopics">
-    <div>
-        <p>[[topicInfo.user_id]]</p>
-        <p>[[topicInfo.title]]</p>
-        <p>[[topicInfo.topic_text]]</p>
-        <p>[[topicInfo.topic_time]]</p>
-    </div>
+    	<div class="common-comment" id="comment-area" style="transform: translate(18%, 0);width:75%;padding:10px 15px 0px 15px;margin-top:20px;box-shadow: 0 2px 6px rgba(0,0,0,.1);">
+            <div style="font-size:25px;font-weight:bold;text-align:center;">
+                <span class="btn btn-danger" style="float:right;font-size:12px">返回</span>
+                话题主页</div>
 
-    <div>
-        <ul>
-            <li v-for="broadcast in broadcasts">
-                <p>[[broadcast.user_id]]</p>
-                <p>[[broadcast.broadcast_text]]</p>
-                <p>[[broadcast.broadcast_time]]</p>
-                <div v-if="broadcast.user_id == user_id">
-                    <button v-on:click="deleteBroadcast(broadcast.broadcast_id)">删除</button>
+		<div class="filmplay-info-common left-section authorize-con-parent" style="padding-bottom:45px;margin-top:30px">
+            <div class="col-xs-1" style="margin-right:-40px">
+					<a href="/u12431481" target="_blank">
+				<span class="head-wrap col-xs-0" data-userid="12431481">
+					<img class="user-avator" src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg" style="width:50px">
+				</span>
+			</a>
+            </div>
+			<div class="comment-wrap clearfix col-xs-offset-1" style="margin-left:75px">
+				<div class="user-time">
+
+						<span class="user-name fs_14 fw_600 c_b_3" style="margin-right:15px">
+							<i class="text">[[topicInfo.user_id]]</i>
+						</span>
+
+					<span class="send-time fs_12 fw_300 c_b_9">[[topicInfo.topic_time]]</span>
+				</div>
+
+				<div class="user-name fs_14 fw_600 c_b_3" style="margin-top:7px">
+                    <a v-on:click="toTopicPage(topic.topic_id)" class="bg-red" style="color:#fff;font-size:16px;padding:1px 14px 1px 14px">[[topicInfo.title]]</a>
                 </div>
-            </li>
-        </ul>
+
+				<div class="comment-con fs_14 fw_300 c_b_3" style="margin-top:15px">
+					<i class="top-icon dn">置顶</i>
+					<p class="text" style="text-indent:2em">[[topicInfo.topic_text]]</p>
+				</div>
+
+				<div class="comment-btn fs_12 fw_600 c_b_9" data-replyid="1348420">
+
+
+					<span class="like-btn J_like_comment hide-split">
+						<i class="approve-text"></i>
+						&nbsp;
+					</span>
+				</div>
+			</div>
+				</div>
+
+    <div id="comment-anchor"></div>
+    <div class="comment-top">
+        <h3 class="fs_20 fw_600 c_b_3">
+                    <span>广播&nbsp;<span class="total-counts fs_14 c_b_9"></span></span>
+                            </h3>
+                            <div class="input-wrap">
+                  <a class="avator-wrap" href="/u12431481?from=articleList">
+                  <img class="user-avator head-wrap" src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg" data-userid="12431481">
+                                </a>
+              <div class="input-area clearfix">
+                  <div class="textarea-wrap">
+                    <textarea v-model="broadcast_text" name="content" id="comment_content" placeholder="请输入广播内容"></textarea>
+                  </div>
+                  <div class="relpy-wrap fs_14 fw_300 c_b_9 dn" >回复
+                      <span class="reply-user fw_600"></span>&nbsp;
+                      <span class="reply-con"></span>
+                      <i class="icon-close"></i>
+                  </div>
+                  <span class="send-comment fs_12 bg-red" v-if="this.symbol == 'user'" v-on:click="addBroadcast()">添加广播</span>
+              </div>
+          </div>
+                      </div>
+
+
+
+    <div class="comment-bottom">
+        <ul class="comment-list">
+        <li v-for="broadcast in broadcasts">
+			<a href="/u12431481" target="_blank">
+				<span class="head-wrap" data-userid="12431481">
+					<img class="user-avator" src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg">
+				</span>
+			</a>
+			<div class="comment-wrap clearfix">
+				<div class="user-time">
+
+						<span class="user-name fs_14 fw_600 c_b_3">
+							<i class="text">[[broadcast.user_id]]</i>
+						</span>
+
+					<span class="send-time fs_12 fw_300 c_b_9">[[broadcast.broadcast_time]]</span>
+				</div>
+
+<!--				<div class="user-name fs_14 fw_600 c_b_3" style="margin-top:7px">-->
+<!--                    <a v-on:click="toTopicPage(topic.topic_id)">[[topic.title]]</a>-->
+<!--                </div>-->
+
+				<div class="comment-con fs_14 fw_300 c_b_3">
+					<i class="top-icon dn">置顶</i>
+					<i class="text">[[broadcast.broadcast_text]]</i>
+				</div>
+
+				<div class="comment-btn fs_12 fw_600 c_b_9" data-replyid="1348420">
+
+
+					<span v-if="user_id == broadcast.user_id">
+						<span class="del-btn hover-show" data-commentid="1348420" v-on:click="deleteBroadcast(broadcast.broadcast_id)">删除</span>
+                	</span>
+
+					<span class="like-btn J_like_comment hide-split">
+						<i class="approve-text"></i>
+						&nbsp;
+					</span>
+				</div>
+			</div>
+		</li>
+
+		</ul>
+        <div class="comment-empty-wrap">
+          <div class="comment-empty author-or-opened fs_16 dn">还没有人发表评论，来第一个发言吧！</div>
+          <div class="comment-empty author-and-closed fs_16 dn">关闭前无评论</div>
+          <div class="comment-empty notauthor-and-closed fs_16 dn">还没有人评论</div>
+        </div>
+        <div class="more-comment fs_14 fw_600 c_b_9 no-more">没有更多了</div>
     </div>
+</div>
 
-    <textarea v-model="broadcast_text">
+<!--            <div class="post-right col-xs-offset-9 col-xs-3" style="margin-top:-900px">-->
+<!--            <div class="post-right-item">-->
+<!--                <h4 class="post-right-title">最新粉丝团</h4>-->
+<!--                <ul class="ori-list" style="margin-left:30px;margin-top:-20px">-->
+<!--                    <li class="clearfix" data-id="63114" v-for="club in club_info" style="margin-top:10px">-->
+<!--                        <div>-->
+<!--                            <a v-on:click="toFanClub(club.club_id)" class="index-img" style="width:130px;height:150px;padding: 0px 0px 0 0px">-->
+<!--                                <img v-bind:src="club.worker_picture">-->
+<!--                            </a>-->
+<!--                        </div>-->
+<!--                    <p style="margin-top:20px">-->
+<!--                        <a v-on:click="toFanClub(club.club_id)" style="font-size:18px;color:#272727;font-weight:bold;float:center;margin-left:30px">[[club.club_name]]</a>-->
+<!--                        <div class="index-con" style="margin-top:30px;margin-bottom:10px;background-color: #2689FF;">-->
+<!--                            <a class="user" style="margin-left:55px;color:#FFF;font-size:13px;text-align:center">[[club.worker_name]]</a>-->
+<!--                        </div>-->
+<!--                    </p>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
 
-    </textarea>
-    <button v-if="this.symbol == 'user'" v-on:click="addBroadcast()">回复</button>
+<!--        </div>-->
 </div>
 
 <script>
@@ -51,12 +174,14 @@
                 broadcast_time: new Date(),
                 user_id:window.sessionStorage.getItem("id"),
                 broadcast_id:'',
-                symbol: sessionStorage.getItem("symbol")
+                symbol: sessionStorage.getItem("symbol"),
+                club_info: []
             },
 
             mounted: function(){
                 this.showSingleTopic();  //展示本话题的信息
                 this.showBroadcasts(); //展示所有广播的内容
+                this.showClubs();
             },
 
             methods:{
@@ -115,6 +240,21 @@
                         }
                     this.broadcast_text = "";
                     location.reload();
+                },
+                toFanClub(club_id) {
+                    window.sessionStorage.setItem("club_id",club_id)
+                    window.location.href = "{% url 'fanClub' %}"
+                },
+                showClubs() {
+                    axios.get("{% url 'showClubs' %}").then(response=>{
+                            this.club_info = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
+                back() {
+                    window.sessionStorage.setItem("club_id",club_id)
+                    window.location.href = "{% url 'fanClub' %}"
                 }
             }
         })
