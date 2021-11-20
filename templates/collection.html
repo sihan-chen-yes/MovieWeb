@@ -204,18 +204,18 @@
 			        </a>
 			<div class="video-con">
 				<div class="video-con-top">
-					<a v-on:click="toMoviePage(movie.film_id)"><p class="fs_14 fw_600 c_b_3 line-hide-1" >[[movie.film_name]]</p></a>
+					<a v-on:click="toMoviePage(movie.film_id)" style="width:210px"><p class="fs_14 fw_600 c_b_3 line-hide-1" style="width:210px;">[[movie.film_name]]</p></a>
 					<div class="new-cate">
 
-						<span class="fs_12 fw_300 c_b_9">
-												[[movie.film_date]]					</span>
+						<span class="fs_12 fw_300 c_b_9" style="margin-right:0px">
+												[[movie.film_date]]</span>
 												<span class="i-icon v-center"></span>
 						<span class="fs_12 fw_300 c_b_9">
 						[[movie.film_area]]					</span>
 											</div>
-					<div class="video-view fs_12 fw_300 c_b_9">
-						<span class="fw_300 icon-play-volume">272</span>
-						<span class="fw_300 c_b_9 icon-like">1</span>
+					<div class="video-view fs_12 fw_300 c_b_9" style="width:240px ;text-align:right">
+						<span class="fw_300 icon-play-volume">[[movie.film_score]]分，共[[movie.film_score_people]]人评价</span>
+
 					</div>
 				</div>
 				<div class="user-info">
@@ -225,7 +225,7 @@
 		</li>
 
 				</ul>
-			<div class="more fs_16 fw_600 c_b_3 no-more">没有更多了</div>
+			<div class="more fs_16 fw_600 c_b_3 no-more" style="background-color:#fff">没有更多了</div>
 					</div>
 	</div>
 </div>
@@ -234,50 +234,7 @@
 
 
 
-        <div style="text-align:center">
 
-<div class="" style="margin-top:30px">
-
-    <div style="padding: 0 0 30px 0;text-align:center;">
-        <h3><b>您的收藏</b></h3>
-    </div>
-    <div class="box2" style="margin-left:355px">
-        <ul>
-
-            <li class="" v-for="movie in movies" style="margin-bottom:190px;margin-left:-100px">
-                <div class="com" style="margin-bottom:30px;padding:20px 0 0 0">
-                <a v-on:click="toMoviePage(movie.film_id)"><img v-bind:src="movie.picture" style="width:120px;height:170px"></a>
-                    <div style="font-size:16px;padding:5px 0 40px 0">
-                <p><a v-on:click="toMoviePage(movie.film_id)">[[movie.film_name]]</a></p>
-                    </div>
-                    </div>
-            </li>
-
-        </ul>
-        </div>
-    </div>
-
-                   </div>
-
-
-    <div>
-        <p>我喜爱的电影主题:</p>
-        <ul>
-            <li v-for="theme in myThemes">[[theme.theme_name]]</li>
-        </ul>
-    </div>
-
-        <div>
-            <p>----------------</p>
-            <p>我加入的粉丝团：</p>
-            <ol>
-                <li v-for="club in joinedClubs">
-                    <img v-bind:src="club.worker_picture">
-                    <span>[[club.worker_name]]</span>
-                    <a v-on:click="toFanClub(club.club_id)">[[club.club_name]]</a>
-                </li>
-            </ol>
-        </div>
 
 </div>
 </div>
