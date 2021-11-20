@@ -80,9 +80,28 @@
             <div class="index-tab">
                 <a v-on:click="showAll()">随便看看</a>
                 <a v-on:click="showRecommendedMovies()">影片推荐</a>
-                <a>星级精选</a>
+                <a v-on:click="showClubs()">星级精选</a>
                 <a>热门排行</a>
             </div>
+
+            <div v-if="this.isClub == true">
+            <ul class="index-list clearfix">
+                <li class="clearfix" data-id="63114" v-for="club in club_info" style="margin-top:50px">
+                    <a v-on:click="toFanClub(club.club_id)" class="index-img" style="width:200px;height:250px;padding: 27px 15px 0 0">
+                        <img v-bind:src="club.worker_picture">
+                    </a>
+                    <div class="index-text">
+                        <h1><a v-on:click="toFanClub(club.club_id)">[[club.club_name]]</a></h1>
+                        <div class="index-con" style="margin-top:15px;margin-bottom:10px">
+                            影人：<a class="user">[[club.worker_name]]</a>
+                        </div>
+                        <div class="index-intro" style="text-indent:1.8em;font-size:13px;line-height:200%">[[club.worker_introduction]]</div>
+                    </div>
+                    <hr>
+                </li>
+            </ul>
+        </div>
+            <div v-else>
             <div v-if="isSearching">
                     <ul class="index-list clearfix">
                     <li class="clearfix" data-id="63114" v-for="movie in searchMovies" style="">
@@ -131,36 +150,12 @@
                     </li>
                 </ul>
             </div>
-
+        </div>
 
         </div>
 
-        <div>
-            <ol>
-                <li v-for="club in club_info">
-                    <img v-bind:src="club.worker_picture">
-                    <span>[[club.worker_name]]</span>
-                    <a v-on:click="toFanClub(club.club_id)">[[club.club_name]]</a>
-                </li>
-            </ol>
-        </div>
 
-        <div class="col-xs-offset-1 col-xs-2">
-            <div style="display:none">
-                <h3>电影热榜</h3>
-                <ol>
-                    <li v-for="movie in movies"><a v-on:click="toMoviePage(movie.film_id)">[[movie.film_name]],[[movie.film_date]],[[movie.film_area]]</a>
-                    <img src="" id="picture">
-                    </li>
-                </ol>
-            </div>
-            <div style="display:none">
-                 <h3>我的收藏</h3>
-                 <ol>
-                    <li v-for="collectedMovie in collectedMovies"><a v-on:click="toMoviePage(collectedMovie.film_id)">[[collectedMovie.film_name]]</a></li>
-                 </ol>
-            </div>
-        </div>
+
     </div>
 </div>
 <script>
@@ -173,12 +168,12 @@
                 searchMovies:[],
                 keyword: null,
                 isSearching: false,
-                club_info: []
+                club_info: [],
+                isClub: false
             },
             mounted:function () {
                 this.showAll()
                 this.show()
-                this.showClubs()
             },
             methods:{
                 showClubs() {
@@ -187,6 +182,7 @@
                         }),err=>{
                             console.log(err);
                         };
+                    this.isClub = true;
                 },
                 showAll() {
                     axios.get("{% url 'showAllMovies' %}").then(response=>{
@@ -194,6 +190,7 @@
                         }),err=>{
                             console.log(err);
                         };
+                    this.isClub = false;
                 },
                 showRecommendedMovies() {
                     axios.get("{% url 'showRecommendedMovies' %}",{
@@ -205,7 +202,7 @@
                     }),err=>{
                         console.log(err);
                     };
-                    console.log(this.movies);
+                    this.isClub = false;
                 },
                 toSquare() {
                     window.location.href = "{% url 'movieSquare' %}"
@@ -240,11 +237,12 @@
                         }),err=>{
                             console.log(err);
                         };
+                    this.isClub = false;
                 },
 
                 normalShow() {
-                    console.log(this.isSearching);
                     this.isSearching = false;
+                    this.isClub = false;
                     //点返回键正常显示，这里不用传值
                 },
 
