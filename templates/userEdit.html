@@ -153,9 +153,11 @@
 				<!-- <div class="bannerbg" ></div>
 				 -->
 				<span class="avator-wrap-s">
-					<img src="https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789">
+					<img id="img_id" src="https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789">
 									</span>
 			</div>
+            <input type="file" onchange="showImg()" id="img_file" style="display:none">
+            <button style ="margin-top:53px" class='btn btn-sm' onclick="document.getElementById('img_file').click()">上传头像</button>
 		</div>
 	</div>
 	<div class="creator-info-wrap">
@@ -164,7 +166,7 @@
 
 
 			</div>
-			<p class="creator-name fs_26 fw_600 c_b_26">请修改您的个人信息:)
+			<p class="creator-name fs_26 fw_600 c_b_26" style="margin-top:80px">请修改您的个人信息:)
 
 
 							</p>
@@ -270,6 +272,19 @@
 
 
 <script>
+ function showImg(){
+            var img =  $("#img_file").val();
+            var file =  document.getElementById('img_file').files[0];
+            var url = URL.createObjectURL(file);
+            console.log(URL.createObjectURL(file));
+            var re = new FileReader();
+            re.readAsDataURL(file);
+            re.onload = function(re){
+                $('#img_id').attr("src", re.target.result);
+            }
+            console.log(document.getElementById('img_id').src);
+        };
+
         var vm = new Vue({
             el:"#edit",
             delimiters:["[[","]]"],
