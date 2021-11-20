@@ -76,7 +76,7 @@
 
     <div class="content_wrapper">
 
-        <div class="col-xs-6 col-xs-offset-2" style="margin-left:320px">
+        <div class="col-xs-6 col-xs-offset-0" style="margin-left:320px">
             <div class="index-tab">
                 <a v-on:click="showAll()">随便看看</a>
                 <a v-on:click="showRecommendedMovies()">影片推荐</a>
@@ -151,6 +151,26 @@
                 </ul>
             </div>
         </div>
+
+        </div>
+
+        <div class="post-right col-xs-3">
+            <div class="post-right-item">
+                <h4 class="post-right-title">最新粉丝团</h4>
+                <ul class="ori-list" style="margin-left:30px;margin-top:-30px">
+                    <li class="clearfix" data-id="63114" v-for="club in club_info" style="margin-top:-5px">
+                    <a v-on:click="toFanClub(club.club_id)" class="index-img" style="width:160px;height:190px;padding: 27px 15px 0 0px">
+                        <img v-bind:src="club.worker_picture">
+                    </a>
+                    <div class="index-text">
+                        <h1><a v-on:click="toFanClub(club.club_id)">[[club.club_name]]</a></h1>
+                        <div class="index-con" style="margin-top:15px;margin-bottom:10px">
+                            <a class="user">[[club.worker_name]]</a>
+                        </div>
+                    </div>
+                    </li>
+                </ul>
+            </div>
 
         </div>
 
