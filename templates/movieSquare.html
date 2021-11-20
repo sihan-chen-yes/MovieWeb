@@ -160,14 +160,14 @@
                 <ul class="ori-list" style="margin-left:30px;margin-top:-20px">
                     <li class="clearfix" data-id="63114" v-for="club in club_info" style="margin-top:10px">
                         <div>
-                            <a v-on:click="toFanClub(club.club_id)" class="index-img" style="width:130px;height:165px;padding: 0px 0px 0 0px">
+                            <a v-on:click="toFanClub(club.club_id)" class="index-img" style="width:130px;height:150px;padding: 0px 0px 0 0px">
                                 <img v-bind:src="club.worker_picture">
                             </a>
                         </div>
-                    <p>
-                        <a v-on:click="toFanClub(club.club_id)">[[club.club_name]]</a>
-                        <div class="index-con" style="margin-top:15px;margin-bottom:10px">
-                            <a class="user">[[club.worker_name]]</a>
+                    <p style="margin-top:20px">
+                        <a v-on:click="toFanClub(club.club_id)" style="font-size:18px;color:#272727;font-weight:bold;float:center;margin-left:30px">[[club.club_name]]</a>
+                        <div class="index-con" style="margin-top:30px;margin-bottom:10px;background-color: #2689FF;">
+                            <a class="user" style="margin-left:55px;color:#FFF;font-size:13px;text-align:center">[[club.worker_name]]</a>
                         </div>
                     </p>
                     </li>
