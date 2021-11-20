@@ -118,6 +118,20 @@ def insert(sql):
     db.close()
     return mark
 
+def procedureCall(sql):
+    '''执行存储过程'''
+    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
+    cursor = db.cursor()
+    try:
+        cursor.execute(sql)
+        db.commit()
+        mark = True
+    except:
+        db.rollback()
+        mark = False
+    db.close()
+    return mark
+
 def transaction(sqls):
     '''插入 删除 修改 操作的事务'''
     db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
@@ -132,10 +146,6 @@ def transaction(sqls):
         mark = False
     db.close()
     return mark
-
-def addWorker_transaction():
-    #Todo
-    pass
 
 def generateDictData(result,name_list):
     '''根据sql结果和列名生成字典'''
@@ -708,19 +718,14 @@ def managerLoginCheck(request):
     return JsonResponse(data, safe=False)
 
 def addWorker(request):
-    #Todo procedure
-    # worker_name = request.GET.get("worker_name")
-    # worker_picture = request.GET.get("worker_picture")
-    # worker_introduction = request.GET.get("worker_introduction")
-    # film_id = request.GET.get("film_id")
-    # type = request.GET.get("type")
-    # sqls = []
-    # sql = "insert into worker_list (worker_name, worker_picture, worker_introduction) values ('%s','%s','%s')" \
-    #       % (worker_name,worker_picture,worker_introduction)
-    # sqls.append(sql)
-    # if type == "actor":
-    #     sql = "in"
-    pass
+    worker_name = request.GET.get("worker_name")
+    worker_picture = request.GET.get("worker_picture")
+    worker_introduction = request.GET.get("worker_introduction")
+    film_id = request.GET.get("film_id")
+    type = request.GET.get("type")
+    sql = "call addWorker('%s','%s','%s','%s'，'%s')" % (worker_name,worker_picture,worker_introduction,film_id,type)
+    mark = procedureCall(sql)
+    return JsonResponse(mark,safe=False)
 
 def uploadPicture(request):
     user_id = request.GET.get("user_id")
