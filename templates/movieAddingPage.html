@@ -41,7 +41,7 @@
             var re = new FileReader();
             re.readAsDataURL(file);
             re.onload = function(re){
-                $('#img_id').attr("src", url);
+                $('#img_id').attr("src", re.target.result);
             }
             console.log(document.getElementById('img_id').src);
         };
