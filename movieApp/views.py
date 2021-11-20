@@ -834,7 +834,7 @@ def showRelatedClubs(request):
         if len(results) == 0:
             continue
         result = results[0]
-        data.append(generateDictData(result,fan_club_name_list + worker_list_name_list[2]))
+        data.append(generateDictData(result,fan_club_name_list + [worker_list_name_list[2]]))
     return JsonResponse(data,safe=False)
 
 
