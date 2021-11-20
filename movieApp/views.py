@@ -61,6 +61,12 @@ def fanClub(request):
 def movieAddingPage(request):
     return render(request, "movieAddingPage.html")
 
+def collection(request):
+    return render(request, "collection.html")
+
+def selfClub(request):
+    return render(request, "selfClub.html")
+
 def select(sql):
     '''显示信息'''
     db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
