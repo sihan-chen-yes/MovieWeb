@@ -7,7 +7,7 @@ import numpy as np
 
 
 db_user = "root"
-db_password = "123"
+db_password = "lzc011229"
 database = "movie"
 host = "localhost"
 #表头
