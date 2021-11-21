@@ -21,6 +21,8 @@ urlpatterns = [
     path('movieSquare/showMovieRanks', views.showMovieRanks, name="showMovieRanks"),
     path('movieSquare/moviePage',views.moviePage,name="moviePage"),
     path('movieSquare/workerPage', views.workerPage, name="workerPage"),
+    path('movieSquare/showFiveClubs', views.showFiveClubs, name="showFiveClubs"),
+
     path('movieSquare/workerPage/showParticipatedMovies', views.showParticipatedMovies, name="showParticipatedMovies"),
     path('movieSquare/workerPage/showRelatedWorkers', views.showRelatedWorkers, name="showRelatedWorkers"),
     path('movieSquare/moviePage/showMovie',views.showMovie,name="showMovie"),
