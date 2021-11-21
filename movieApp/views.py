@@ -287,11 +287,13 @@ def show(request):
         data["gender"] = user_info[3]
         data["email"] = user_info[4]
         data["phone"] = user_info[5]
+        data["user_picture"] = user_info[6]
     except:
         data["name"] = None
         data["gender"] = None
         data["email"] = None
         data["phone"] = None
+        data["user_picture"] = None
     return JsonResponse(data,safe=False)
 
 def showManager(request):
