@@ -23,6 +23,7 @@ fan_club_name_list = ["club_id","club_name"]
 
 #分别定位到不同的html页面
 def login(request):
+    # ip = getIp(request)
     return render(request, "login.html")
 
 def register(request):
@@ -67,6 +68,14 @@ def collection(request):
 def selfClub(request):
     return render(request, "selfClub.html")
 
+def getIp(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
 def select(sql):
     '''显示信息'''
     db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
@@ -76,8 +85,8 @@ def select(sql):
     db.close()
     return results
 
-def delete(sql):
-    '''删除信息'''
+def execute(sql):
+    '''执行sql语句'''
     db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
     cursor = db.cursor()
     try:
@@ -89,34 +98,18 @@ def delete(sql):
         mark = False
     db.close()
     return mark
+
+def delete(sql):
+    '''删除信息'''
+    return execute(sql)
 
 def update(sql):
     '''更新信息'''
-    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
-    cursor = db.cursor()
-    try:
-        cursor.execute(sql)
-        db.commit()
-        mark = True
-    except:
-        db.rollback()
-        mark = False
-    db.close()
-    return mark
+    return execute(sql)
 
 def insert(sql):
     '''插入信息'''
-    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
-    cursor = db.cursor()
-    try:
-        cursor.execute(sql)
-        db.commit()
-        mark = True
-    except:
-        db.rollback()
-        mark = False
-    db.close()
-    return mark
+    return execute(sql)
 
 def procedureCall(sql):
     '''执行存储过程'''
@@ -124,21 +117,6 @@ def procedureCall(sql):
     cursor = db.cursor()
     try:
         cursor.execute(sql)
-        db.commit()
-        mark = True
-    except:
-        db.rollback()
-        mark = False
-    db.close()
-    return mark
-
-def transaction(sqls):
-    '''插入 删除 修改 操作的事务'''
-    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
-    cursor = db.cursor()
-    try:
-        for sql in sqls:
-            cursor.execute(sql)
         db.commit()
         mark = True
     except:
@@ -205,7 +183,7 @@ def registerApply(request):
         return JsonResponse(data, safe=False)
 
     sql = "insert into user_list(user_id,user_name,password) values('%s','%s','%s')" % (id,name,pwd)
-    insert(sql)
+    data = insert(sql)
     return JsonResponse(data, safe=False)
 
 def edit(request):
@@ -269,98 +247,60 @@ def showMovie(request=None,film_id=None):
 
 def show(request):
     '''显示用户收藏的电影以及用户信息'''
-    #Todo 太丑了
     id = request.GET.get("id")
 
     data = {}
     data["film_info"] = []
-    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
-    cursor = db.cursor()
     sql = "select * from user_collection where user_id = '%s'" % (id)
-    cursor.execute(sql)
-    results = cursor.fetchall()
+    results = select(sql)
     for result in results:
         film_id = result[2]
-        sql2 = "select * from film_info where film_id = '%s'" % (film_id)
-        cursor.execute(sql2)
-        film = cursor.fetchone()
-        data["film_info"].append({
-            "film_id":film[0],
-            "film_name":film[1],
-            "film_date":film[2],
-            "film_area":film[3],
-            "film_score":film[4],
-            "film_score_people":film[5],
-            "introduction":film[6],
-            "picture":film[7],
-            "video":film[8]
-        })
-    sql3 = "select * from user_list where user_id = '%s'" %(id)
-    cursor.execute(sql3)
-    user_info = cursor.fetchone()
+        sql = "select * from film_info where film_id = '%s'" % (film_id)
+        info_results = select(sql)
+        assert len(info_results) == 1
+        info_result = info_results[0]
+        data["film_info"].append(generateDictData(info_result,film_info_name_list))
+    sql = "select * from user_list where user_id = '%s'" %(id)
+    user_results = select(sql)
+    assert len(user_results) == 1
+    user_info = user_results[0]
     try:
         data["name"] = user_info[1]
+        data["gender"] = user_info[3]
+        data["email"] = user_info[4]
+        data["phone"] = user_info[5]
+        data["picture"] = user_info[6]
     except:
         data["name"] = None
-    try:
-        data["gender"] = user_info[3]
-    except:
         data["gender"] = None
-    try:
-        data["email"] = user_info[4]
-    except:
         data["email"] = None
-    try:
-        data["phone"] = user_info[5]
-    except:
         data["phone"] = None
-
-    db.close()
+        data["picture"] = None
     return JsonResponse(data,safe=False)
 
 def collect(request):
-    #Todo 太丑了
     user_id = request.GET.get("id")
     film_id = request.GET.get("film_id")
-    data = True
-    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
-    cursor = db.cursor()
     sql = "select * from user_collection where user_id = '%s' and film_id = '%s'" % (user_id,film_id)
-    cursor.execute(sql)
-    results = cursor.fetchall()
+    results = select(sql)
     if results:
-        data = False
+        mark = False
     else:
         sql = "insert into user_collection(user_id,film_id) values('%s','%s')" % (user_id,film_id)
-        try:
-            cursor.execute(sql)
-            db.commit()
-        except:
-            db.rollback()
-    db.close()
-    return JsonResponse(data, safe=False)
+        mark = insert(sql)
+    return JsonResponse(mark, safe=False)
 
 def cancelCollect(request):
-    #Todo 太丑了
     user_id = request.GET.get("id")
     film_id = request.GET.get("film_id")
-    data = True
-    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
-    cursor = db.cursor()
     sql = "select * from user_collection where user_id = '%s' and film_id = '%s'" % (user_id, film_id)
-    cursor.execute(sql)
-    results = cursor.fetchall()
+    results = select(sql)
     if not results:
-        data = False
+        mark = False
     else:
         sql = "delete from user_collection where user_id = '%s' and film_id = '%s'" % (user_id,film_id)
-        try:
-            cursor.execute(sql)
-            db.commit()
-        except:
-            db.rollback()
-    db.close()
-    return JsonResponse(data, safe=False)
+        mark = delete(sql)
+    return JsonResponse(mark, safe=False)
 
 def searchMovieByName(request):
     '''根据输入的电影名模糊搜索'''
@@ -786,8 +726,7 @@ def showFans(request):
     '''显示所有粉丝信息 除了密码'''
     club_id = request.GET.get("club_id")
     data = []
-    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone " \
-          "from user_in_club,user_list " \
+    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone,user_list.user_picture from user_in_club,user_list " \
           "where user_in_club.club_id = '%s' and user_in_club.user_id = user_list.user_id" % (club_id)
     results = select(sql)
     for result in results:
@@ -869,11 +808,11 @@ def getWorkersOfFilmId(film_id):
 def getPartialFilmInfo(film_ids):
     data = []
     for film_id in film_ids:
-        sql = "select film_id,film_name,introduction,picture from film_info where film_id = '%s'" % (film_id)
+        sql = "select * from film_info where film_id = '%s'" % (film_id)
         results = select(sql)
         assert len(results) == 1
         result = results[0]
-        data.append(generateDictData(result,film_info_name_list[:2] + film_info_name_list[-3:-1]))
+        data.append(generateDictData(result,film_info_name_list))
     return data
 
 def showParticipatedMovies(request):
