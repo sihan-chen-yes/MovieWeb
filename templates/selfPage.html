@@ -262,7 +262,9 @@
                             this.phone = response.data["phone"]
                             this.name = response.data["name"]
                             this.picture = response.data["user_picture"]
-                            console.log(response.data)
+                            if (this.picture == null) {
+                                this.picture = 'https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789'
+                            }
                         }),err=>{
                             console.log(err);
                         };

@@ -117,7 +117,7 @@
 				<!-- <div class="bannerbg" ></div>
 				 -->
 				<span class="avator-wrap-s">
-					<img src="https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789">
+					<img v-bind:src="this.picture">
 									</span>
 			</div>
 		</div>
@@ -253,7 +253,8 @@
                 myThemes:[],
                 joinedClubs:[],
                 id: sessionStorage.getItem("id"),
-                symbol: sessionStorage.getItem("symbol")
+                symbol: sessionStorage.getItem("symbol"),
+                picture: ''
             },
             mounted:function () {
                 this.show();
@@ -286,6 +287,10 @@
 								this.email = response.data["email"]
 								this.phone = response.data["phone"]
 								this.name = response.data["name"]
+								this.picture = response.data["user_picture"]
+								if (this.picture == null) {
+									this.picture = 'https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789'
+								}
 							}),err=>{
 								console.log(err);
 							};
