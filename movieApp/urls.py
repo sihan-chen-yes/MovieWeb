@@ -13,6 +13,7 @@ urlpatterns = [
     path('uesrEdit/showAllThemes', views.showAllThemes, name="showAllThemes"),
     path('uesrEdit/showManager', views.showManager, name="showManager"),
     path('uesrEdit/showPersonalThemes', views.showPersonalThemes, name="showPersonalThemes"),
+    path('uesrEdit/uploadPicture', views.uploadPicture, name="uploadPicture"),
     path('showAllMovies',views.showAllMovies,name="showAllMovies"),
     path('selfPage/show',views.show,name="show"),
     path('selfPage/showManager', views.showManager, name="showManager"),
