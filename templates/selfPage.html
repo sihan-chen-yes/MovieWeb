@@ -194,16 +194,21 @@
 			        <span class="title">电话：</span>
 			        <span class="con"><span class="c_b_9">[[phone]]</span></span>
 		        </div>
+            <div></div>
+                <div class="name">
+			        <span class="title">喜好：</span>
+			        <span class="con"><span class="c_b_9">
+                    <ul>
+                        <li v-for="theme in myThemes" style="float:left">[[theme.theme_name]] &nbsp;| &nbsp;</li>
+                        <li style="float:left">&nbsp;...</li>
+                    </ul>
+
+                    </span></span>
+		        </div>
 
                    </div>
 </div>
 
-    <div>
-        <p>我喜爱的电影主题:</p>
-        <ul>
-            <li v-for="theme in myThemes">[[theme.theme_name]]</li>
-        </ul>
-    </div>
 
 </div>
 </div>

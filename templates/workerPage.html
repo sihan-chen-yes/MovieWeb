@@ -6,53 +6,357 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>workerPage</title>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    {% load static %}
+    <link type="text/css" rel="stylesheet" href="{% static "css/selfPage.css" %}">
+
+	<link type="text/css" rel="stylesheet" href="{% static "css/movieSquare.css" %}">
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
+    <style>
+        span{
+    color: #ccc;
+    margin-right: 15px;
+    vertical-align: middle;
+    display: inline-block;
+        }
+
+        li {
+    text-align: -webkit-match-parent;
+    display: list-item;
+        }
+
+
+    </style>
 </head>
+
 <body>
 
-<div id="workerInfo">
-<div>[[workerInfo.worker_id]]</div>
-    <img v-bind:src="workerInfo.worker_picture">
-    <div>[[workerInfo.worker_introduction]]</div>
 
-    <div>
-        <p>参演电影：</p>
-        <ol>
-            <li v-for="movie in participatedMovies">
-                <img v-bind:src="movie.picture">
-                <span>[[movie.film_name]]</span>
-            </li>
-        </ol>
-    </div>
+<div class="index-wrap clearfix ease-in-out" id="index-wrap" style="position: absolute; opacity: 1; left: 0px; z-index: 2; top: 0px;">
+            <div class="index-nav">
+    <!--			<a href="/" title="场库_最大的微电影平台" class="index-logo" id="index-logo"><img src="https://oss-xpc0.xpccdn.com/Upload/edu/2018/05/115af5482b2b4c9.png" alt="场库_最大的微电影平台"></a>-->
+                <ul class="index-nav-list clearfix" style="list-style:none">
+                    <li><a> <span class="glyphicon glyphicon-film"></span>  <font color="white">电影网站</font></a></li>
+                    <li><a href="index.html"> <span class="glyphicon glyphicon-home"></span><font color="white">  首页</font></a></li>
+                    <li><a href="/movieSquare"><font color="white">广场</font></a></li>
+                    <li class="dropdown" id="UserDropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="UserName">
+                            <span><font color="white">我的</font></span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/selfPage">个人主页</a></li>
+                            <li><a href="/" onclick="delCookie()">退出登录</a></li>
+                        </ul>
+                    </li>
+                </ul>
 
-    <div>
-        <p>合作艺人：</p>
-        <ol>
-            <li v-for="worker in relatedWorkers">
-                <img v-bind:src="worker.worker_picture">
-                <span>[[worker.worker_name]]</span>
-            </li>
-        </ol>
-    </div>
+            </div>
+        </div>
 
 
-    <div v-if="this.symbol == 'manager'">
-      <button v-on:click="this.showTextarea">
-          添加粉丝团
-      </button>
-    </div>
+<div class="header-container">
 
-    <div v-if="this.addClubBoolean == true">
+	<style>
+    .common-layer-cover{position: fixed;top: 0;left: 0;width: 100%;height: 100%;z-index: 10001;background: rgba(0,0,0,0.5);}
+    .common-layer-cover .set-bg-pop{position: absolute; width: 540px; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 2px; background-color: #FFF;}
+    .tip-wrap{position: relative; padding: 14px 20px; border-bottom: 4px solid #f7f7f7;}
+    .tip-wrap .set-bg-tab{font-size: 14px; font-weight: 500; color: #333; text-align: center;}
+    .tip-wrap .set-bg-tab a{position: relative; font-weight: 300;}
+    .tip-wrap .set-bg-tab a.selected{font-weight: 500;}
+    .tip-wrap .set-bg-tab a.selected:after{content: ""; position: absolute; width: 20px; height: 4px; background-color: #e74949; left: 50%; transform: translateX(-50%); bottom: -14px;}
+    .tip-wrap .set-bg-tab a.custom{margin-right: 40px;}
+    .tip-wrap .tip-title{font-size: 14px; font-weight: 600px; color: #333;}
+    .tip-wrap .dialog-close{position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer;}
+    .tip-wrap .dialog-close i:before{font-size: 14px; color: #000;}
+    .tip-wrap .dialog-close i:hover:before{color: #666;}
+    .set-bg-pop-drag{width: 100%;background-color: #fff;height: 30px;cursor: move;vertical-align: middle;}
+    .set-bg-pop-drag span {margin-left: -7px;margin-top: 5px;font-size: 14px;}
+
+    .set-bg-pop-content{position: relative; padding: 20px;}
+    .set-bg-main{overflow: hidden; height: 319px; overflow-y: auto; background-color: #f7f7f7;}
+    .set-bg-main::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,0)}
+    .set-bg-main::-webkit-scrollbar{display:none}
+    .set-bg-main .set-bg-2{padding: 0 20px;}
+    .bgd-list{margin-right: -25px;*padding-bottom: 30px;}
+    .bgd-list li{cursor: pointer;border: 2px solid #EFEFEF;border-radius: 2px;width: 153px;height: 104px;margin: 0 20px 20px 0 ; float: left;background-color: #f9f9f9; box-sizing: border-box;}
+    .bgd-list li:nth-of-type(3n){margin-right: 0;}
+    .bgd-list li.selected{border-color: #e74b3b;}
+    .bgd-list li img{width: 100%;height: 100%;}
+    .set-bg-pre{height: 116px;background-color: rgba(0, 0, 0, 0.1);text-align: center; margin-top: 88px; overflow: hidden; position: relative; background-repeat: no-repeat; background-size: cover; background-position: center;}
+    .set-bg-pre .bg-cover{position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(0,0,0,.4);}
+    .set-bg-pre .loading-cover{position: absolute; width: 100%; height: 100%; top: 0; left: 0;}
+    .set-bg-pre img{max-height: 100%;}
+    .upload-tip{font-size: 12px; font-weight: 300; color: #999; text-align: center; padding-top: 10px;}
+    .set-bg-btn{height: 160px;}
+    .tc{text-align: center;margin-top: 20px;}
+    .button-group{display: block; width: 100px; height: 36px; line-height: 36px; text-align: center; font-size: 14px; font-weight: 500; color: #fff; border-radius: 2px; margin: 30px auto 0;}
+    .uploadify-button{background: #e74b3b;border:none;margin-left: 0;}
+    .uploadify-queue-item *{display: none;}
+    .uploadify-queue-item .uploadify-progress{display: block; position: absolute; width: 400px; height: 4px; border-radius: 2px; background-color: rgba(255, 255, 255, 0.4); top: 50%; left: 50%; transform: translate(-50%, -50%); border: none;}
+    .uploadify-queue-item .uploadify-progress .uploadify-progress-bar{display: block; border-radius: 2px; background-color: #fff;}
+    #id-upload-bg{width: 100%; height: 100%;}
+    #id-upload-bg .bg-cover{position: absolute; width: 100%; height: 100%; top: 0; left: 0; background-color: rgba(0,0,0,.4);}
+    #file_upload_1-button{position: absolute; width: 100%; height: 100%; top: 0; left: 0; padding: 0; margin: 0; border-radius: 0; background-color: rgba(0,0,0,0); font-size: 16px; font-weight: 500; color: #fff; line-height: 116px;}
+</style>
+
+
+
+<div class="new" id="workerInfo" >
+	<div class="banner-container">
+		<div class="banner-wrap" style="background-image: url('/static/image/bg-big-new.jpg');">
+			<div class="banner-linear">
+				<!-- <img class="banner-img" src="https://cs.xinpianchang.com/app/user/html/stars/css/skin27/bg-big.jpg"> -->
+
+				<!-- <div class="bannerbg" ></div>
+				 -->
+				<span class="avator-wrap-s">
+					<img v-bind:src="workerInfo.worker_picture">
+									</span>
+			</div>
+		</div>
+	</div>
+	<div class="creator-info-wrap">
+		<div class="creator-info">
+
+
+			<div class="btn-wrap">
+
+				<div v-if="this.symbol == 'manager'" class="btn contact-btn" >
+					<span v-on:click="this.showTextarea" class="collect-jump fs_12 fw_600 c_b_3" style="margin-bottom:40px">
+						<!-- 联系他 -->
+						成立粉丝团
+					</span>
+				</div>
+
+
+    <div v-if="this.addClubBoolean == true" class="btn contact-btn" style="width:200px">
         <input name="" class="login-input" id="input" placeholder="请为粉丝团取个名称吧:)" v-model="club_name">
-        <button v-on:click="this.addClub">
+        <button v-on:click="this.addClub" class="btn contact-btn">
             确认
         </button>
     </div>
+
+
+			</div>
+			<p class="creator-name fs_26 fw_600 c_b_26">影人主页:)
+
+
+							</p>
+
+		</div>
+	</div>
+	<div class="index-tab" style="height:50px;">
+
+		<ul class="tab-list">
+
+            <li class="last">
+				<div class="fs_16 fw_300 c_b_26" >参演</div>
+			</li>
+
+			<li class="select">
+                <div class="fs_16 fw_300 c_b_26" >简介</div>
+            </li>
+
+            <li class="last">
+                <div class="fs_16 fw_300 c_b_26" >合作</div>
+            </li>
+		</ul>
+		<span class="red-underline"></span>  <!--这个红色之后修改一下 -->
+	</div>
+
+
+
+
+    <div class="space-container" style="margin-top:40px">
+	<div class="article-con" >
+		<div class="counts-wrap fs_14 fw_300 c_b_26">
+						<div class="cate-list-wrap choose-bar-v3">
+				<div class="choose-bar-bottom clearfix">
+
+
+										<ul class="detail-type fs_12 fw_300 c_b_3 clearfix">
+												<li class="icon-arrow-down duration-item">
+														<div class="common-hover-wrap" style="z-index: 1005;">
+								<div class="hover-box">
+									<ul class="list">
+										<li class="selected"><a href="/user/space/id-12474931/d-1">全部<span class="item-num"></span></a></li>
+																				<li><a href="/user/space/id-12474931/sort-pick/cateid-142/d-1/audit-1">混剪<span class="item-num">3</span></a></li>
+																			</ul>
+								</div>
+							</div>
+													</li>
+					</ul>
+
+				</div>
+			</div>
+						<!-- <div class="cate-counts-wrap fs_12">作品&nbsp;<span class="counts fw_600">3</span></div> -->
+		</div>
+		<div class="article-wrap">
+									<div class="top-video enter-filmplay" data-articleid="11623714" data-videourl="UserProfile">
+				<div class="video-cover top-video-cover" style="width:356px">
+					<img class="video-img lazy-img lazy-img-show" v-bind:src="workerInfo.worker_picture" style="width:356px">
+					<span class="duration fs_14">图源：IMDb</span>
+					<div class="video-cover-con" style="width:356px">
+						<div class="video-mark">
+																																				<div class="list-tags">
+																<span class="tag tag-2k"></span>
+																							</div>
+						</div>
+					</div>
+					<div class="video-hover-con" style="width:356px">
+											</div>
+				</div>
+				<div class="top-video-info" style="margin-left:356px">
+					<h3 class="title fs_20 fw_600 c_b_s_1 line-hide-2" style="font-size:25px">[[workerInfo.worker_name]]</h3>
+
+					<!-- 作品的文案 不是分类 -->
+										<p class="desc fs_12 fw_300 c_b_3 line-hide-6" style="font-size:17px;max-height: 350px;height:350px">[[workerInfo.worker_introduction]]</p>
+
+				</div>
+			</div>
+
+	</div>
 </div>
 
+
+</div>
+
+
+	<p class="creator-name fs_26 fw_600 c_b_26" style="text-align:center;margin-top:0px">参演电影
+
+							</p>
+
+	    <div class="space-container">
+
+	<div class="article-con" style="margin-left:310px">
+		<div class="counts-wrap fs_14 fw_300 c_b_26">
+						<div class="cate-list-wrap choose-bar-v3">
+				<div class="choose-bar-bottom clearfix">
+
+
+
+
+				</div>
+			</div>
+						<!-- <div class="cate-counts-wrap fs_12">作品&nbsp;<span class="counts fw_600">5</span></div> -->
+		</div>
+		<div class="article-wrap" style="margin-top:40px">
+            <ul class="article-list">
+
+                <li class="enter-filmplay" v-for="movie in participatedMovies" style="width:240px; margin-right:65px">
+                    <a class="video-cover" v-on:click="toMoviePage(movie.film_id)">
+				        <img class="lazy-img lazy-img-show" v-bind:src="movie.picture" style="width:240px;height:320px">
+
+				        <div class="video-cover-con">
+					        <div class="video-mark">
+
+                                <div class="list-tags"> </div>
+					        </div>
+				        </div>
+				        <div class="video-hover-con">
+					        <div class="fs_12 fw_300 c_w_f desc line-hide-3">[[movie.introduction]]</div>
+					        <p class="fs_12">[[movie.film_date]] 发布</p>
+                        </div>
+			        </a>
+			<div class="video-con">
+				<div class="video-con-top">
+					<a v-on:click="toMoviePage(movie.film_id)" style="width:210px"><p class="fs_14 fw_600 c_b_3 line-hide-1" style="width:210px;">[[movie.film_name]]</p></a>
+					<div class="new-cate">
+
+						<span class="fs_12 fw_300 c_b_9" style="margin-right:0px">
+												[[movie.film_date]]</span>
+												<span class="i-icon v-center"></span>
+						<span class="fs_12 fw_300 c_b_9">
+						[[movie.film_area]]					</span>
+											</div>
+					<div class="video-view fs_12 fw_300 c_b_9" style="width:240px ;text-align:right">
+						<span class="fw_300 icon-play-volume">[[movie.film_score]]分，共[[movie.film_score_people]]人评价</span>
+
+					</div>
+				</div>
+				<div class="user-info">
+
+									</div>
+			</div>
+		</li>
+
+				</ul>
+
+	</div>
+</div>
+
+</div>
+
+		<p class="creator-name fs_26 fw_600 c_b_26" style="text-align:center;margin-top:0px">合作影人
+
+							</p>
+
+	<div class="space-container">
+
+	<div class="article-con"  style="margin-left:310px">
+		<div class="counts-wrap fs_14 fw_300 c_b_26">
+						<div class="cate-list-wrap choose-bar-v3">
+				<div class="choose-bar-bottom clearfix">
+
+
+
+
+				</div>
+			</div>
+						<!-- <div class="cate-counts-wrap fs_12">作品&nbsp;<span class="counts fw_600">5</span></div> -->
+		</div>
+		<div class="article-wrap" style="margin-top:40px">
+            <ul class="article-list">
+
+                <li class="enter-filmplay" v-for="worker in relatedWorkers" style="width:240px; margin-right:65px">
+                    <a class="video-cover" v-on:click="toWorkerPage(worker.worker_id)">
+				        <img class="lazy-img lazy-img-show" v-bind:src="worker.worker_picture" style="width:240px;height:240px">
+						<span class="duration fs_14"></span>
+				        <div class="video-cover-con">
+					        <div class="video-mark">
+
+                                <div class="list-tags"> </div>
+					        </div>
+				        </div>
+				        <div class="video-hover-con">
+					        <div class="fs_12 fw_300 c_w_f desc line-hide-3"></div>
+
+                        </div>
+			        </a>
+			<div class="video-con">
+				<div class="video-con-top">
+					<a v-on:click="toWorkerPage(worker.worker_id)" style="width:210px"><p class="fs_14 fw_600 c_b_3 line-hide-1" style="width:210px;">[[worker.worker_name]]</p></a>
+
+					<div class="video-view fs_12 fw_300 c_b_9" style="width:240px ;text-align:right">
+						<span class="fw_300 icon-play-volume">[[worker.worker_name]]</span>
+
+					</div>
+				</div>
+				<div class="user-info">
+
+									</div>
+			</div>
+		</li>
+
+				</ul>
+
+	</div>
+    </div>
+
+
+</div>
+
+
+
+
+</div>
+
+
+</div>
 
 
 
@@ -111,9 +415,18 @@
                     };
             },
             showTextarea(){
+
                 this.addClubBoolean = true;
             },
 
+            toMoviePage(film_id) {
+                    window.sessionStorage.setItem("film_id",film_id)
+                    window.location.href = "{% url 'moviePage' %}"
+                },
+			toWorkerPage(worker_id) {
+                    window.sessionStorage.setItem("worker_id",worker_id)
+                    window.location.href = "{% url 'workerPage' %}"
+                },
             addClub(){
                 axios.get("{% url 'addClub' %}",{
                         params:{

@@ -155,19 +155,58 @@
 	</div>
 
 
+    <div class="space-container">
+
+	<div class="article-con">
+		<div class="counts-wrap fs_14 fw_300 c_b_26">
+						<div class="cate-list-wrap choose-bar-v3">
+				<div class="choose-bar-bottom clearfix">
 
 
-        <div>
-            <p>----------------</p>
-            <p>我加入的粉丝团：</p>
-            <ol>
-                <li v-for="club in joinedClubs">
-                    <img v-bind:src="club.worker_picture">
-                    <span>[[club.worker_name]]</span>
-                    <a v-on:click="toFanClub(club.club_id)">[[club.club_name]]</a>
-                </li>
-            </ol>
-        </div>
+
+
+				</div>
+			</div>
+						<!-- <div class="cate-counts-wrap fs_12">作品&nbsp;<span class="counts fw_600">5</span></div> -->
+		</div>
+		<div class="article-wrap" style="margin-top:40px">
+            <ul class="article-list">
+
+                <li class="enter-filmplay" v-for="club in joinedClubs" style="width:240px; margin-right:65px">
+                    <a class="video-cover" v-on:click="toFanClub(club.club_id)">
+				        <img class="lazy-img lazy-img-show" v-bind:src="club.worker_picture" style="width:240px;height:240px">
+
+				        <div class="video-cover-con">
+					        <div class="video-mark">
+
+                                <div class="list-tags"> </div>
+					        </div>
+				        </div>
+				        <div class="video-hover-con">
+					        <div class="fs_12 fw_300 c_w_f desc line-hide-3"></div>
+					        <p class="fs_12">[[club.worker_name]]</p>
+                        </div>
+			        </a>
+			<div class="video-con">
+				<div class="video-con-top">
+					<a v-on:click="toFanClub(club.club_id)" style="width:210px"><p class="fs_14 fw_600 c_b_3 line-hide-1" style="width:210px;">[[club.club_name]]</p></a>
+
+					<div class="video-view fs_12 fw_300 c_b_9" style="width:240px ;text-align:right">
+						<span class="fw_300 icon-play-volume">[[club.worker_name]]</span>
+
+					</div>
+				</div>
+				<div class="user-info">
+
+									</div>
+			</div>
+		</li>
+
+				</ul>
+			<div class="more fs_16 fw_600 c_b_3 no-more" style="background-color:#fff">没有更多了</div>
+					</div>
+	</div>
+    </div>
 
 </div>
 </div>
