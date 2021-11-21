@@ -213,32 +213,35 @@ ul li {
         </div> <!---->
     </div> <!----> <!---->
 
-			<div class="filmplay-info" style="background:white;float:left" >
+			<div class="filmplay-info" style="background:white;float:left;margin-top:30px" >
 
-				<div class="filmplay-info-common left-section authorize-con-parent" style="float:none;">
+				<div class="filmplay-info-common left-section authorize-con-parent" style="float:none;padding-bottom:60px">
 					<div class="video-mark">
 
 																							</div>
 					<span class="authorize-con">不使用原创授权</span>
 					<div class="title-wrap">
-						<h3 class="title fs_26 fw_600 c_b_3 " style="margin-top:-5px">[[movieInfo.film_info.film_name]]</h3>
-                        <span>评分:[[movieInfo.film_info.film_score]]，共有[[movieInfo.film_info.film_score_people]]人评分</span>
-						        <span><button v-if="this.symbol == 'user'" v-on:click="cancelCollect">取消收藏</button></span>
-            <span><button v-if="this.symbol == 'user'" v-on:click="collect">收藏</button></span>
+						<h3 class="title fs_26 fw_600 c_b_3 " style="margin-top:-5px;margin-bottom:10px">[[movieInfo.film_info.film_name]]</h3>
+
 					</div>
 
-					<div class="filmplay-intro fs_12 fw_300 c_b_9">
+					<div class="filmplay-intro fs_12 fw_300 c_b_9" >
 
 
 												<span class="update-time v-center" style="margin-right: 20px;font-size:14px"><i>[[movieInfo.film_info.film_date]]</i></span>
 												<span class="J_whistleblow span_whistleblow" style="font-size:14px">[[movieInfo.film_info.film_area]]</span>
 					</div>
+
+					<div style="margin-top:17px">
+						<span class="desc  fs_14 c_b_3 fw_300 ">评分:[[movieInfo.film_info.film_score]]，共有[[movieInfo.film_info.film_score_people]]人评分</span>
+					</div>
+
 					<div class="filmplay-data">
 
 
-						 <div class="panel-body" style="margin-top:-25px;float:none;margin-bottom:-280px" >
+						 <div class="panel-body" style="margin-top:-25px;float:none;margin-bottom:-340px;padding-bottom:0px;padding-top:5px" >
 		  	  		  <input name="starNum" id="starNum" type="hidden">
-                      <div class="starability-container" style="margin-left:200px">
+                      <div class="starability-container" style="margin-left:170px">
 	                       <fieldset class="starability-slot">
 		                        <input type="radio" id="rate_1_0_1_5" name="starLevel" value=5 v-on:click="initScoreBind(5)" />
 		                        <label for="rate_1_0_1_5" title="5星" ></label>
@@ -254,15 +257,17 @@ ul li {
                       </div>
                       <span style="font-size: 2rem;line-height: 2.9rem;padding: 1rem;font-style: oblique;" id="starStr"></span>
 
-                          <span v-on:click="score()" style="color:white;font-size:13px;margin-bottom:30px;margin-left:-200px;padding:5px 5px 5px 5px" class="send-comment fs_12 bg-red">提交评分</span>
+                          <span v-on:click="score()" style="color:white;font-size:13px;margin-bottom:30px;padding:5px 5px 5px 5px;margin-left:-140px" class="send-comment fs_12 bg-red">提交评分</span>
+							            <span style="color:white;font-size:13px;padding:5px 5px 5px 5px;margin-left:10px" class="send-comment fs_12 bg-red" v-if="this.symbol == 'user'" v-on:click="collect">收藏</span>
+							 <span style="color:white;font-size:13px;padding:5px 5px 5px 5px;margin-left:10px" class="send-comment fs_12 bg-red" v-if="this.symbol == 'user'" v-on:click="cancelCollect">取消收藏</span>
 
 		  </div>
 
 
 					</div>
 				</div>
-								<div class="filmplay-info-desc left-section" style="float:none;margin-top:100px">
-					<p class="desc  fs_14 c_b_3 fw_300 ">
+								<div class="filmplay-info-desc left-section" style="float:none;margin-top:70px;padding-bottom:20px;padding-top:15px">
+					<p class="desc  fs_14 c_b_3 fw_300 " style="font-size:16px;margin-bottom:0px">
 
 						[[movieInfo.film_info.introduction]]
 										</p>
@@ -272,11 +277,11 @@ ul li {
 					<h3 class="title-item fs_16 fw_600">使用器材</h3>
 					<p class="info fs_14 fw_300">大疆精灵第四代   佳能5D Mark IV</p>
 				</div> -->
-							<div class="filmplay-info-tags left-section"  style="float:none;margin-top:-30px">
+							<div class="filmplay-info-tags left-section"  style="float:none;margin-top:-20px;padding-bottom:12px;padding-top:12px">
 					<h3 class="title-item fs_14 fw_600">类型</h3>
 					<div class="fs_12 fw_300 c_b_3 tag-wrapper">
                         <ol>
-            <li v-for="theme in themes" style="display:inline-block;font-size:14px">
+            <li v-for="theme in themes" style="display:inline-block;font-size:15px">
                 <div>
                     [[theme.theme_name]] &nbsp;
                 </div>
@@ -317,49 +322,21 @@ ul li {
 
 					</div>
 
-                    <div class="filmplay-data">
+                    <div class="filmplay-data" style="margin-left:-50px">
 
 						<div class="filmplay-data-btn fs_12" style="margin-right:20px">
 
 
-                            <span class="pick-wrap share">
-                                <span class="btn xpc-stat border-btn share-btn show-qr c_b_3 v-center share-host" data-event="clickArticleShare">
-                                    <button v-on:click="toTopicCreating(movieInfo.film_info.film_id)" class="icon-share">添加新的话题</button>
 
+										<span class="send-comment fs_12 bg-red" style="color:white;font-size:13px;padding:9px 15px 9px 15px;margin-left:-100px" v-on:click="toTopicCreating(movieInfo.film_info.film_id)">添加话题</span>
 
-										<span class="share-counts v-center counts fs_12 fw_300 show" style="font-size:13px">添加新的话题</span>
-								</span>
-								<span class="award-con-wrap fs_12 fw_300">
-									<span class="award-con">分享作品</span>
-								</span>
-							</span>
 
 						</div>
 					</div>
 				</div>
 
     <div id="comment-anchor"></div>
-    <div class="comment-top">
-        <h3 class="fs_20 fw_600 c_b_3">
-                    <span>评论&nbsp;<span class="total-counts fs_14 c_b_9">2</span></span>
-                            </h3>
-                            <div class="input-wrap">
-                  <a class="avator-wrap" href="/u12431481?from=articleList">
-                  <img class="user-avator head-wrap" src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg" data-userid="12431481">
-                                </a>
-              <div class="input-area clearfix">
-                  <div class="textarea-wrap">
-                    <textarea name="content" id="comment_content" placeholder="请输入评论内容"></textarea>
-                  </div>
-                  <div class="relpy-wrap fs_14 fw_300 c_b_9 dn">回复
-                      <span class="reply-user fw_600"></span>&nbsp;
-                      <span class="reply-con"></span>
-                      <i class="icon-close"></i>
-                  </div>
-                  <span class="send-comment fs_12 bg-red">发表评论</span>
-              </div>
-          </div>
-                      </div>
+
 
 
 
