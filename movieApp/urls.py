@@ -13,6 +13,7 @@ urlpatterns = [
     path('uesrEdit/showAllThemes', views.showAllThemes, name="showAllThemes"),
     path('uesrEdit/showManager', views.showManager, name="showManager"),
     path('uesrEdit/showPersonalThemes', views.showPersonalThemes, name="showPersonalThemes"),
+    path('uesrEdit/uploadPicture', views.uploadPicture, name="uploadPicture"),
     path('showAllMovies',views.showAllMovies,name="showAllMovies"),
     path('selfPage/show',views.show,name="show"),
     path('selfPage/showManager', views.showManager, name="showManager"),
@@ -54,6 +55,8 @@ urlpatterns = [
     path('movieSquare/showMovieRanks',views.showMovieRanks,name="showMovieRanks"),
     path('movieSquare/showWorkers',views.showWorkers,name="showWorkers"),
     path('movieSquare/showClubs', views.showClubs, name="showClubs"),
+    path('movieSquare/searchWorker', views.searchWorker, name="searchWorker"),
+
     path('selfPage/showPersonalThemes',views.showPersonalThemes,name="showPersonalThemes"),
     path('moviePage/showMovieThemes',views.showMovieThemes,name="showMovieThemes"),
     path('moviePage/showWorkersinPage', views.showWorkersinPage, name="showWorkersinPage"),
