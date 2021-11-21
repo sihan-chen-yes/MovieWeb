@@ -18,17 +18,15 @@
 <body>
 
  <div class="layui-form-item" id="movieAdding">
+                <input v-model="this.type" placeholder="请输入影人类型">
+                <input v-model="this.name" placeholder="请输入影人姓名">
+                <input v-model="this.introduction" placeholder="请输入影人简介">
                 <label class="layui-form-label">图片地址</label>
                 <div class="layui-input-block">
                     <input type="hidden" id="img_url">
                     <input type="file" onchange="showImg()" id="img_file"><img src="" alt="" id="img_id" style="width: 100px">
   				</div>
 
-                    <label class="layui-form-label">视频地址</label>
-                <div class="layui-input-block">
-                    <input type="hidden" id="video_url">
-                    <input type="file" onchange="showVideo()" id=video_file"><video src="" alt="" id="video_id" style="width: 100px"></video>
-  				</div>
  </div>
 
 
@@ -46,18 +44,29 @@
             console.log(document.getElementById('img_id').src);
         };
 
-
- function showVideo(){
-            // var video_file =  $("#video_file").val();
-            console.log($("#video_file").val());
-            var file =  document.getElementById('video_file').files[0];
-            var re = new FileReader();
-            re.readAsDataURL(file);
-            re.onload = function(re){
-                $('#video_id').attr("src", re.target.result);
+    var vm = new Vue({
+        el:"#movieAdding"
+        delimiters:["[[","]]"],
+        data:{
+            name: '',
+            type: '',
+            introduction: '',
+            picture: document.getElementById('img_id').src
+        },
+        methods: {
+            addWorkers() {
+                axios.get("{% url 'showMovie' %}",{
+                        params:{
+                            film_id:sessionStorage.getItem("film_id")
+                        }
+                    }).then(response=>{
+                        this.movieInfo = response.data
+                    }),err=>{
+                        console.log(err);
+                    };
             }
-
         }
+    })
 
 
 
