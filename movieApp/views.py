@@ -719,7 +719,17 @@ def addWorker(request):
     film_id = request.GET.get("film_id")
     type = request.GET.get("type")
     sql = "call addWorker('%s','%s','%s','%s'，'%s')" % (worker_name,worker_picture,worker_introduction,film_id,type)
-    mark = procedureCall(sql)
+    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
+    cursor = db.cursor()
+    try:
+        cursor.callproc('addWorker', (worker_name,worker_picture,worker_introduction,film_id,type))
+        db.commit()
+        mark = True
+    except:
+        db.rollback()
+        mark = False
+    db.close()
+    #mark = procedureCall(sql)
     return JsonResponse(mark,safe=False)
 
 def uploadPicture(request):

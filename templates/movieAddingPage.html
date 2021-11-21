@@ -18,14 +18,21 @@
 <body>
 
  <div class="layui-form-item" id="movieAdding">
-                <input v-model="this.type" placeholder="请输入影人类型">
-                <input v-model="this.name" placeholder="请输入影人姓名">
-                <input v-model="this.introduction" placeholder="请输入影人简介">
+                    <form method="get">
+    请选择影人类型<br /><br />
+    <label><input name="type" type="radio" value="director" checked/>导演 </label>
+    <label><input name="type" type="radio" value="writer" />编剧 </label>
+    <label><input name="type" type="radio" value="actor" />演员 </label>
+    </form>
+                <input id="name" placeholder="请输入影人姓名">
+                <textarea id="introduction" placeholder="请输入影人简介"></textarea>
                 <label class="layui-form-label">图片地址</label>
                 <div class="layui-input-block">
                     <input type="hidden" id="img_url">
                     <input type="file" onchange="showImg()" id="img_file"><img src="" alt="" id="img_id" style="width: 100px">
   				</div>
+     <button v-on:click="output" hidden>测试</button>
+     <button v-on:click="addWorker">确认添加</button>
 
  </div>
 
@@ -45,25 +52,35 @@
         };
 
     var vm = new Vue({
-        el:"#movieAdding"
+        el:"#movieAdding",
         delimiters:["[[","]]"],
         data:{
             name: '',
             type: '',
-            introduction: '',
-            picture: document.getElementById('img_id').src
+            introduction: ''
         },
         methods: {
-            addWorkers() {
-                axios.get("{% url 'showMovie' %}",{
+            addWorker() {
+                axios.get("{% url 'addWorker' %}",{
                         params:{
-                            film_id:sessionStorage.getItem("film_id")
+                            film_id:sessionStorage.getItem("film_id"),
+                            worker_name: document.getElementById('name').value,
+                            worker_introduction: document.getElementById('introduction').value,
+                            worker_picture: document.getElementById('img_id').src,
+                            type: $("input[name='type']:checked").val()
                         }
                     }).then(response=>{
-                        this.movieInfo = response.data
+                        alert("影人添加成功！")
                     }),err=>{
                         console.log(err);
                     };
+            },
+            output() {
+                console.log(sessionStorage.getItem("film_id"))
+                console.log(document.getElementById('name').value)
+                console.log(document.getElementById('introduction').value)
+                console.log(document.getElementById('img_id').src)
+                console.log($("input[name='type']:checked").val())
             }
         }
     })
