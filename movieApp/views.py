@@ -532,6 +532,22 @@ def showWorkers(request=None,film_id=None):
     else:
         return data
 
+def showWorkersinPage(request=None,film_id=None):
+    '''显示与特定电影有关的所有影人信息'''
+    if request:
+        film_id = request.GET.get("film_id")
+    else:
+        assert film_id
+    data = {}
+    data["directors"] = showDirector(film_id)
+    data["actors"] = showActor(film_id)
+    data["writers"] = showWriter(film_id)
+
+    if request:
+        return JsonResponse(data, safe=False)
+    else:
+        return data
+
 def getDirectorIds(film_id):
     sql = "select worker_id from film_director where film_id = '%s'" % (film_id)
     director_ids = select(sql)
