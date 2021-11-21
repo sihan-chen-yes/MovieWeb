@@ -17,7 +17,7 @@ film_info_name_list = ["film_id","film_name","film_date",
                        "film_area","film_score","film_score_people","introduction","picture","video"]
 worker_list_name_list = ["worker_id","worker_name","worker_picture","worker_introduction"]
 theme_list_name_list = ["theme_id","theme_name"]
-user_list_name_list = ["user_id","user_name","gender","email","phone","user_picture"]
+user_list_name_list = ["user_id","user_name","gender","email","phone"]
 #no password
 fan_club_name_list = ["club_id","club_name"]
 
