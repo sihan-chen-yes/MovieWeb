@@ -7,7 +7,7 @@ import numpy as np
 
 
 db_user = "root"
-db_password = "123"
+db_password = "61lyx520837"
 database = "movie"
 host = "localhost"
 #表头
@@ -878,7 +878,7 @@ def showRelatedClubs(request):
 def searchWorker(request):
     keyword = request.GET.get("keyword")
     keyword = "%" + keyword + "%"
-    sql = "select * from woker_list where worker_name like '%s'" % (keyword)
+    sql = "select * from worker_list where worker_name like '%s'" % (keyword)
     results = select(sql)
     data = []
     for result in results:
@@ -889,7 +889,7 @@ def searchClub(request):
     keyword = request.GET.get("keyword")
     keyword = "%" + keyword + "%"
     sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_name,worker_list.worker_picture " \
-          "from fan_club,woker_list " \
+          "from fan_club,worker_list " \
           "where fan_club.club_name like '%s' and fan_club.worker_id = worker_list.worker_id" % (keyword)
     results = select(sql)
     data = []
@@ -935,7 +935,7 @@ def showRelatedClubOfMovie(request):
     data = []
     for worker_id in worker_ids:
         sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_name,worker_list.worker_picture " \
-              "from fan_club,woker_list " \
+              "from fan_club,worker_list " \
               "where fan_club.worker_id = worker_list.worker_id and worker_list.worker_id = '%s'" % (worker_id)
         results = select(sql)
         assert len(results) == 1
@@ -945,7 +945,7 @@ def showRelatedClubOfMovie(request):
 def getClubs():
     data = []
     sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_name,worker_list.worker_picture " \
-          "from fan_club,woker_list " \
+          "from fan_club,worker_list " \
           "where fan_club.worker_id = worker_list.worker_id"
     results = select(sql)
     for result in results:
