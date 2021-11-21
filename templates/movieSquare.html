@@ -54,14 +54,15 @@
                         </ul>
                     </li>
                 </ul>
+
+                <button class="btn btn-primary btm-xs" v-on:click="normalShow()" style="float:right;margin-left:7px;">返回</button>
+                <button class="btn btn-primary btm-sm" v-on:click="searching()" style="float:right;margin-left:7px">搜电影</button>
+                <button class="btn btn-primary btm-sm" v-on:click="searchingWorkers()" style="float:right;margin-left:7px">搜影人</button>
+
                 <form class="index-search">
                     <div class="glyphicon glyphicon-search"></div>
                     <input placeholder="请输入关键字" v-model="keyword">
                 </form>
-
-                <button class="btn btn-default" v-on:click="searching()" style="float:right">搜索</button>
-                <button class="btn btn-default" v-on:click="normalShow()" style="float:right">返回</button>
-
 
             </div>
         </div>
@@ -105,6 +106,24 @@
             <div v-if="this.isWorker == true">
             <ul class="index-list clearfix">
                 <li class="clearfix" data-id="63114" v-for="worker in worker_info" style="margin-top:50px;margin-left:20px;margin-right:20px">
+                    <a v-on:click="toWorkerPage(worker.worker_id)" class="index-img" style="width:200px;height:250px;padding: 27px 15px 0 0">
+                        <img v-bind:src="worker.worker_picture">
+                    </a>
+                    <div class="index-text">
+                        <h1><a v-on:click="toWorkerPage(worker.worker_id)">[[worker.worker_name]]</a></h1>
+<!--                        <div class="index-con" style="margin-top:15px;margin-bottom:10px">-->
+<!--                            影人：<a class="user">[[worker.worker_name]]</a>-->
+<!--                        </div>-->
+                        <div class="index-intro" style="text-indent:1.8em;font-size:13px;line-height:200%">[[worker.worker_introduction]]</div>
+                    </div>
+                    <hr>
+                </li>
+            </ul>
+        </div>
+
+            <div v-if="this.isSearchingWorker == true">
+            <ul class="index-list clearfix">
+                <li class="clearfix" data-id="63114" v-for="worker in searchWorkers" style="margin-top:50px;margin-left:20px;margin-right:20px">
                     <a v-on:click="toWorkerPage(worker.worker_id)" class="index-img" style="width:200px;height:250px;padding: 27px 15px 0 0">
                         <img v-bind:src="worker.worker_picture">
                     </a>
@@ -207,13 +226,16 @@
                 movies:[],
                 collectedMovies:[],
                 searchMovies:[],
+                searchWorkers:[],
                 keyword: null,
                 isSearching: false,
                 club_info: [],
                 worker_info: [],
                 isClub: false,
                 isWorker: false,
-                fiveClubs: []
+                fiveClubs: [],
+                isSearchingWorker: false
+
             },
             mounted:function () {
                 this.showAll()
@@ -236,6 +258,8 @@
                         };
                     this.isWorker = true;
                     this.isClub = false;
+                    this.isSearching = false;
+                    this.isSearchingWorker = false;
                 },
                 showClubs() {
                     axios.get("{% url 'showClubs' %}").then(response=>{
@@ -245,6 +269,8 @@
                         };
                     this.isClub = true;
                     this.isWorker = false;
+                    this.isSearching = false;
+                    this.isSearchingWorker = false;
                 },
                 showAll() {
                     axios.get("{% url 'showAllMovies' %}").then(response=>{
@@ -254,6 +280,8 @@
                         };
                     this.isClub = false;
                     this.isWorker = false;
+                    this.isSearching = false;
+                    this.isSearchingWorker = false;
                 },
                 showRecommendedMovies() {
                     axios.get("{% url 'showRecommendedMovies' %}",{
@@ -267,6 +295,8 @@
                     };
                     this.isClub = false;
                     this.isWorker = false;
+                    this.isSearching = false;
+                    this.isSearchingWorker = false;
                 },
                 toSquare() {
                     window.location.href = "{% url 'movieSquare' %}"
@@ -292,12 +322,33 @@
                         };
                     this.isClub = false;
                     this.isWorker = false;
+                    this.isSearchingWorker = false;
+                },
+                searchingWorkers() {
+                    console.log(this.isSearching);
+                    console.log(this.keyword);
+                    this.isSearchingWorker = true;
+                    this.isSearching = false;
+                    //keyword是传到后台的值
+                    //结果返回到searchMovies上，上面会显示
+                    axios.get("{% url 'searchWorker' %}",{
+                            params:{
+                                keyword:this.keyword
+                            }
+                        }).then(response=>{
+                            this.searchWorkers = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
+                    this.isClub = false;
+                    this.isWorker = false;
                 },
 
                 normalShow() {
                     this.isSearching = false;
                     this.isClub = false;
                     this.isWorker = false;
+                    this.isSearchingWorker = false;
                     //点返回键正常显示，这里不用传值
                 },
 
