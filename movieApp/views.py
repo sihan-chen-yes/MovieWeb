@@ -125,21 +125,6 @@ def procedureCall(sql):
     db.close()
     return mark
 
-def transaction(sqls):
-    '''插入 删除 修改 操作的事务'''
-    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
-    cursor = db.cursor()
-    try:
-        for sql in sqls:
-            cursor.execute(sql)
-        db.commit()
-        mark = True
-    except:
-        db.rollback()
-        mark = False
-    db.close()
-    return mark
-
 def generateDictData(result,name_list):
     '''根据sql结果和列名生成字典'''
     dict = {}
@@ -262,34 +247,34 @@ def showMovie(request=None,film_id=None):
 
 def show(request):
     '''显示用户收藏的电影以及用户信息'''
-    id = request.GET.get("id")
-
-    data = {}
-    data["film_info"] = []
-    sql = "select * from user_collection where user_id = '%s'" % (id)
-    results = select(sql)
-    for result in results:
-        film_id = result[2]
-        sql = "select * from film_info where film_id = '%s'" % (film_id)
-        info_results = select(sql)
-        assert len(info_results) == 1
-        info_result = info_results[0]
-        data["film_info"].append(generateDictData(info_result,film_info_name_list))
-    sql = "select * from user_list where user_id = '%s'" %(id)
-    user_results = select(sql)
-    assert len(user_results) == 1
-    user_info = user_results[0]
-    try:
-        data["name"] = user_info[1]
-        data["gender"] = user_info[3]
-        data["email"] = user_info[4]
-        data["phone"] = user_info[5]
-    except:
-        data["gender"] = None
-        data["name"] = None
-        data["email"] = None
-        data["phone"] = None
-    return JsonResponse(data,safe=False)
+    # id = request.GET.get("id")
+    #
+    # data = {}
+    # data["film_info"] = []
+    # sql = "select * from user_collection where user_id = '%s'" % (id)
+    # results = select(sql)
+    # for result in results:
+    #     film_id = result[2]
+    #     sql = "select * from film_info where film_id = '%s'" % (film_id)
+    #     info_results = select(sql)
+    #     assert len(info_results) == 1
+    #     info_result = info_results[0]
+    #     data["film_info"].append(generateDictData(info_result,film_info_name_list))
+    # print(id)
+    # sql = "select * from user_list where user_id = '%s'" %(id)
+    # user_results = select(sql)
+    # user_info = user_results[0]
+    # try:
+    #     data["name"] = user_info[1]
+    #     data["gender"] = user_info[3]
+    #     data["email"] = user_info[4]
+    #     data["phone"] = user_info[5]
+    # except:
+    #     data["name"] = None
+    #     data["gender"] = None
+    #     data["email"] = None
+    #     data["phone"] = None
+    # return JsonResponse(data,safe=False)
 
 def collect(request):
     user_id = request.GET.get("id")
@@ -306,14 +291,13 @@ def collect(request):
 def cancelCollect(request):
     user_id = request.GET.get("id")
     film_id = request.GET.get("film_id")
-    mark = True
     sql = "select * from user_collection where user_id = '%s' and film_id = '%s'" % (user_id, film_id)
     results = select(sql)
     if not results:
         mark = False
     else:
         sql = "delete from user_collection where user_id = '%s' and film_id = '%s'" % (user_id,film_id)
-        delete(sql)
+        mark = delete(sql)
     return JsonResponse(mark, safe=False)
 
 def searchMovieByName(request):
@@ -740,7 +724,7 @@ def showFans(request):
     '''显示所有粉丝信息 除了密码'''
     club_id = request.GET.get("club_id")
     data = []
-    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone " \
+    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone,user_list.picture" \
           "from user_in_club,user_list " \
           "where user_in_club.club_id = '%s' and user_in_club.user_id = user_list.user_id" % (club_id)
     results = select(sql)
