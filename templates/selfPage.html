@@ -272,6 +272,7 @@
                     };
                 },
                 edit() {
+                    window.sessionStorage.setItem("id",this.id)
                     window.location.href = "{% url 'userEdit' %}"
                 },
                 toMoviePage(film_id) {
@@ -283,15 +284,15 @@
                     window.location.href = "{% url 'fanClub' %}"
                 },
                 toCollection(id) {
-                    window.sessionStorage.setItem("id",id)
+                    window.sessionStorage.setItem("id",this.id)
                     window.location.href = "{% url 'collection' %}"
                 },
                 toSelfPage(id) {
-                    window.sessionStorage.setItem("id",id)
+                    window.sessionStorage.setItem("id",this.id)
                     window.location.href = "{% url 'selfPage' %}"
                 },
                 toSelfClub(id) {
-                    window.sessionStorage.setItem("id",id)
+                    window.sessionStorage.setItem("id",this.id)
                     window.location.href = "{% url 'selfClub' %}"
                 }
             }
