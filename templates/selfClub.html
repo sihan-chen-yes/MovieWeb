@@ -184,7 +184,7 @@
 				        </div>
 				        <div class="video-hover-con">
 					        <div class="fs_12 fw_300 c_w_f desc line-hide-3"></div>
-					        <p class="fs_12">发布</p>
+					        <p class="fs_12">[[club.worker_name]]</p>
                         </div>
 			        </a>
 			<div class="video-con">
@@ -207,19 +207,6 @@
 					</div>
 	</div>
     </div>
-
-
-        <div>
-            <p>----------------</p>
-            <p>我加入的粉丝团：</p>
-            <ol>
-                <li v-for="club in joinedClubs">
-                    <img v-bind:src="club.worker_picture">
-                    <span>[[club.worker_name]]</span>
-                    <a v-on:click="toFanClub(club.club_id)">[[club.club_name]]</a>
-                </li>
-            </ol>
-        </div>
 
 </div>
 </div>
