@@ -224,7 +224,8 @@
                 movies:[],
                 myThemes:[],
                 joinedClubs:[],
-                id: sessionStorage.getItem("id")
+                id: sessionStorage.getItem("id"),
+                symbol: sessionStorage.getItem("symbol")
             },
             mounted:function () {
                 this.show();
@@ -233,18 +234,20 @@
             },
             methods:{
                  showJoinedClubs() {
-                    axios.get("{% url 'showJoinedClubs' %}",{
-                            params:{
-                                user_id:sessionStorage.getItem("id")
-                            }
-                        }).then(response=>{
-                            this.joinedClubs = response.data
-                        }),err=>{
-                            console.log(err);
-                        };
-                        console.log(this.id);
+                    if (this.symbol == 'user') {
+                        axios.get("{% url 'showJoinedClubs' %}",{
+                                params:{
+                                    user_id:sessionStorage.getItem("id")
+                                }
+                            }).then(response=>{
+                                this.joinedClubs = response.data
+                            }),err=>{
+                                console.log(err);
+                            };
+                    }
                 },
                 show() {
+                    if(this.symbol == 'user'){
                     axios.get("{% url 'show' %}",{
                             params:{
                                 id:sessionStorage.getItem("id")
@@ -258,17 +261,33 @@
                         }),err=>{
                             console.log(err);
                         };
+                    } else{
+                        axios.get("{% url 'showManager' %}",{
+                            params:{
+                                id:sessionStorage.getItem("id")
+                            }
+                        }).then(response=>{
+                            this.gender = response.data["gender"]
+                            this.email = response.data["email"]
+                            this.phone = response.data["phone"]
+                            this.name = response.data["name"]
+                        }),err=>{
+                            console.log(err);
+                        };
+                    }
                 },
                 showPersonalThemes() {
-                    axios.get("{% url 'showPersonalThemes' %}",{
-                        params: {
-                            user_id:sessionStorage.getItem("id")
-                        }
-                    }).then(response=>{
-                        this.myThemes = response.data;
-                    }),err=>{
-                        console.log(err);
-                    };
+                    if(this.symbol == 'user') {
+                        axios.get("{% url 'showPersonalThemes' %}",{
+                            params: {
+                                user_id:sessionStorage.getItem("id")
+                            }
+                        }).then(response=>{
+                            this.myThemes = response.data;
+                        }),err=>{
+                            console.log(err);
+                        };
+                    }
                 },
                 edit() {
                     window.location.href = "{% url 'userEdit' %}"

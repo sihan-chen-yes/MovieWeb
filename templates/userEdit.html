@@ -250,9 +250,9 @@
                     <span style="margin-inline:5px"></span>
 </div>
 
-            <form action="" method="get">
+            <form v-if="this.symbol == 'user'" action="" method="get">
 请选择你喜欢的电影主题:)<br /><br />
-<ul>
+<ul v-if="this.symbol == 'user'">
 <li v-for="theme in themes" style="display:inline;margin-inline:4px;">
     <label><input name="themeName" type="checkbox" :value="theme.theme_id"/>[[theme.theme_name]]</label>
 </li>
@@ -296,7 +296,8 @@
                 movies:[],
                 themes:[],
                 myThemes:[],
-                tempThemes:[]
+                tempThemes:[],
+                symbol: sessionStorage.getItem("symbol")
             },
             mounted:function () {
                 this.show();
@@ -335,41 +336,75 @@
                     };
                 },
                 submit() {
-                    this.getSelectedThemes();
-                    console.log("this is " + this.tempThemes);
-                    var list = JSON.stringify(this.tempThemes);
-                    axios.get("{% url 'edit' %}",{
-                            params:{
-                                gender:this.gender,
-                                email:this.email,
-                                phone:this.phone,
-                                id:sessionStorage.getItem("id"),
-                                themes: list
-                            }
-                        }).then(response=>{
-                            this.allowed = response.data
-                            if (this.allowed == true) {
-                                alert("修改成功！")
-                            } else {
-                                alert("修改失败！")
-                            }
-                        }),err=>{
-                            console.log(err);
-                        };
+                    if (this.symbol == 'user') {
+                        this.getSelectedThemes();
+                        console.log("this is " + this.tempThemes);
+                        var list = JSON.stringify(this.tempThemes);
+                        axios.get("{% url 'edit' %}",{
+                                params:{
+                                    gender:this.gender,
+                                    email:this.email,
+                                    phone:this.phone,
+                                    id:sessionStorage.getItem("id"),
+                                    themes: list
+                                }
+                            }).then(response=>{
+                                this.allowed = response.data
+                                if (this.allowed == true) {
+                                    alert("修改成功！")
+                                } else {
+                                    alert("修改失败！")
+                                }
+                            }),err=>{
+                                console.log(err);
+                            };
+                    } else {
+                        axios.get("{% url 'editManager' %}",{
+                                    params:{
+                                        gender:this.gender,
+                                        email:this.email,
+                                        phone:this.phone,
+                                        id:sessionStorage.getItem("id"),
+                                    }
+                                }).then(response=>{
+                                    this.allowed = response.data
+                                    if (this.allowed == true) {
+                                        alert("修改成功！")
+                                    } else {
+                                        alert("修改失败！")
+                                    }
+                                }),err=>{
+                                    console.log(err);
+                                };
+                    }
                 },
                 show() {
-                    axios.get("{% url 'show' %}",{
-                            params:{
-                                id:sessionStorage.getItem("id")
-                            }
-                        }).then(response=>{
-                            this.movies = response.data["film_info"]
-                            this.gender = response.data["gender"]
-                            this.email = response.data["email"]
-                            this.phone = response.data["phone"]
-                        }),err=>{
-                            console.log(err);
-                        };
+                    if (this.symbol == 'user'){
+                        axios.get("{% url 'show' %}",{
+                                params:{
+                                    id:sessionStorage.getItem("id")
+                                }
+                            }).then(response=>{
+                                this.movies = response.data["film_info"]
+                                this.gender = response.data["gender"]
+                                this.email = response.data["email"]
+                                this.phone = response.data["phone"]
+                            }),err=>{
+                                console.log(err);
+                            };
+                    } else {
+                            axios.get("{% url 'showManager' %}",{
+                                params:{
+                                    id:sessionStorage.getItem("id")
+                                }
+                            }).then(response=>{
+                                this.gender = response.data["gender"]
+                                this.email = response.data["email"]
+                                this.phone = response.data["phone"]
+                            }),err=>{
+                                console.log(err);
+                            };
+                    }
                 },
                 back() {
                     window.location.href = "{% url 'selfPage' %}"

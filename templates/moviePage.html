@@ -223,8 +223,8 @@ ul li {
 					<div class="title-wrap">
 						<h3 class="title fs_26 fw_600 c_b_3 " style="margin-top:-5px">[[movieInfo.film_info.film_name]]</h3>
                         <span>评分:[[movieInfo.film_info.film_score]]，共有[[movieInfo.film_info.film_score_people]]人评分</span>
-						        <span><button v-on:click="cancelCollect">取消收藏</button></span>
-            <span><button v-on:click="collect">收藏</button></span>
+						        <span><button v-if="this.symbol == 'user'" v-on:click="cancelCollect">取消收藏</button></span>
+            <span><button v-if="this.symbol == 'user'" v-on:click="collect">收藏</button></span>
 					</div>
 
 					<div class="filmplay-intro fs_12 fw_300 c_b_9">
@@ -236,7 +236,7 @@ ul li {
 					<div class="filmplay-data">
 
 
-						 <div class="panel-body" style="margin-top:-25px;float:none;margin-bottom:-280px">
+						 <div class="panel-body" style="margin-top:-25px;float:none;margin-bottom:-280px" >
 		  	  		  <input name="starNum" id="starNum" type="hidden">
                       <div class="starability-container" style="margin-left:200px">
 	                       <fieldset class="starability-slot">
