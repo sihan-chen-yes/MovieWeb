@@ -7,7 +7,7 @@ import numpy as np
 
 
 db_user = "root"
-db_password = "61lyx520837"
+db_password = "123"
 database = "movie"
 host = "localhost"
 #表头
@@ -17,7 +17,7 @@ film_info_name_list = ["film_id","film_name","film_date",
                        "film_area","film_score","film_score_people","introduction","picture","video"]
 worker_list_name_list = ["worker_id","worker_name","worker_picture","worker_introduction"]
 theme_list_name_list = ["theme_id","theme_name"]
-user_list_name_list = ["user_id","user_name","gender","email","phone","user_picture"]
+user_list_name_list = ["user_id","user_name","gender","email","phone"]
 #no password
 fan_club_name_list = ["club_id","club_name"]
 
@@ -726,7 +726,7 @@ def showFans(request):
     '''显示所有粉丝信息 除了密码'''
     club_id = request.GET.get("club_id")
     data = []
-    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone,user_list.user_picture from user_in_club,user_list " \
+    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone from user_in_club,user_list " \
           "where user_in_club.club_id = '%s' and user_in_club.user_id = user_list.user_id" % (club_id)
     results = select(sql)
     for result in results:
