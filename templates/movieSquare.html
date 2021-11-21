@@ -54,14 +54,15 @@
                         </ul>
                     </li>
                 </ul>
+
+                <button class="btn btn-primary btm-xs" v-on:click="normalShow()" style="float:right;margin-left:7px;">返回</button>
+                <button class="btn btn-primary btm-sm" v-on:click="searching()" style="float:right;margin-left:7px">搜电影</button>
+                <button class="btn btn-primary btm-sm" v-on:click="searchingWorkers()" style="float:right;margin-left:7px">搜影人</button>
+
                 <form class="index-search">
                     <div class="glyphicon glyphicon-search"></div>
                     <input placeholder="请输入关键字" v-model="keyword">
                 </form>
-
-                <button class="btn btn-default" v-on:click="searching()" style="float:right">搜索</button>
-                <button class="btn btn-default" v-on:click="normalShow()" style="float:right">返回</button>
-
 
             </div>
         </div>
@@ -80,8 +81,8 @@
             <div class="index-tab">
                 <a v-on:click="showAll()">随便看看</a>
                 <a v-on:click="showRecommendedMovies()">影片推荐</a>
-                <a v-on:click="showClubs()">星级精选</a>
-                <a>热门排行</a>
+                <a v-on:click="showClubs()">粉丝团</a>
+                <a v-on:click="showAllWorkers()">影人</a>
             </div>
 
             <div v-if="this.isClub == true">
@@ -101,6 +102,43 @@
                 </li>
             </ul>
         </div>
+
+            <div v-if="this.isWorker == true">
+            <ul class="index-list clearfix">
+                <li class="clearfix" data-id="63114" v-for="worker in worker_info" style="margin-top:50px;margin-left:20px;margin-right:20px">
+                    <a v-on:click="toWorkerPage(worker.worker_id)" class="index-img" style="width:200px;height:250px;padding: 27px 15px 0 0">
+                        <img v-bind:src="worker.worker_picture">
+                    </a>
+                    <div class="index-text">
+                        <h1><a v-on:click="toWorkerPage(worker.worker_id)">[[worker.worker_name]]</a></h1>
+<!--                        <div class="index-con" style="margin-top:15px;margin-bottom:10px">-->
+<!--                            影人：<a class="user">[[worker.worker_name]]</a>-->
+<!--                        </div>-->
+                        <div class="index-intro" style="text-indent:1.8em;font-size:13px;line-height:200%">[[worker.worker_introduction]]</div>
+                    </div>
+                    <hr>
+                </li>
+            </ul>
+        </div>
+
+            <div v-if="this.isSearchingWorker == true">
+            <ul class="index-list clearfix">
+                <li class="clearfix" data-id="63114" v-for="worker in searchWorkers" style="margin-top:50px;margin-left:20px;margin-right:20px">
+                    <a v-on:click="toWorkerPage(worker.worker_id)" class="index-img" style="width:200px;height:250px;padding: 27px 15px 0 0">
+                        <img v-bind:src="worker.worker_picture">
+                    </a>
+                    <div class="index-text">
+                        <h1><a v-on:click="toWorkerPage(worker.worker_id)">[[worker.worker_name]]</a></h1>
+<!--                        <div class="index-con" style="margin-top:15px;margin-bottom:10px">-->
+<!--                            影人：<a class="user">[[worker.worker_name]]</a>-->
+<!--                        </div>-->
+                        <div class="index-intro" style="text-indent:1.8em;font-size:13px;line-height:200%">[[worker.worker_introduction]]</div>
+                    </div>
+                    <hr>
+                </li>
+            </ul>
+        </div>
+
             <div v-else>
             <div v-if="isSearching">
                     <ul class="index-list clearfix">
@@ -158,7 +196,7 @@
             <div class="post-right-item">
                 <h4 class="post-right-title">最新粉丝团</h4>
                 <ul class="ori-list" style="margin-left:30px;margin-top:-20px">
-                    <li class="clearfix" data-id="63114" v-for="club in club_info" style="margin-top:10px">
+                    <li class="clearfix" data-id="63114" v-for="club in fiveClubs" style="margin-top:10px">
                         <div>
                             <a v-on:click="toFanClub(club.club_id)" class="index-img" style="width:130px;height:150px;padding: 0px 0px 0 0px">
                                 <img v-bind:src="club.worker_picture">
@@ -188,23 +226,53 @@
                 movies:[],
                 collectedMovies:[],
                 searchMovies:[],
+                searchWorkers:[],
                 keyword: null,
                 isSearching: false,
                 club_info: [],
-                isClub: false
+                worker_info: [],
+                isClub: false,
+                isWorker: false,
+                fiveClubs: [],
+                isSearchingWorker: false
+
             },
             mounted:function () {
                 this.showAll()
-                this.show()
+                this.showFiveClubs()
             },
             methods:{
+                showFiveClubs(){
+                    axios.get("{% url 'showFiveClubs' %}").then(response=>{
+                            this.fiveClubs = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
+                },
+                showAllWorkers() {
+                    axios.get("{% url 'showAllWorkers' %}").then(response=>{
+                            this.worker_info = response.data
+                            console.log(response.data)
+                        }),err=>{
+                            console.log(err);
+                        };
+                    this.movies = [];
+                    this.isWorker = true;
+                    this.isClub = false;
+                    this.isSearching = false;
+                    this.isSearchingWorker = false;
+                },
                 showClubs() {
                     axios.get("{% url 'showClubs' %}").then(response=>{
                             this.club_info = response.data
                         }),err=>{
                             console.log(err);
                         };
+                    this.movies = [];
                     this.isClub = true;
+                    this.isWorker = false;
+                    this.isSearching = false;
+                    this.isSearchingWorker = false;
                 },
                 showAll() {
                     axios.get("{% url 'showAllMovies' %}").then(response=>{
@@ -213,6 +281,9 @@
                             console.log(err);
                         };
                     this.isClub = false;
+                    this.isWorker = false;
+                    this.isSearching = false;
+                    this.isSearchingWorker = false;
                 },
                 showRecommendedMovies() {
                     axios.get("{% url 'showRecommendedMovies' %}",{
@@ -225,6 +296,9 @@
                         console.log(err);
                     };
                     this.isClub = false;
+                    this.isWorker = false;
+                    this.isSearching = false;
+                    this.isSearchingWorker = false;
                 },
                 toSquare() {
                     window.location.href = "{% url 'movieSquare' %}"
@@ -232,17 +306,6 @@
                 toMoviePage(film_id) {
                     window.sessionStorage.setItem("film_id",film_id)
                     window.location.href = "{% url 'moviePage' %}"
-                },
-                show() {
-                    axios.get("{% url 'show' %}",{
-                            params:{
-                                id:sessionStorage.getItem("id")
-                            }
-                        }).then(response=>{
-                            this.collectedMovies = response.data["film_info"]
-                        }),err=>{
-                            console.log(err);
-                        };
                 },
                 searching() {
                     console.log(this.isSearching);
@@ -260,11 +323,34 @@
                             console.log(err);
                         };
                     this.isClub = false;
+                    this.isWorker = false;
+                    this.isSearchingWorker = false;
+                },
+                searchingWorkers() {
+                    console.log(this.isSearching);
+                    console.log(this.keyword);
+                    this.isSearchingWorker = true;
+                    this.isSearching = false;
+                    //keyword是传到后台的值
+                    //结果返回到searchMovies上，上面会显示
+                    axios.get("{% url 'searchWorker' %}",{
+                            params:{
+                                keyword:this.keyword
+                            }
+                        }).then(response=>{
+                            this.searchWorkers = response.data
+                        }),err=>{
+                            console.log(err);
+                        };
+                    this.isClub = false;
+                    this.isWorker = false;
                 },
 
                 normalShow() {
                     this.isSearching = false;
                     this.isClub = false;
+                    this.isWorker = false;
+                    this.isSearchingWorker = false;
                     //点返回键正常显示，这里不用传值
                 },
 
@@ -272,6 +358,10 @@
                     window.sessionStorage.setItem("club_id",club_id)
                     window.location.href = "{% url 'fanClub' %}"
                 },
+                toWorkerPage(worker_id) {
+                    window.sessionStorage.setItem("worker_id",worker_id)
+                    window.location.href = "{% url 'workerPage' %}"
+                }
             }
         });
 </script>

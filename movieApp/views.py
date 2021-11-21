@@ -17,7 +17,7 @@ film_info_name_list = ["film_id","film_name","film_date",
                        "film_area","film_score","film_score_people","introduction","picture","video"]
 worker_list_name_list = ["worker_id","worker_name","worker_picture","worker_introduction"]
 theme_list_name_list = ["theme_id","theme_name"]
-user_list_name_list = ["user_id","user_name","gender","email","phone","user_picture"]
+user_list_name_list = ["user_id","user_name","gender","email","phone"]
 #no password
 fan_club_name_list = ["club_id","club_name"]
 
@@ -212,16 +212,30 @@ def edit(request):
     sql = "update user_list set gender = '%s',email = '%s',phone = '%s' where user_id = '%s'" % (gender,email,phone,id)
     mark = update(sql)
     if not mark:
-        return JsonResponse(mark,saft=False)
-    sql = "delete from user_theme where user_id = '%s'" %(id)
-    mark = delete(sql)
-    if not mark:
         return JsonResponse(mark,safe=False)
-    for theme in themes:
-        sql = "insert into user_theme (user_id,theme_id) values ('%s','%s')"%(id,theme)
-        mark = insert(sql)
+    if(themes[0] != '') :
+        sql = "delete from user_theme where user_id = '%s'" %(id)
+        mark = delete(sql)
         if not mark:
             return JsonResponse(mark,safe=False)
+        for theme in themes:
+            sql = "insert into user_theme (user_id,theme_id) values ('%s','%s')"%(id,theme)
+            mark = insert(sql)
+            if not mark:
+                return JsonResponse(mark,safe=False)
+    return JsonResponse(mark, safe=False)
+
+def editManager(request):
+    '''个人资料编辑'''
+    gender = request.GET.get("gender")
+    email = request.GET.get("email")
+    phone = request.GET.get("phone")
+    id = request.GET.get("id")
+
+    sql = "update manager_list set gender = '%s',email = '%s',phone = '%s' where manager_id = '%s'" % (gender,email,phone,id)
+    mark = update(sql)
+    if not mark:
+        return JsonResponse(mark,safe=False)
     return JsonResponse(mark, safe=False)
 
 def showAllMovies(request=None):
@@ -247,7 +261,11 @@ def showMovie(request=None,film_id=None):
     sql = "select * from film_info where film_id = '%s'" % (film_id)
     results = select(sql)
     assert len(results) == 1
-    data = showWorkers(request=None,film_id=film_id)
+    #data = showWorkers(request=None,film_id=film_id)
+    data = {}
+    data["actor"] = showActor(film_id)
+    data["director"] = showDirector(film_id)
+    data["writer"] = showWriter(film_id)
     data["film_info"] = generateDictData(results[0],film_info_name_list)
     data["themes"] = showMovieThemes(request=None,film_id=film_id)
     if request:
@@ -279,13 +297,33 @@ def show(request):
         data["gender"] = user_info[3]
         data["email"] = user_info[4]
         data["phone"] = user_info[5]
-        data["picture"] = user_info[6]
+        data["user_picture"] = user_info[6]
     except:
         data["name"] = None
         data["gender"] = None
         data["email"] = None
         data["phone"] = None
-        data["picture"] = None
+        data["user_picture"] = None
+    return JsonResponse(data,safe=False)
+
+def showManager(request):
+    '''显示管理员收藏的电影以及用户信息'''
+    id = request.GET.get("id")
+    data = {}
+    sql = "select * from manager_list where manager_id = '%s'" %(id)
+    user_results = select(sql)
+    assert len(user_results) == 1
+    user_info = user_results[0]
+    try:
+        data["name"] = user_info[1]
+        data["gender"] = user_info[3]
+        data["email"] = user_info[4]
+        data["phone"] = user_info[5]
+    except:
+        data["name"] = None
+        data["gender"] = None
+        data["email"] = None
+        data["phone"] = None
     return JsonResponse(data,safe=False)
 
 def collect(request):
@@ -507,10 +545,27 @@ def showWorkers(request=None,film_id=None):
         assertAll([film_id])
     else:
         assert film_id
+    data = []
+    data = data + showDirector(film_id)
+    data = data + showActor(film_id)
+    data = data + showWriter(film_id)
+
+    if request:
+        return JsonResponse(data, safe=False)
+    else:
+        return data
+
+def showWorkersinPage(request=None,film_id=None):
+    '''显示与特定电影有关的所有影人信息'''
+    if request:
+        film_id = request.GET.get("film_id")
+    else:
+        assert film_id
     data = {}
     data["directors"] = showDirector(film_id)
     data["actors"] = showActor(film_id)
     data["writers"] = showWriter(film_id)
+
     if request:
         return JsonResponse(data, safe=False)
     else:
@@ -759,7 +814,7 @@ def showFans(request):
     club_id = request.GET.get("club_id")
     assertAll([club_id])
     data = []
-    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone,user_list.user_picture from user_in_club,user_list " \
+    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone from user_in_club,user_list " \
           "where user_in_club.club_id = '%s' and user_in_club.user_id = user_list.user_id" % (club_id)
     results = select(sql)
     for result in results:
@@ -769,7 +824,6 @@ def showFans(request):
 def showWorker(request):
     '''显示粉丝团的worker'''
     club_id = request.GET.get("club_id")
-    assertAll([club_id])
     sql = "select worker_list.worker_id,worker_list.worker_name,worker_list.worker_picture,worker_list.worker_introduction " \
           "from worker_list,fan_club " \
           "where worker_list.worker_id = fan_club.worker_id and fan_club.club_id = '%s'" % (club_id)
@@ -904,7 +958,7 @@ def showRelatedClubs(request):
     worker_ids = getRelatedWorkerId(worker_id)
     data = []
     for worker_id in worker_ids:
-        sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_picture " \
+        sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_picture, worker_list.worker_name " \
               "from fan_club,worker_list " \
               "where fan_club.worker_id = '%s' and fan_club.worker_id = worker_list.worker_id" % (worker_id)
         results = select(sql)
@@ -912,14 +966,14 @@ def showRelatedClubs(request):
         if len(results) == 0:
             continue
         result = results[0]
-        data.append(generateDictData(result,fan_club_name_list + [worker_list_name_list[2]]))
+        data.append(generateDictData(result,fan_club_name_list + [worker_list_name_list[2], worker_list_name_list[1]]))
     return JsonResponse(data,safe=False)
 
 def searchWorker(request):
     keyword = request.GET.get("keyword")
     assertAll([keyword])
     keyword = "%" + keyword + "%"
-    sql = "select * from woker_list where worker_name like '%s'" % (keyword)
+    sql = "select * from worker_list where worker_name like '%s'" % (keyword)
     results = select(sql)
     data = []
     for result in results:
@@ -931,7 +985,7 @@ def searchClub(request):
     assertAll([keyword])
     keyword = "%" + keyword + "%"
     sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_name,worker_list.worker_picture " \
-          "from fan_club,woker_list " \
+          "from fan_club,worker_list " \
           "where fan_club.club_name like '%s' and fan_club.worker_id = worker_list.worker_id" % (keyword)
     results = select(sql)
     data = []
@@ -979,7 +1033,7 @@ def showRelatedClubOfMovie(request):
     data = []
     for worker_id in worker_ids:
         sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_name,worker_list.worker_picture " \
-              "from fan_club,woker_list " \
+              "from fan_club,worker_list " \
               "where fan_club.worker_id = worker_list.worker_id and worker_list.worker_id = '%s'" % (worker_id)
         results = select(sql)
         assert len(results) == 1
@@ -989,7 +1043,7 @@ def showRelatedClubOfMovie(request):
 def getClubs():
     data = []
     sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_name,worker_list.worker_picture " \
-          "from fan_club,woker_list " \
+          "from fan_club,worker_list " \
           "where fan_club.worker_id = worker_list.worker_id"
     results = select(sql)
     for result in results:

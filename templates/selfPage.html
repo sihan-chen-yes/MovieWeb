@@ -117,7 +117,7 @@
 				<!-- <div class="bannerbg" ></div>
 				 -->
 				<span class="avator-wrap-s">
-					<img src="https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789">
+					<img v-bind:src="this.picture">
 									</span>
 			</div>
 		</div>
@@ -226,7 +226,9 @@
                 movies:[],
                 myThemes:[],
                 joinedClubs:[],
-                id: sessionStorage.getItem("id")
+                id: sessionStorage.getItem("id"),
+                symbol: sessionStorage.getItem("symbol"),
+                picture: ''
             },
             mounted:function () {
                 this.show();
@@ -235,17 +237,20 @@
             },
             methods:{
                  showJoinedClubs() {
-                    axios.get("{% url 'showJoinedClubs' %}",{
-                            params:{
-                                user_id:sessionStorage.getItem("id")
-                            }
-                        }).then(response=>{
-                            this.joinedClubs = response.data
-                        }),err=>{
-                            console.log(err);
-                        };
+                    if (this.symbol == 'user') {
+                        axios.get("{% url 'showJoinedClubs' %}",{
+                                params:{
+                                    user_id:sessionStorage.getItem("id")
+                                }
+                            }).then(response=>{
+                                this.joinedClubs = response.data
+                            }),err=>{
+                                console.log(err);
+                            };
+                    }
                 },
                 show() {
+                    if(this.symbol == 'user'){
                     axios.get("{% url 'show' %}",{
                             params:{
                                 id:sessionStorage.getItem("id")
@@ -256,20 +261,40 @@
                             this.email = response.data["email"]
                             this.phone = response.data["phone"]
                             this.name = response.data["name"]
+                            this.picture = response.data["user_picture"]
+                            console.log(response.data)
                         }),err=>{
                             console.log(err);
                         };
+                    } else{
+                        axios.get("{% url 'showManager' %}",{
+                            params:{
+                                id:sessionStorage.getItem("id")
+                            }
+                        }).then(response=>{
+                            this.gender = response.data["gender"]
+                            this.email = response.data["email"]
+                            this.phone = response.data["phone"]
+                            this.name = response.data["name"]
+                            this.picture = 'https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg'
+                            console.log(response.data)
+                        }),err=>{
+                            console.log(err);
+                        };
+                    }
                 },
                 showPersonalThemes() {
-                    axios.get("{% url 'showPersonalThemes' %}",{
-                        params: {
-                            user_id:sessionStorage.getItem("id")
-                        }
-                    }).then(response=>{
-                        this.myThemes = response.data;
-                    }),err=>{
-                        console.log(err);
-                    };
+                    if(this.symbol == 'user') {
+                        axios.get("{% url 'showPersonalThemes' %}",{
+                            params: {
+                                user_id:sessionStorage.getItem("id")
+                            }
+                        }).then(response=>{
+                            this.myThemes = response.data;
+                        }),err=>{
+                            console.log(err);
+                        };
+                    }
                 },
                 edit() {
                     window.sessionStorage.setItem("id",this.id)

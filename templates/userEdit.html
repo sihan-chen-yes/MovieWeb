@@ -146,18 +146,19 @@
 
 <div class="new" id="selfInfo">
 	<div class="banner-container">
-		<div class="banner-wrap">
+		<div class="banner-wrap" id="upload">
 			<div class="banner-linear">
 				<!-- <img class="banner-img" src="https://cs.xinpianchang.com/app/user/html/stars/css/skin27/bg-big.jpg"> -->
 
 				<!-- <div class="bannerbg" ></div>
 				 -->
 				<span class="avator-wrap-s">
-					<img id="img_id" src="https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789">
+					<img id="img_id" v-bind:src="this.picture">
 									</span>
 			</div>
             <input type="file" onchange="showImg()" id="img_file" style="display:none">
-            <button style ="margin-top:53px" class='btn btn-sm' onclick="document.getElementById('img_file').click()">上传头像</button>
+            <button v-if="this.symbol == 'user'" style ="margin-top:53px" class='btn btn-sm' onclick="document.getElementById('img_file').click()">上传头像</button>
+            <button v-if="this.symbol == 'user'" style ="margin-top:53px" class='btn btn-sm' v-on:click="uploadPicture">确认上传</button>
 		</div>
 	</div>
 	<div class="creator-info-wrap">
@@ -250,9 +251,9 @@
                     <span style="margin-inline:5px"></span>
 </div>
 
-            <form action="" method="get">
+            <form v-if="this.symbol == 'user'" action="" method="get">
 请选择你喜欢的电影主题:)<br /><br />
-<ul>
+<ul v-if="this.symbol == 'user'">
 <li v-for="theme in themes" style="display:inline;margin-inline:4px;">
     <label><input name="themeName" type="checkbox" :value="theme.theme_id"/>[[theme.theme_name]]</label>
 </li>
@@ -285,6 +286,47 @@
             console.log(document.getElementById('img_id').src);
         };
 
+        var v = new Vue({
+            el:"#upload",
+            delimiters:["[[","]]"],
+            data:{
+                picture: '',
+                symbol: sessionStorage.getItem("symbol")
+            },
+            mounted:function () {
+                this.show();
+            },
+            methods:{
+                uploadPicture() {
+                     axios.get("{% url 'uploadPicture' %}",{
+                        params: {
+                            user_id:sessionStorage.getItem("id"),
+                            user_picture:document.getElementById('img_id').src
+                        }
+                    }).then(response=>{
+                        alert("头像上传成功！")
+                    }),err=>{
+                        console.log(err);
+                    };
+                },
+                show() {
+                    if (this.symbol == 'user'){
+                        axios.get("{% url 'show' %}",{
+                                params:{
+                                    id:sessionStorage.getItem("id")
+                                }
+                            }).then(response=>{
+                                this.picture = response.data["user_picture"]
+                            }),err=>{
+                                console.log(err);
+                            };
+                    } else {
+                        this.picture = 'https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg';
+                    }
+                },
+            }
+        })
+
         var vm = new Vue({
             el:"#edit",
             delimiters:["[[","]]"],
@@ -296,7 +338,8 @@
                 movies:[],
                 themes:[],
                 myThemes:[],
-                tempThemes:[]
+                tempThemes:[],
+                symbol: sessionStorage.getItem("symbol")
             },
             mounted:function () {
                 this.show();
@@ -335,41 +378,75 @@
                     };
                 },
                 submit() {
-                    this.getSelectedThemes();
-                    console.log("this is " + this.tempThemes);
-                    var list = JSON.stringify(this.tempThemes);
-                    axios.get("{% url 'edit' %}",{
-                            params:{
-                                gender:this.gender,
-                                email:this.email,
-                                phone:this.phone,
-                                id:sessionStorage.getItem("id"),
-                                themes: list
-                            }
-                        }).then(response=>{
-                            this.allowed = response.data
-                            if (this.allowed == true) {
-                                alert("修改成功！")
-                            } else {
-                                alert("修改失败！")
-                            }
-                        }),err=>{
-                            console.log(err);
-                        };
+                    if (this.symbol == 'user') {
+                        this.getSelectedThemes();
+                        console.log("this is " + this.tempThemes);
+                        var list = JSON.stringify(this.tempThemes);
+                        axios.get("{% url 'edit' %}",{
+                                params:{
+                                    gender:this.gender,
+                                    email:this.email,
+                                    phone:this.phone,
+                                    id:sessionStorage.getItem("id"),
+                                    themes: list
+                                }
+                            }).then(response=>{
+                                this.allowed = response.data
+                                if (this.allowed == true) {
+                                    alert("修改成功！")
+                                } else {
+                                    alert("修改失败！")
+                                }
+                            }),err=>{
+                                console.log(err);
+                            };
+                    } else {
+                        axios.get("{% url 'editManager' %}",{
+                                    params:{
+                                        gender:this.gender,
+                                        email:this.email,
+                                        phone:this.phone,
+                                        id:sessionStorage.getItem("id"),
+                                    }
+                                }).then(response=>{
+                                    this.allowed = response.data
+                                    if (this.allowed == true) {
+                                        alert("修改成功！")
+                                    } else {
+                                        alert("修改失败！")
+                                    }
+                                }),err=>{
+                                    console.log(err);
+                                };
+                    }
                 },
                 show() {
-                    axios.get("{% url 'show' %}",{
-                            params:{
-                                id:sessionStorage.getItem("id")
-                            }
-                        }).then(response=>{
-                            this.movies = response.data["film_info"]
-                            this.gender = response.data["gender"]
-                            this.email = response.data["email"]
-                            this.phone = response.data["phone"]
-                        }),err=>{
-                            console.log(err);
-                        };
+                    if (this.symbol == 'user'){
+                        axios.get("{% url 'show' %}",{
+                                params:{
+                                    id:sessionStorage.getItem("id")
+                                }
+                            }).then(response=>{
+                                this.movies = response.data["film_info"]
+                                this.gender = response.data["gender"]
+                                this.email = response.data["email"]
+                                this.phone = response.data["phone"]
+                            }),err=>{
+                                console.log(err);
+                            };
+                    } else {
+                            axios.get("{% url 'showManager' %}",{
+                                params:{
+                                    id:sessionStorage.getItem("id")
+                                }
+                            }).then(response=>{
+                                this.gender = response.data["gender"]
+                                this.email = response.data["email"]
+                                this.phone = response.data["phone"]
+                            }),err=>{
+                                console.log(err);
+                            };
+                    }
                 },
                 back() {
                     window.location.href = "{% url 'selfPage' %}"

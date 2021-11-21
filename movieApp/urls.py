@@ -9,10 +9,14 @@ urlpatterns = [
     path('userEdit/showAllThemes',views.showAllThemes,name="showAllThemes"),
     path('register/registerApply',views.registerApply,name="registerApply"),
     path('uesrEdit/edit',views.edit,name="edit"),
+    path('uesrEdit/editManager', views.editManager, name="editManager"),
     path('uesrEdit/showAllThemes', views.showAllThemes, name="showAllThemes"),
+    path('uesrEdit/showManager', views.showManager, name="showManager"),
     path('uesrEdit/showPersonalThemes', views.showPersonalThemes, name="showPersonalThemes"),
+    path('uesrEdit/uploadPicture', views.uploadPicture, name="uploadPicture"),
     path('showAllMovies',views.showAllMovies,name="showAllMovies"),
     path('selfPage/show',views.show,name="show"),
+    path('selfPage/showManager', views.showManager, name="showManager"),
     path('selfPage',views.selfPage,name="selfPage"),
     path('collection', views.collection, name="collection"),
     path('selfClub', views.selfClub, name="selfClub"),
@@ -21,6 +25,8 @@ urlpatterns = [
     path('movieSquare/showMovieRanks', views.showMovieRanks, name="showMovieRanks"),
     path('movieSquare/moviePage',views.moviePage,name="moviePage"),
     path('movieSquare/workerPage', views.workerPage, name="workerPage"),
+    path('movieSquare/showFiveClubs', views.showFiveClubs, name="showFiveClubs"),
+
     path('movieSquare/workerPage/showParticipatedMovies', views.showParticipatedMovies, name="showParticipatedMovies"),
     path('movieSquare/workerPage/showRelatedWorkers', views.showRelatedWorkers, name="showRelatedWorkers"),
     path('movieSquare/moviePage/showMovie',views.showMovie,name="showMovie"),
@@ -49,9 +55,14 @@ urlpatterns = [
     path('movieSquare/showMovieRanks',views.showMovieRanks,name="showMovieRanks"),
     path('movieSquare/showWorkers',views.showWorkers,name="showWorkers"),
     path('movieSquare/showClubs', views.showClubs, name="showClubs"),
+    path('movieSquare/searchWorker', views.searchWorker, name="searchWorker"),
+
     path('selfPage/showPersonalThemes',views.showPersonalThemes,name="showPersonalThemes"),
     path('moviePage/showMovieThemes',views.showMovieThemes,name="showMovieThemes"),
+    path('moviePage/showWorkersinPage', views.showWorkersinPage, name="showWorkersinPage"),
+
     path('movieSquare/showRecommendedMovies',views.showRecommendedMovies,name="showRecommendedMovies"),
+    path('movieSquare/showAllWorkers', views.showAllWorkers, name="showAllWorkers"),
 
     path('movieSquare/moviePage/workerPage/showSingleWorker', views.showSingleWorker, name="showSingleWorker"),
 
