@@ -7,7 +7,7 @@ import numpy as np
 
 
 db_user = "root"
-db_password = "61lyx520837"
+db_password = "123"
 database = "movie"
 host = "localhost"
 #表头
@@ -736,13 +736,13 @@ def showFans(request):
 def showWorker(request):
     '''显示粉丝团的worker'''
     club_id = request.GET.get("club_id")
-    sql = "select worker_list.worker_id,worker_list.worker_name,worker_list.worker_picture,worker_list.worker_introduction " \
+    sql = "select worker_list.worker_id,worker_list.worker_name,worker_list.worker_picture,worker_list.worker_introduction, fan_club.club_name " \
           "from worker_list,fan_club " \
           "where worker_list.worker_id = fan_club.worker_id and fan_club.club_id = '%s'" % (club_id)
     results = select(sql)
     assert len(results) == 1
     for result in results:
-        data = generateDictData(result,worker_list_name_list)
+        data = generateDictData(result,worker_list_name_list + [fan_club_name_list[1]])
         return JsonResponse(data,safe=False)
 
 def showClubs(request):
@@ -864,7 +864,7 @@ def showRelatedClubs(request):
     worker_ids = getRelatedWorkerId(worker_id)
     data = []
     for worker_id in worker_ids:
-        sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_picture " \
+        sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_picture, worker_list.worker_name " \
               "from fan_club,worker_list " \
               "where fan_club.worker_id = '%s' and fan_club.worker_id = worker_list.worker_id" % (worker_id)
         results = select(sql)
@@ -872,7 +872,7 @@ def showRelatedClubs(request):
         if len(results) == 0:
             continue
         result = results[0]
-        data.append(generateDictData(result,fan_club_name_list + [worker_list_name_list[2]]))
+        data.append(generateDictData(result,fan_club_name_list + [worker_list_name_list[2], worker_list_name_list[1]]))
     return JsonResponse(data,safe=False)
 
 def searchWorker(request):
