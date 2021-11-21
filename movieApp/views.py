@@ -203,16 +203,30 @@ def edit(request):
     sql = "update user_list set gender = '%s',email = '%s',phone = '%s' where user_id = '%s'" % (gender,email,phone,id)
     mark = update(sql)
     if not mark:
-        return JsonResponse(mark,saft=False)
-    sql = "delete from user_theme where user_id = '%s'" %(id)
-    mark = delete(sql)
-    if not mark:
         return JsonResponse(mark,safe=False)
-    for theme in themes:
-        sql = "insert into user_theme (user_id,theme_id) values ('%s','%s')"%(id,theme)
-        mark = insert(sql)
+    if(themes[0] != '') :
+        sql = "delete from user_theme where user_id = '%s'" %(id)
+        mark = delete(sql)
         if not mark:
             return JsonResponse(mark,safe=False)
+        for theme in themes:
+            sql = "insert into user_theme (user_id,theme_id) values ('%s','%s')"%(id,theme)
+            mark = insert(sql)
+            if not mark:
+                return JsonResponse(mark,safe=False)
+    return JsonResponse(mark, safe=False)
+
+def editManager(request):
+    '''个人资料编辑'''
+    gender = request.GET.get("gender")
+    email = request.GET.get("email")
+    phone = request.GET.get("phone")
+    id = request.GET.get("id")
+
+    sql = "update manager_list set gender = '%s',email = '%s',phone = '%s' where manager_id = '%s'" % (gender,email,phone,id)
+    mark = update(sql)
+    if not mark:
+        return JsonResponse(mark,safe=False)
     return JsonResponse(mark, safe=False)
 
 def showAllMovies(request=None):
@@ -269,13 +283,31 @@ def show(request):
         data["gender"] = user_info[3]
         data["email"] = user_info[4]
         data["phone"] = user_info[5]
-        data["picture"] = user_info[6]
     except:
         data["name"] = None
         data["gender"] = None
         data["email"] = None
         data["phone"] = None
-        data["picture"] = None
+    return JsonResponse(data,safe=False)
+
+def showManager(request):
+    '''显示管理员收藏的电影以及用户信息'''
+    id = request.GET.get("id")
+    data = {}
+    sql = "select * from manager_list where manager_id = '%s'" %(id)
+    user_results = select(sql)
+    assert len(user_results) == 1
+    user_info = user_results[0]
+    try:
+        data["name"] = user_info[1]
+        data["gender"] = user_info[3]
+        data["email"] = user_info[4]
+        data["phone"] = user_info[5]
+    except:
+        data["name"] = None
+        data["gender"] = None
+        data["email"] = None
+        data["phone"] = None
     return JsonResponse(data,safe=False)
 
 def collect(request):
