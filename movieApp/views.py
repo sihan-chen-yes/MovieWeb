@@ -869,11 +869,11 @@ def getWorkersOfFilmId(film_id):
 def getPartialFilmInfo(film_ids):
     data = []
     for film_id in film_ids:
-        sql = "select film_id,film_name,introduction,picture from film_info where film_id = '%s'" % (film_id)
+        sql = "select * from film_info where film_id = '%s'" % (film_id)
         results = select(sql)
         assert len(results) == 1
         result = results[0]
-        data.append(generateDictData(result,film_info_name_list[:2] + film_info_name_list[-3:-1]))
+        data.append(generateDictData(result,film_info_name_list))
     return data
 
 def showParticipatedMovies(request):
