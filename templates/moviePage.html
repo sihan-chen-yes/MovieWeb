@@ -256,6 +256,7 @@ ul li {
 	                       </fieldset>
                       </div>
                       <span style="font-size: 2rem;line-height: 2.9rem;padding: 1rem;font-style: oblique;" id="starStr"></span>
+							 <span v-on:click="toMovieAddingPage()" style="color:white;font-size:13px;margin-bottom:30px;padding:5px 5px 5px 5px;margin-left:-140px" class="send-comment fs_12 bg-red" v-if="this.symbol == 'manager'">新增影人</span>
 
                           <span v-on:click="score()" style="color:white;font-size:13px;margin-bottom:30px;padding:5px 5px 5px 5px;margin-left:-140px" class="send-comment fs_12 bg-red">提交评分</span>
 							            <span style="color:white;font-size:13px;padding:5px 5px 5px 5px;margin-left:10px" class="send-comment fs_12 bg-red" v-if="this.symbol == 'user'" v-on:click="collect">收藏</span>
@@ -779,6 +780,11 @@ ul li {
                         }),err=>{
                             console.log(err);
                         };
+                },
+                toMovieAddingPage() {
+                	var filmId = sessionStorage.getItem("film_id")
+                	window.sessionStorage.setItem("film_id", filmId)
+                    window.location.href = "{% url 'movieAddingPage' %}"
                 }
             }
         })
