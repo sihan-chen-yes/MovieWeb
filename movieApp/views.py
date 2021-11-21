@@ -247,34 +247,34 @@ def showMovie(request=None,film_id=None):
 
 def show(request):
     '''显示用户收藏的电影以及用户信息'''
-    # id = request.GET.get("id")
-    #
-    # data = {}
-    # data["film_info"] = []
-    # sql = "select * from user_collection where user_id = '%s'" % (id)
-    # results = select(sql)
-    # for result in results:
-    #     film_id = result[2]
-    #     sql = "select * from film_info where film_id = '%s'" % (film_id)
-    #     info_results = select(sql)
-    #     assert len(info_results) == 1
-    #     info_result = info_results[0]
-    #     data["film_info"].append(generateDictData(info_result,film_info_name_list))
-    # print(id)
-    # sql = "select * from user_list where user_id = '%s'" %(id)
-    # user_results = select(sql)
-    # user_info = user_results[0]
-    # try:
-    #     data["name"] = user_info[1]
-    #     data["gender"] = user_info[3]
-    #     data["email"] = user_info[4]
-    #     data["phone"] = user_info[5]
-    # except:
-    #     data["name"] = None
-    #     data["gender"] = None
-    #     data["email"] = None
-    #     data["phone"] = None
-    # return JsonResponse(data,safe=False)
+    id = request.GET.get("id")
+    assert id
+    data = {}
+    data["film_info"] = []
+    sql = "select * from user_collection where user_id = '%s'" % (id)
+    results = select(sql)
+    for result in results:
+        film_id = result[2]
+        sql = "select * from film_info where film_id = '%s'" % (film_id)
+        info_results = select(sql)
+        assert len(info_results) == 1
+        info_result = info_results[0]
+        data["film_info"].append(generateDictData(info_result,film_info_name_list))
+    sql = "select * from user_list where user_id = '%s'" %(id)
+    user_results = select(sql)
+    assert len(user_results) == 1
+    user_info = user_results[0]
+    try:
+        data["name"] = user_info[1]
+        data["gender"] = user_info[3]
+        data["email"] = user_info[4]
+        data["phone"] = user_info[5]
+    except:
+        data["name"] = None
+        data["gender"] = None
+        data["email"] = None
+        data["phone"] = None
+    return JsonResponse(data,safe=False)
 
 def collect(request):
     user_id = request.GET.get("id")

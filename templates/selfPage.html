@@ -194,16 +194,21 @@
 			        <span class="title">电话：</span>
 			        <span class="con"><span class="c_b_9">[[phone]]</span></span>
 		        </div>
+            <div></div>
+                <div class="name">
+			        <span class="title">喜好：</span>
+			        <span class="con"><span class="c_b_9">
+                    <ul>
+                        <li v-for="theme in myThemes" style="float:left">[[theme.theme_name]] &nbsp;| &nbsp;</li>
+                        <li style="float:left">&nbsp;...</li>
+                    </ul>
+
+                    </span></span>
+		        </div>
 
                    </div>
 </div>
 
-    <div>
-        <p>我喜爱的电影主题:</p>
-        <ul>
-            <li v-for="theme in myThemes">[[theme.theme_name]]</li>
-        </ul>
-    </div>
 
 </div>
 </div>
@@ -267,6 +272,7 @@
                     };
                 },
                 edit() {
+                    window.sessionStorage.setItem("id",this.id)
                     window.location.href = "{% url 'userEdit' %}"
                 },
                 toMoviePage(film_id) {
@@ -278,15 +284,15 @@
                     window.location.href = "{% url 'fanClub' %}"
                 },
                 toCollection(id) {
-                    window.sessionStorage.setItem("id",id)
+                    window.sessionStorage.setItem("id",this.id)
                     window.location.href = "{% url 'collection' %}"
                 },
                 toSelfPage(id) {
-                    window.sessionStorage.setItem("id",id)
+                    window.sessionStorage.setItem("id",this.id)
                     window.location.href = "{% url 'selfPage' %}"
                 },
                 toSelfClub(id) {
-                    window.sessionStorage.setItem("id",id)
+                    window.sessionStorage.setItem("id",this.id)
                     window.location.href = "{% url 'selfClub' %}"
                 }
             }
