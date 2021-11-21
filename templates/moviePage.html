@@ -662,7 +662,7 @@ ul li {
                 allowed:false,
                 user_id:window.sessionStorage.getItem("id"),
                 topic_id:'',
-                workers:[],
+                workers:{},
                 themes:[],
                 symbol: sessionStorage.getItem("symbol")
             },
@@ -691,12 +691,13 @@ ul li {
                         };
                 },
                 showWorkers() {
-                    axios.get("{% url 'showWorkers' %}",{
+                    axios.get("{% url 'showWorkersinPage' %}",{
                             params:{
                                 film_id:sessionStorage.getItem("film_id")
                             }
                         }).then(response=>{
                             this.workers = response.data
+                            console.log(this.workers)
                         }),err=>{
                             console.log(err);
                         };

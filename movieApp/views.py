@@ -251,7 +251,11 @@ def showMovie(request=None,film_id=None):
     sql = "select * from film_info where film_id = '%s'" % (film_id)
     results = select(sql)
     assert len(results) == 1
-    data = showWorkers(request=None,film_id=film_id)
+    #data = showWorkers(request=None,film_id=film_id)
+    data = {}
+    data["actor"] = showActor(film_id)
+    data["director"] = showDirector(film_id)
+    data["writer"] = showWriter(film_id)
     data["film_info"] = generateDictData(results[0],film_info_name_list)
     data["themes"] = showMovieThemes(request=None,film_id=film_id)
     if request:
@@ -518,10 +522,27 @@ def showWorkers(request=None,film_id=None):
         film_id = request.GET.get("film_id")
     else:
         assert film_id
+    data = []
+    data = data + showDirector(film_id)
+    data = data + showActor(film_id)
+    data = data + showWriter(film_id)
+
+    if request:
+        return JsonResponse(data, safe=False)
+    else:
+        return data
+
+def showWorkersinPage(request=None,film_id=None):
+    '''显示与特定电影有关的所有影人信息'''
+    if request:
+        film_id = request.GET.get("film_id")
+    else:
+        assert film_id
     data = {}
     data["directors"] = showDirector(film_id)
     data["actors"] = showActor(film_id)
     data["writers"] = showWriter(film_id)
+
     if request:
         return JsonResponse(data, safe=False)
     else:

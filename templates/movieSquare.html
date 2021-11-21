@@ -80,8 +80,8 @@
             <div class="index-tab">
                 <a v-on:click="showAll()">随便看看</a>
                 <a v-on:click="showRecommendedMovies()">影片推荐</a>
-                <a v-on:click="showClubs()">星级精选</a>
-                <a>热门排行</a>
+                <a v-on:click="showClubs()">粉丝团</a>
+                <a v-on:click="showAllWorkers()">影人</a>
             </div>
 
             <div v-if="this.isClub == true">
@@ -191,12 +191,13 @@
                 keyword: null,
                 isSearching: false,
                 club_info: [],
+                worker_info: [],
                 isClub: false,
+                isWorker: false,
                 fiveClubs: []
             },
             mounted:function () {
                 this.showAll()
-                this.show()
                 this.showFiveClubs()
             },
             methods:{
@@ -207,6 +208,16 @@
                             console.log(err);
                         };
                 },
+                showAllWorkers() {
+                    axios.get("{% url 'showAllWorkers' %}").then(response=>{
+                            this.worker_info = response.data
+                            console.log(response.data)
+                        }),err=>{
+                            console.log(err);
+                        };
+                    this.isWorker = true;
+                    this.isClub = false;
+                },
                 showClubs() {
                     axios.get("{% url 'showClubs' %}").then(response=>{
                             this.club_info = response.data
@@ -214,6 +225,7 @@
                             console.log(err);
                         };
                     this.isClub = true;
+                    this.isWorker = false;
                 },
                 showAll() {
                     axios.get("{% url 'showAllMovies' %}").then(response=>{
@@ -222,6 +234,7 @@
                             console.log(err);
                         };
                     this.isClub = false;
+                    this.isWorker = false;
                 },
                 showRecommendedMovies() {
                     axios.get("{% url 'showRecommendedMovies' %}",{
@@ -234,6 +247,7 @@
                         console.log(err);
                     };
                     this.isClub = false;
+                    this.isWorker = false;
                 },
                 toSquare() {
                     window.location.href = "{% url 'movieSquare' %}"
@@ -241,17 +255,6 @@
                 toMoviePage(film_id) {
                     window.sessionStorage.setItem("film_id",film_id)
                     window.location.href = "{% url 'moviePage' %}"
-                },
-                show() {
-                    axios.get("{% url 'show' %}",{
-                            params:{
-                                id:sessionStorage.getItem("id")
-                            }
-                        }).then(response=>{
-                            this.collectedMovies = response.data["film_info"]
-                        }),err=>{
-                            console.log(err);
-                        };
                 },
                 searching() {
                     console.log(this.isSearching);
@@ -269,11 +272,13 @@
                             console.log(err);
                         };
                     this.isClub = false;
+                    this.isWorker = false;
                 },
 
                 normalShow() {
                     this.isSearching = false;
                     this.isClub = false;
+                    this.isWorker = false;
                     //点返回键正常显示，这里不用传值
                 },
 
