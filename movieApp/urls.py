@@ -57,6 +57,7 @@ urlpatterns = [
     path('selfPage/showPersonalThemes',views.showPersonalThemes,name="showPersonalThemes"),
     path('moviePage/showMovieThemes',views.showMovieThemes,name="showMovieThemes"),
     path('movieSquare/showRecommendedMovies',views.showRecommendedMovies,name="showRecommendedMovies"),
+    path('movieSquare/showAllWorkers', views.showAllWorkers, name="showAllWorkers"),
 
     path('movieSquare/moviePage/workerPage/showSingleWorker', views.showSingleWorker, name="showSingleWorker"),
 
