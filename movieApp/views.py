@@ -183,7 +183,7 @@ def registerApply(request):
         return JsonResponse(data, safe=False)
 
     sql = "insert into user_list(user_id,user_name,password) values('%s','%s','%s')" % (id,name,pwd)
-    insert(sql)
+    data = insert(sql)
     return JsonResponse(data, safe=False)
 
 def edit(request):
@@ -248,7 +248,7 @@ def showMovie(request=None,film_id=None):
 def show(request):
     '''显示用户收藏的电影以及用户信息'''
     id = request.GET.get("id")
-    assert id
+
     data = {}
     data["film_info"] = []
     sql = "select * from user_collection where user_id = '%s'" % (id)
@@ -269,11 +269,13 @@ def show(request):
         data["gender"] = user_info[3]
         data["email"] = user_info[4]
         data["phone"] = user_info[5]
+        data["picture"] = user_info[6]
     except:
         data["name"] = None
         data["gender"] = None
         data["email"] = None
         data["phone"] = None
+        data["picture"] = None
     return JsonResponse(data,safe=False)
 
 def collect(request):
@@ -724,8 +726,7 @@ def showFans(request):
     '''显示所有粉丝信息 除了密码'''
     club_id = request.GET.get("club_id")
     data = []
-    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone,user_list.picture" \
-          "from user_in_club,user_list " \
+    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone,user_list.user_picture from user_in_club,user_list " \
           "where user_in_club.club_id = '%s' and user_in_club.user_id = user_list.user_id" % (club_id)
     results = select(sql)
     for result in results:
@@ -807,11 +808,11 @@ def getWorkersOfFilmId(film_id):
 def getPartialFilmInfo(film_ids):
     data = []
     for film_id in film_ids:
-        sql = "select film_id,film_name,introduction,picture from film_info where film_id = '%s'" % (film_id)
+        sql = "select * from film_info where film_id = '%s'" % (film_id)
         results = select(sql)
         assert len(results) == 1
         result = results[0]
-        data.append(generateDictData(result,film_info_name_list[:2] + film_info_name_list[-3:-1]))
+        data.append(generateDictData(result,film_info_name_list))
     return data
 
 def showParticipatedMovies(request):
