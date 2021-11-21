@@ -101,6 +101,25 @@
                 </li>
             </ul>
         </div>
+
+            <div v-if="this.isWorker == true">
+            <ul class="index-list clearfix">
+                <li class="clearfix" data-id="63114" v-for="worker in worker_info" style="margin-top:50px;margin-left:20px;margin-right:20px">
+                    <a v-on:click="toWorkerPage(worker.worker_id)" class="index-img" style="width:200px;height:250px;padding: 27px 15px 0 0">
+                        <img v-bind:src="worker.worker_picture">
+                    </a>
+                    <div class="index-text">
+                        <h1><a v-on:click="toWorkerPage(worker.worker_id)">[[worker.worker_name]]</a></h1>
+<!--                        <div class="index-con" style="margin-top:15px;margin-bottom:10px">-->
+<!--                            影人：<a class="user">[[worker.worker_name]]</a>-->
+<!--                        </div>-->
+                        <div class="index-intro" style="text-indent:1.8em;font-size:13px;line-height:200%">[[worker.worker_introduction]]</div>
+                    </div>
+                    <hr>
+                </li>
+            </ul>
+        </div>
+
             <div v-else>
             <div v-if="isSearching">
                     <ul class="index-list clearfix">
@@ -286,6 +305,10 @@
                     window.sessionStorage.setItem("club_id",club_id)
                     window.location.href = "{% url 'fanClub' %}"
                 },
+                toWorkerPage(worker_id) {
+                    window.sessionStorage.setItem("worker_id",worker_id)
+                    window.location.href = "{% url 'workerPage' %}"
+                }
             }
         });
 </script>
