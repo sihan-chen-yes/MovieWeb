@@ -120,16 +120,23 @@
 		</div>
 	</div>
 	<div class="creator-info-wrap">
-		<div class="creator-info">
+		<div class="creator-info" style="padding-bottom:17px">
 
 
-			<div class="btn-wrap">
+			<div class="btn-wrap" style="width:350px;text-decoration：none;">
 
+				<div class="banner-btn" style="margin-top:10px">
 
+					<div v-if="this.symbol == 'user'">
+        				<a v-if="this.inClub == false" v-on:click="joinClub" class="collect-jump fs_12 fw_600 c_b_3" style="text-decoration：none">加入粉丝团</a>
+        				<a v-else class="collect-jump fs_12 fw_600 c_b_3" v-on:click="quitClub" style="text-decoration：none">退出粉丝团</a>
+    				</div>
+
+				</div>
 
 
 			</div>
-			<p class="creator-name fs_26 fw_600 c_b_26">[[worker_info.club_name]]
+			<p class="creator-name fs_26 fw_600 c_b_26" style="margin-top:20px">[[worker_info.club_name]]
 
 
 							</p>
@@ -171,7 +178,7 @@
 
                 <li class="enter-filmplay" v-for="fan in user_info" style="width:200px; margin-right:40px">
                     <div class="video-cover">
-				        <img class="lazy-img lazy-img-show" src="https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789" style="width:200px;height:200px">
+				        <img class="lazy-img lazy-img-show" v-bind:src="fan.user_picture" style="width:200px;height:200px">
 						<span class="duration fs_14"></span>
 				        <div class="video-cover-con">
 					        <div class="video-mark">
@@ -263,11 +270,6 @@
 
 
 
-    <div v-if="this.symbol == 'user'">
-        <button v-if="this.inClub == false" v-on:click="joinClub">加入粉丝团</button>
-        <button v-else  v-on:click="quitClub">退出粉丝团</button>
-    </div>
-
 </div>
 </div>
 
@@ -346,6 +348,7 @@
                         }
                     }).then(response=>{
                         this.user_info = response.data
+                        console.log(response.data)
                     }),err=>{
                         console.log(err);
                     };
