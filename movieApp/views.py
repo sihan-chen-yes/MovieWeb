@@ -125,10 +125,6 @@ def procedureCall(sql):
     db.close()
     return mark
 
-def assertAll(tar):
-    for i in tar:
-        assert i
-
 def generateDictData(result,name_list):
     '''根据sql结果和列名生成字典'''
     dict = {}
@@ -141,7 +137,6 @@ def loginCheck(request):
     '''登陆校验'''
     id = request.GET.get("id")
     pwd = request.GET.get("pwd")
-    assertAll([id,pwd])
 
     sql = "select * from user_list where user_id = '%s'" %(id)
     results = select(sql)
@@ -166,7 +161,6 @@ def registerApply(request):
     id = request.GET.get("id")
     name = request.GET.get("name")
     pwd = request.GET.get("pwd")
-    assertAll([id, name, pwd])
 
     data = {
         "allowed": True,
@@ -199,9 +193,6 @@ def edit(request):
     phone = request.GET.get("phone")
     id = request.GET.get("id")
     themes = request.GET.get("themes")
-
-    assertAll([gender,email,phone,id,themes])
-
     #前端传入是字符串 转化成list
     tempThemes = themes
     tempThemes = tempThemes.replace('[','')
@@ -255,7 +246,6 @@ def showMovie(request=None,film_id=None):
     '''根据电影id显示该电影信息'''
     if request:
         film_id = request.GET.get("film_id")
-        assertAll([film_id])
     else:
         assert film_id
     sql = "select * from film_info where film_id = '%s'" % (film_id)
@@ -276,7 +266,7 @@ def showMovie(request=None,film_id=None):
 def show(request):
     '''显示用户收藏的电影以及用户信息'''
     id = request.GET.get("id")
-    assertAll([id])
+
     data = {}
     data["film_info"] = []
     sql = "select * from user_collection where user_id = '%s'" % (id)
@@ -329,7 +319,6 @@ def showManager(request):
 def collect(request):
     user_id = request.GET.get("id")
     film_id = request.GET.get("film_id")
-    assertAll([user_id,film_id])
     sql = "select * from user_collection where user_id = '%s' and film_id = '%s'" % (user_id,film_id)
     results = select(sql)
     if results:
@@ -342,7 +331,6 @@ def collect(request):
 def cancelCollect(request):
     user_id = request.GET.get("id")
     film_id = request.GET.get("film_id")
-    assertAll([user_id, film_id])
     sql = "select * from user_collection where user_id = '%s' and film_id = '%s'" % (user_id, film_id)
     results = select(sql)
     if not results:
@@ -355,7 +343,6 @@ def cancelCollect(request):
 def searchMovieByName(request):
     '''根据输入的电影名模糊搜索'''
     film_name = request.GET.get("keyword")
-    assertAll([film_name])
     film_name = "%" + film_name + "%"
     sql = "select * from film_info where film_name like '%s'" % (film_name)
     results = select(sql)
@@ -376,7 +363,6 @@ def getTopics():
 def showTopics(request):
     '''显示所有话题'''
     film_id = request.GET.get("film_id")
-    assertAll([film_id])
     sql = "select * from topic_list where film_id = '%s'" % (film_id)
     results = select(sql)
     data = []
@@ -395,7 +381,6 @@ def getBroadcasts(topic_id):
 def showBroadcasts(request):
     '''显示所有子话题'''
     topic_id = request.GET.get("topic_id")
-    assertAll([topic_id])
     sql = "select * from broadcast_list where topic_id = '%s'" % (topic_id)
     results = select(sql)
     data = []
@@ -417,7 +402,6 @@ def getTopicAndBroadcast():
 def showSingleTopic(request):
     '''显示单个话题'''
     topic_id = request.GET.get("topic_id")
-    assertAll([topic_id])
     sql = "select * from topic_list where topic_id = '%s'" % (topic_id)
     results = select(sql)
     for result in results:
@@ -432,7 +416,6 @@ def addTopic(request):
     title = request.GET.get("title")
     topic_text = request.GET.get("topic_text")
     topic_time = pd.to_datetime(request.GET.get("topic_time"))
-    assertAll([film_id,user_id,title,topic_text,topic_time])
     sql = "insert into topic_list(film_id,user_id,title,topic_text,topic_time) values('%s','%s','%s','%s','%s')" % \
           (film_id,user_id,title,topic_text,topic_time)
     data = insert(sql)
@@ -445,7 +428,6 @@ def addBroadcast(request):
     user_id = request.GET.get("user_id")
     broadcast_text = request.GET.get("broadcast_text")
     broadcast_time = pd.to_datetime(request.GET.get("broadcast_time"))
-    assertAll([topic_id,user_id,broadcast_text,broadcast_time])
     sql = "insert into broadcast_list(topic_id, user_id, broadcast_text, broadcast_time) values('%s','%s','%s','%s')" % \
           (topic_id, user_id, broadcast_text, broadcast_time)
     data = insert(sql)
@@ -455,7 +437,6 @@ def addBroadcast(request):
 def deleteTopic(request):
     '''删除话题'''
     topic_id = request.GET.get("topic_id")
-    assertAll([topic_id])
     sql = "delete from topic_list where topic_id = '%s'" % (topic_id)
     data = delete(sql)
     return JsonResponse(data,safe=False)
@@ -463,7 +444,6 @@ def deleteTopic(request):
 def deleteBroadcast(request):
     '''删除子话题'''
     broadcast_id = request.GET.get("broadcast_id")
-    assertAll([broadcast_id])
     sql = "delete from broadcast_list where broadcast_id = '%s'" % (broadcast_id)
     data = delete(sql)
     return JsonResponse(data,safe=False)
@@ -473,7 +453,7 @@ def score(request):
     film_id = request.GET.get("film_id")
     user_id = request.GET.get("user_id")
     score_number = request.GET.get("score_number")
-    assertAll([film_id,user_id,score_number])
+    mark = False
     #先检查之前是否评分过
     sql = "select * from user_score where user_id = '%s' and film_id = '%s'" % (user_id,film_id)
     results = select(sql)
@@ -542,7 +522,6 @@ def showWorkers(request=None,film_id=None):
     '''显示与特定电影有关的所有影人信息'''
     if request:
         film_id = request.GET.get("film_id")
-        assertAll([film_id])
     else:
         assert film_id
     data = []
@@ -620,7 +599,6 @@ def showSingleWorker(request=None,worker_id=None):
     '''显示单个影人信息'''
     if request:
         worker_id = request.GET.get("worker_id")
-        assertAll([worker_id])
     sql = "select * from worker_list where worker_id = '%s'" %(worker_id)
     results = select(sql)
     assert len(results) == 1
@@ -632,7 +610,6 @@ def showSingleWorker(request=None,worker_id=None):
 def showPersonalThemes(request):
     '''显示个人主题'''
     user_id = request.GET.get("user_id")
-    assertAll([user_id])
     sql = "select user_theme.theme_id,theme_name from user_theme,theme_list " \
           "where user_id = '%s' and user_theme.theme_id = theme_list.theme_id" % (user_id)
     results = select(sql)
@@ -646,7 +623,6 @@ def showMovieThemes(request=None,film_id=None):
     '''显示与特定电影有关的主题'''
     if request:
         film_id = request.GET.get("film_id")
-        assertAll([film_id])
     else:
         assert film_id
     sql = "select film_theme.theme_id,theme_name from film_theme,theme_list " \
@@ -664,7 +640,6 @@ def showMovieThemes(request=None,film_id=None):
 def showRecommendedMovies(request):
     '''根据用户的偏好主题推荐电影'''
     user_id = request.GET.get("id")
-    assertAll([user_id])
     sql = "select film_id from user_theme,film_theme " \
           "where user_id = '%s' and user_theme.theme_id = film_theme.theme_id" %(user_id)
     results = (np.unique(select(sql))).tolist()
@@ -688,7 +663,6 @@ def managerRegisterApply(request):
     manager_name = request.GET.get("manager_name")
     password = request.GET.get("password")
 
-    assertAll([manager_id,manager_name,password])
     data = {
         "allowed": True,
         "idWrong": False,
@@ -719,8 +693,6 @@ def managerLoginCheck(request):
     manager_id = request.GET.get("manager_id")
     password = request.GET.get("password")
 
-    assertAll([manager_id,password])
-
     sql = "select * from manager_list where manager_id = '%s'" % (manager_id)
     results = select(sql)
     data = {
@@ -746,15 +718,23 @@ def addWorker(request):
     worker_introduction = request.GET.get("worker_introduction")
     film_id = request.GET.get("film_id")
     type = request.GET.get("type")
-    assertAll([worker_name,worker_picture,worker_introduction,film_id,type])
     sql = "call addWorker('%s','%s','%s','%s'，'%s')" % (worker_name,worker_picture,worker_introduction,film_id,type)
-    mark = procedureCall(sql)
+    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
+    cursor = db.cursor()
+    try:
+        cursor.callproc('addWorker', (worker_name,worker_picture,worker_introduction,film_id,type))
+        db.commit()
+        mark = True
+    except:
+        db.rollback()
+        mark = False
+    db.close()
+    #mark = procedureCall(sql)
     return JsonResponse(mark,safe=False)
 
 def uploadPicture(request):
     user_id = request.GET.get("user_id")
     user_picture = request.GET.get("user_picture")
-    assertAll([user_id,user_picture])
     sql = "select * from user_list where user_id = '%s'" % (user_id)
     mark = False
     if select(sql):
@@ -766,7 +746,7 @@ def addClub(request):
     '''添加粉丝团'''
     worker_id = request.GET.get("worker_id")
     club_name = request.GET.get("club_name")
-    assertAll([worker_id,club_name])
+
     data = {
         "success":True
     }
@@ -784,7 +764,6 @@ def joinClub(request):
     '''将用户移入粉丝团'''
     user_id = request.GET.get("user_id")
     club_id = request.GET.get("club_id")
-    assertAll([user_id,club_id])
     sql = "select * from fan_club where club_id = '%s'" % (club_id)
     results = select(sql)
     if not results:
@@ -798,7 +777,6 @@ def quitClub(request):
     '''将用户移出粉丝团'''
     user_id = request.GET.get("user_id")
     club_id = request.GET.get("club_id")
-    assertAll([user_id,club_id])
     sql = "select * from user_in_club where user_id = '%s' and club_id = '%s'" % (user_id,club_id)
     results = select(sql)
     if results:
@@ -812,7 +790,6 @@ def quitClub(request):
 def showFans(request):
     '''显示所有粉丝信息 除了密码'''
     club_id = request.GET.get("club_id")
-    assertAll([club_id])
     data = []
     sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone from user_in_club,user_list " \
           "where user_in_club.club_id = '%s' and user_in_club.user_id = user_list.user_id" % (club_id)
@@ -824,13 +801,13 @@ def showFans(request):
 def showWorker(request):
     '''显示粉丝团的worker'''
     club_id = request.GET.get("club_id")
-    sql = "select worker_list.worker_id,worker_list.worker_name,worker_list.worker_picture,worker_list.worker_introduction " \
+    sql = "select worker_list.worker_id,worker_list.worker_name,worker_list.worker_picture,worker_list.worker_introduction, fan_club.club_name " \
           "from worker_list,fan_club " \
           "where worker_list.worker_id = fan_club.worker_id and fan_club.club_id = '%s'" % (club_id)
     results = select(sql)
     assert len(results) == 1
     for result in results:
-        data = generateDictData(result,worker_list_name_list)
+        data = generateDictData(result,worker_list_name_list + [fan_club_name_list[1]])
         return JsonResponse(data,safe=False)
 
 def showClubs(request):
@@ -848,7 +825,6 @@ def showClubs(request):
 def showJoinedClubs(request):
     '''显示用户已经加入的粉丝团'''
     user_id = request.GET.get("user_id")
-    assertAll([user_id])
     data = []
     sql = "select fan_club.club_id,fan_club.club_name," \
           "worker_list.worker_id,worker_list.worker_name,worker_list.worker_picture,worker_list.worker_introduction " \
@@ -863,7 +839,6 @@ def showJoinedClubs(request):
 def clubCheck(request):
     user_id = request.GET.get("user_id")
     club_id = request.GET.get("club_id")
-    assertAll([user_id,club_id])
     data = {}
     data["inClub"] = True
     sql = "select * from user_in_club where user_id = '%s' and club_id = '%s'" % (user_id,club_id)
@@ -909,7 +884,6 @@ def showParticipatedMovies(request):
     '''搜索出该影人参演的所有电影'''
     worker_id = request.GET.get("worker_id")
     film_ids = getMoviesOfWorker(worker_id)
-    assertAll([worker_id,film_ids])
     data = getPartialFilmInfo(film_ids)
     return JsonResponse(data,safe=False)
 
@@ -928,7 +902,6 @@ def getRelatedWorkerId(worker_id):
 def showRelatedWorkers(request):
     '''搜索出该影人参演的所有电影中包含的影人们（不包括自己）'''
     worker_id = request.GET.get("worker_id")
-    assertAll([worker_id])
     worker_ids = getRelatedWorkerId(worker_id)
     data = []
     for worker_id in worker_ids:
@@ -938,7 +911,6 @@ def showRelatedWorkers(request):
 def showClubRelatedMovies(request):
     '''搜索出粉丝团对应影人的所有参演电影'''
     club_id = request.GET.get("club_id")
-    assertAll([club_id])
     sql = "select worker_id from fan_club where club_id = '%s'" % (club_id)
     results = select(sql)
     assert len(results) == 1
@@ -950,7 +922,6 @@ def showClubRelatedMovies(request):
 def showRelatedClubs(request):
     '''搜索出粉丝团对应影人 所有合作影人 的 粉丝团（不包括自己）'''
     club_id = request.GET.get("club_id")
-    assertAll([club_id])
     sql = "select worker_id from fan_club where club_id = '%s'" % (club_id)
     results = select(sql)
     assert len(results) == 1
@@ -971,7 +942,6 @@ def showRelatedClubs(request):
 
 def searchWorker(request):
     keyword = request.GET.get("keyword")
-    assertAll([keyword])
     keyword = "%" + keyword + "%"
     sql = "select * from worker_list where worker_name like '%s'" % (keyword)
     results = select(sql)
@@ -982,7 +952,6 @@ def searchWorker(request):
 
 def searchClub(request):
     keyword = request.GET.get("keyword")
-    assertAll([keyword])
     keyword = "%" + keyword + "%"
     sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_name,worker_list.worker_picture " \
           "from fan_club,worker_list " \
@@ -1016,7 +985,6 @@ def judgeSimilarity(judging, tar):
 
 def showRelatedMovies(request):
     film_id = request.GET.get("film_id")
-    assertAll([film_id])
     theme_ids = getThemeIds(film_id)
     all_film_ids = getFilmIds()
     data = []
@@ -1027,7 +995,6 @@ def showRelatedMovies(request):
 
 def showRelatedClubOfMovie(request):
     film_id = request.GET.get("film_id")
-    assertAll([film_id])
     worker_ids = getDirectorIds(film_id) + getActorIds(film_id) + getWriterIds(film_id)
     assert worker_ids
     data = []
