@@ -125,24 +125,41 @@
 
 			<div class="btn-wrap">
 
-				<div v-if="this.symbol == 'manager'" class="btn contact-btn" >
-					<span v-on:click="this.showTextarea" class="collect-jump fs_12 fw_600 c_b_3" style="margin-bottom:40px">
+
+
+				<div class="banner-btn"  style="margin-top:10px">
+
+					<div style="width:700px;margin-right:0px;float:left">
+					<a v-if="this.symbol == 'manager'" v-on:click="this.showTextarea" class="collect-jump fs_12 fw_600 c_b_3">
 						<!-- 联系他 -->
 						成立粉丝团
-					</span>
+					</a>
+					<a v-else href="/managerLogin" class="collect-jump fs_12 fw_600 c_b_3">
+						<!-- 联系他 -->
+						用户无法成立粉丝团
+					</a>
+					</div>
+
+					<div v-if="this.addClubBoolean == true" class="btn" style="width:180px;float:left">
+        				<input name="" class="login-input" id="input" placeholder="请为粉丝团取个名称吧:)" v-model="club_name">
+        				<a v-on:click="this.addClub" class="collect-jump fs_12 fw_600 c_b_3" style="margin-top:-70px;margin-bottom:70px">
+            				确认
+        				</a>
+    				</div>
+
+
 				</div>
 
 
-    <div v-if="this.addClubBoolean == true" class="btn contact-btn" style="width:200px">
-        <input name="" class="login-input" id="input" placeholder="请为粉丝团取个名称吧:)" v-model="club_name">
-        <button v-on:click="this.addClub" class="btn contact-btn">
-            确认
-        </button>
-    </div>
+
+
+
+
+
 
 
 			</div>
-			<p class="creator-name fs_26 fw_600 c_b_26">影人主页:)
+			<p class="creator-name fs_26 fw_600 c_b_26" style="margin-top:55px">影人主页:)
 
 
 							</p>
