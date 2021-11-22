@@ -369,7 +369,14 @@ def showTopics(request):
     results = select(sql)
     data = []
     for result in results:
-        data.append(generateDictData(result,topic_list_name_list))
+        sql1 = "select user_picture from user_list where user_id = '%s'" % (result[2])
+        picture = select(sql1)
+        print(picture)
+        if(picture[0][0] == None):
+            ret = result + ("https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg", )
+        else:
+            ret = result + picture[0]
+        data.append(generateDictData(ret,topic_list_name_list + ["user_picture"]))
     return JsonResponse(data,safe=False)
 
 def getBroadcasts(topic_id):
@@ -387,7 +394,14 @@ def showBroadcasts(request):
     results = select(sql)
     data = []
     for result in results:
-        data.append(generateDictData(result,broadcast_list_name_list))
+        sql1 = "select user_picture from user_list where user_id = '%s'" % (result[2])
+        picture = select(sql1)
+        print(picture)
+        if(picture[0][0] == None):
+            ret = result + ("https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg", )
+        else:
+            ret = result + picture[0]
+        data.append(generateDictData(ret,broadcast_list_name_list + ["user_picture"]))
     return JsonResponse(data,safe=False)
 
 def getTopicAndBroadcast():
@@ -407,7 +421,14 @@ def showSingleTopic(request):
     sql = "select * from topic_list where topic_id = '%s'" % (topic_id)
     results = select(sql)
     for result in results:
-        data = generateDictData(result,topic_list_name_list)
+        sql1 = "select user_picture from user_list where user_id = '%s'" % (result[2])
+        picture = select(sql1)
+        print(picture)
+        if(picture[0][0] == None):
+            ret = result + ("https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg", )
+        else:
+            ret = result + picture[0]
+        data = (generateDictData(ret,topic_list_name_list + ["user_picture"]))
         break
     return JsonResponse(data,safe=False)
 
@@ -513,9 +534,9 @@ def showMovieRanks(request=None):
     assert results
     data = []
     for result in results:
-        data.append(generateDictData(result,film_info_name_list))
+        data.append({"film_info": generateDictData(result,film_info_name_list)})
     #按评分降序排列
-    data.sort(key=lambda x:x["film_score"],reverse=True)
+    data.sort(key=lambda x:x["film_info"]["film_score"],reverse=True)
     if request:
         return JsonResponse(data,safe=False)
     return data
@@ -742,11 +763,11 @@ def addClub(request):
         "success":True
     }
 
-    sql = "select * from fan_club where worker_id = '%s'" % (worker_id)
-    results = select(sql)
-    if results:
-        data["success"] = False
-        return JsonResponse(data,safe=False)
+    # sql = "select * from fan_club where worker_id = '%s'" % (worker_id)
+    # results = select(sql)
+    # if results:
+    #     data["success"] = False
+    #     return JsonResponse(data,safe=False)
     sql = "insert into fan_club(worker_id,club_name) values('%s','%s')"%(worker_id,club_name)
     data["success"] = insert(sql)
     return JsonResponse(data,safe=False)
@@ -782,11 +803,14 @@ def showFans(request):
     '''显示所有粉丝信息 除了密码'''
     club_id = request.GET.get("club_id")
     data = []
-    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone from user_in_club,user_list " \
+    sql = "select user_list.user_id,user_list.user_name,user_list.gender,user_list.email,user_list.phone, user_list.user_picture from user_in_club,user_list " \
           "where user_in_club.club_id = '%s' and user_in_club.user_id = user_list.user_id" % (club_id)
     results = select(sql)
     for result in results:
-        data.append(generateDictData(result,user_list_name_list))
+        s = generateDictData(result,user_list_name_list + ["user_picture"])
+        if (s["user_picture"] == None):
+            s["user_picture"] = "https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789"
+        data.append(s)
     return JsonResponse(data,safe=False)
 
 def showWorker(request):
@@ -913,22 +937,26 @@ def showClubRelatedMovies(request):
 def showRelatedClubs(request):
     '''搜索出粉丝团对应影人 所有合作影人 的 粉丝团（不包括自己）'''
     club_id = request.GET.get("club_id")
-    sql = "select worker_id from fan_club where club_id = '%s'" % (club_id)
+    sql = "select distinct worker_id from fan_club where club_id = '%s'" % (club_id)
     results = select(sql)
     assert len(results) == 1
     worker_id = results[0]
     worker_ids = getRelatedWorkerId(worker_id)
+    worker_ids.append(results[0])
     data = []
     for worker_id in worker_ids:
         sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_picture, worker_list.worker_name " \
               "from fan_club,worker_list " \
               "where fan_club.worker_id = '%s' and fan_club.worker_id = worker_list.worker_id" % (worker_id)
         results = select(sql)
-        assert len(results) <= 1
+        # print(results)
+        # assert len(results) <= 1
         if len(results) == 0:
             continue
-        result = results[0]
-        data.append(generateDictData(result,fan_club_name_list + [worker_list_name_list[2], worker_list_name_list[1]]))
+        for result in results:
+            # result = results[0]
+            if (result[0] != int(club_id)):
+                data.append(generateDictData(result,fan_club_name_list + [worker_list_name_list[2], worker_list_name_list[1]]))
     return JsonResponse(data,safe=False)
 
 def searchWorker(request):
@@ -1023,6 +1051,7 @@ def showAllWorkers(request):
 def showFiveClubs(request):
     num = 5
     data = getClubs()[-num:]
+    data.reverse()
     return JsonResponse(data,safe=False)
 
 def showTopFiveMovies(request):

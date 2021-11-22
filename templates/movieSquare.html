@@ -274,8 +274,9 @@
                     this.isSearchingWorker = false;
                 },
                 showAll() {
-                    axios.get("{% url 'showAllMovies' %}").then(response=>{
+                    axios.get("{% url 'showMovieRanks' %}").then(response=>{
                             this.movies = response.data
+                            console.log(this.movies)
                         }),err=>{
                             console.log(err);
                         };
