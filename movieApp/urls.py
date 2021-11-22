@@ -52,6 +52,8 @@ urlpatterns = [
 
     path('searchMovieByName',views.searchMovieByName,name="searchMovieByName"),
     path('moviePage/score',views.score,name="score"),
+    path('moviePage/showRelatedMovies', views.showRelatedMovies, name="showRelatedMovies"),
+
     path('movieSquare/showMovieRanks',views.showMovieRanks,name="showMovieRanks"),
     path('movieSquare/showWorkers',views.showWorkers,name="showWorkers"),
     path('movieSquare/showClubs', views.showClubs, name="showClubs"),

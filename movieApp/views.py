@@ -984,7 +984,7 @@ def showRelatedMovies(request):
     all_film_ids = getFilmIds()
     data = []
     for judging_film_id in all_film_ids:
-        if judgeSimilarity(getThemeIds(judging_film_id),theme_ids):
+        if (judgeSimilarity(getThemeIds(judging_film_id),theme_ids) and int(judging_film_id[0]) != int(film_id)):
             data.append(showMovie(request=None,film_id=judging_film_id))
     return JsonResponse(data,safe=False)
 

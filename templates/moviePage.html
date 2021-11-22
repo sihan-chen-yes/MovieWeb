@@ -611,7 +611,19 @@ ul li {
 
 
 
-
+<div>
+	<ul>
+		<li v-for="movie in relatedMovies">
+			<img v-bind:src="movie.film_info.picture">
+			<span>[[movie.film_info.film_name]]</span>
+			<span>[[movie.film_info.film_area]]</span>
+			<span>[[movie.film_info.film_date]]</span>
+			<span>[[movie.film_info.film_score]]</span>
+			<span>[[movie.film_info.film_score_people]]</span>
+			<span>[[movie.film_info.introduction]]</span>
+		</li>
+	</ul>
+</div>
 
 
 
@@ -642,13 +654,15 @@ ul li {
                 topic_id:'',
                 workers:{},
                 themes:[],
-                symbol: sessionStorage.getItem("symbol")
+                symbol: sessionStorage.getItem("symbol"),
+                relatedMovies: []
             },
             mounted:function () {
                 this.show();
                 this.showTopics();
                 this.showWorkers();
                 this.showMovieThemes();
+                this.showRelatedMovies();
             },
 
             methods:{
@@ -675,7 +689,6 @@ ul li {
                             }
                         }).then(response=>{
                             this.workers = response.data
-                            console.log(this.workers)
                         }),err=>{
                             console.log(err);
                         };
@@ -785,6 +798,19 @@ ul li {
                 	var filmId = sessionStorage.getItem("film_id")
                 	window.sessionStorage.setItem("film_id", filmId)
                     window.location.href = "{% url 'movieAddingPage' %}"
+                },
+                showRelatedMovies() {
+                    axios.get("{% url 'showRelatedMovies' %}",{
+                            params:{
+                                film_id:sessionStorage.getItem("film_id")
+                            }
+                        }).then(response=>{
+                            this.relatedMovies = response.data;
+                        }),err=>{
+                            console.log(err);
+                        };
+                    //传入本页的film_id
+                    //topics数组接收返回值即可显示
                 }
             }
         })
