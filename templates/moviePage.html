@@ -329,7 +329,7 @@ ul li {
 
 
 
-										<span class="send-comment fs_12 bg-red" style="color:white;font-size:13px;padding:9px 15px 9px 15px;margin-left:-100px" v-on:click="toTopicCreating(movieInfo.film_info.film_id)">添加话题</span>
+										<span v-if="this.symbol == 'user'" class="send-comment fs_12 bg-red" style="color:white;font-size:13px;padding:9px 15px 9px 15px;margin-left:-100px" v-on:click="toTopicCreating(movieInfo.film_info.film_id)">添加话题</span>
 
 
 						</div>
@@ -344,9 +344,9 @@ ul li {
     <div class="comment-bottom">
         <ul class="comment-list">
         <li v-for="topic in topics">
-			<a href="/u12431481" target="_blank">
+			<a target="_blank">
 				<span class="head-wrap" data-userid="12431481">
-					<img class="user-avator" src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg">
+					<img class="user-avator" v-bind:src="topic.user_picture">
 				</span>
 			</a>
 			<div class="comment-wrap clearfix">
@@ -507,9 +507,9 @@ ul li {
 
 					<div class="right-con" style="margin-left:130px;margin-top:10px">
 						<div class="article-contanier fenleiNumber" style="width:100%;">
-							<span class="title fs_14 fw_600 c_b_3 line-hide-2" style="font-size:17px;width:190px">[[movie.film_info.film_name]]</span>
+							<span v-on:click="toMoviePage(movie.film_info.film_id)" class="title fs_14 fw_600 c_b_3 line-hide-2" style="font-size:17px;width:190px">[[movie.film_info.film_name]]</span>
 
-							<div v-on:click="toMoviePage(movie.film_info.film_id)" class="cate-wrap">
+							<div class="cate-wrap">
 								<span class="fs_14 fw_300 c_b_9 line-hide-1 createFenlei">[[movie.film_info.film_date]],[[movie.film_info.film_area]]</span>
 								<br/>
 								<span class="fs_14 fw_300 c_b_9 line-hide-1 createFenlei">[[movie.film_info.film_score_people]]人评分,共[[movie.film_info.film_score]]分</span>
@@ -586,20 +586,24 @@ ul li {
                         };
                 },
                 score(){
-                    var score = $('#starNum').val()
-                    console.log(score)
-                    axios.get("{% url 'score' %}",{
-                            params:{
-                                film_id:sessionStorage.getItem("film_id"),
-                                user_id:sessionStorage.getItem("id"),
-                                score_number: score
-                            }
-                        }).then(response=>{
-                            this.show()
-                        }),err=>{
-                            console.log(err);
-                        };
-                        location.reload();
+                	if(this.symbol == 'user') {
+						var score = $('#starNum').val()
+						console.log(score)
+						axios.get("{% url 'score' %}",{
+								params:{
+									film_id:sessionStorage.getItem("film_id"),
+									user_id:sessionStorage.getItem("id"),
+									score_number: score
+								}
+							}).then(response=>{
+								this.show()
+							}),err=>{
+								console.log(err);
+							};
+							location.reload();
+                    } else {
+                    	alert("管理员无法评分！");
+                    }
                 },
                 deleteTopic(topic_id){
                         axios.get("{% url 'deleteTopic' %}",{
@@ -633,6 +637,10 @@ ul li {
                             }
                         }).then(response=>{
                             this.topics = response.data
+							for (var i = 0; i < this.topics.length; i++)
+								{
+								  this.topics[i].topic_time=this.topics[i].topic_time.replace(/T/g, ' ').replace(/.[\d]{3}Z/, ' ');
+								}
                         }),err=>{
                             console.log(err);
                         };

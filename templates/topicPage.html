@@ -22,14 +22,14 @@
 <div id="showTopics">
     	<div class="common-comment" id="comment-area" style="transform: translate(18%, 0);width:75%;padding:10px 15px 0px 15px;margin-top:20px;box-shadow: 0 2px 6px rgba(0,0,0,.1);">
             <div style="font-size:25px;font-weight:bold;text-align:center;">
-                <span class="btn btn-danger" style="float:right;font-size:12px">返回</span>
+                <span class="btn btn-danger" style="float:right;font-size:12px;display:none">返回</span>
                 话题主页</div>
 
 		<div class="filmplay-info-common left-section authorize-con-parent" style="padding-bottom:45px;margin-top:30px">
             <div class="col-xs-1" style="margin-right:-40px">
 					<a href="/u12431481" target="_blank">
 				<span class="head-wrap col-xs-0" data-userid="12431481">
-					<img class="user-avator" src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg" style="width:50px">
+					<img class="user-avator" v-bind:src="topicInfo.user_picture" style="width:50px;height:50px">
 				</span>
 			</a>
             </div>
@@ -70,7 +70,7 @@
                             </h3>
                             <div class="input-wrap">
                   <a class="avator-wrap" href="/u12431481?from=articleList">
-                  <img class="user-avator head-wrap" src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg" data-userid="12431481">
+                  <img class="user-avator head-wrap" v-bind:src="this.picture" data-userid="12431481">
                                 </a>
               <div class="input-area clearfix">
                   <div class="textarea-wrap">
@@ -93,7 +93,7 @@
         <li v-for="broadcast in broadcasts">
 			<a href="/u12431481" target="_blank">
 				<span class="head-wrap" data-userid="12431481">
-					<img class="user-avator" src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg">
+					<img class="user-avator" v-bind:src="broadcast.user_picture">
 				</span>
 			</a>
 			<div class="comment-wrap clearfix">
@@ -175,13 +175,15 @@
                 user_id:window.sessionStorage.getItem("id"),
                 broadcast_id:'',
                 symbol: sessionStorage.getItem("symbol"),
-                club_info: []
+                club_info: [],
+                picture: ''
             },
 
             mounted: function(){
                 this.showSingleTopic();  //展示本话题的信息
                 this.showBroadcasts(); //展示所有广播的内容
                 this.showClubs();
+                this.showSelfInfo();
             },
 
             methods:{
@@ -205,6 +207,7 @@
                             }
                         }).then(response=>{
                             this.topicInfo = response.data
+                            this.topicInfo.topic_time = this.topicInfo.topic_time.replace(/T/g, ' ').replace(/.[\d]{3}Z/, ' ');
                         }),err=>{
 
                         };
@@ -215,8 +218,13 @@
                             params:{
                                 topic_id:sessionStorage.getItem("topic_id"), //话题id
                             }
-                        }).then(response=>{
-                            this.broadcasts = response.data
+                        	}).then(response=>{
+                        	    this.broadcasts = response.data
+                                for (var i = 0; i < this.broadcasts.length; i++)
+								{
+								  this.broadcasts[i].broadcast_time=this.broadcasts[i].broadcast_time.replace(/T/g, ' ').replace(/.[\d]{3}Z/, ' ');
+								}
+                            	console.log(this.broadcasts)
                         }),err=>{
 
                         };
@@ -255,6 +263,32 @@
                 back() {
                     window.sessionStorage.setItem("club_id",club_id)
                     window.location.href = "{% url 'fanClub' %}"
+                },
+                showSelfInfo() {
+                    if(this.symbol == 'user'){
+                    axios.get("{% url 'show' %}",{
+                            params:{
+                                id:sessionStorage.getItem("id")
+                            }
+                        }).then(response=>{
+                            this.picture = response.data["user_picture"]
+                            if (this.picture == null) {
+                                this.picture = 'https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789'
+                            }
+                        }),err=>{
+                            console.log(err);
+                        };
+                    } else{
+                        axios.get("{% url 'showManager' %}",{
+                            params:{
+                                id:sessionStorage.getItem("id")
+                            }
+                        }).then(response=>{
+                            this.picture = 'https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg'
+                        }),err=>{
+                            console.log(err);
+                        };
+                    }
                 }
             }
         })
