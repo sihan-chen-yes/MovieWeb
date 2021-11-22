@@ -94,6 +94,9 @@
                                 alert("账号已存在！")
                             } else if (this.nameWrong === true) {
                                 alert("用户名已存在！")
+                            } else {
+                                alert("注册成功！请登录")
+                                window.location.href = "{% url 'managerLogin'%}"
                             }
                         }),err=>{
                             console.log(err);

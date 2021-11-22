@@ -111,12 +111,12 @@ def insert(sql):
     '''插入信息'''
     return execute(sql)
 
-def procedureCall(sql):
+def procedureCall(proc_name,args):
     '''执行存储过程'''
     db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
     cursor = db.cursor()
     try:
-        cursor.execute(sql)
+        cursor.callproc(proc_name, args)
         db.commit()
         mark = True
     except:
@@ -343,6 +343,8 @@ def cancelCollect(request):
 def searchMovieByName(request):
     '''根据输入的电影名模糊搜索'''
     film_name = request.GET.get("keyword")
+    if not film_name:
+        film_name = ""
     film_name = "%" + film_name + "%"
     sql = "select * from film_info where film_name like '%s'" % (film_name)
     results = select(sql)
@@ -718,18 +720,7 @@ def addWorker(request):
     worker_introduction = request.GET.get("worker_introduction")
     film_id = request.GET.get("film_id")
     type = request.GET.get("type")
-    sql = "call addWorker('%s','%s','%s','%s'，'%s')" % (worker_name,worker_picture,worker_introduction,film_id,type)
-    db = pymysql.connect(user=db_user, password=db_password, database=database, host=host)
-    cursor = db.cursor()
-    try:
-        cursor.callproc('addWorker', (worker_name,worker_picture,worker_introduction,film_id,type))
-        db.commit()
-        mark = True
-    except:
-        db.rollback()
-        mark = False
-    db.close()
-    #mark = procedureCall(sql)
+    mark = procedureCall('addWorker',[worker_name,worker_picture,worker_introduction,film_id,type])
     return JsonResponse(mark,safe=False)
 
 def uploadPicture(request):
@@ -942,6 +933,8 @@ def showRelatedClubs(request):
 
 def searchWorker(request):
     keyword = request.GET.get("keyword")
+    if not keyword:
+        keyword = ""
     keyword = "%" + keyword + "%"
     sql = "select * from worker_list where worker_name like '%s'" % (keyword)
     results = select(sql)
@@ -952,6 +945,8 @@ def searchWorker(request):
 
 def searchClub(request):
     keyword = request.GET.get("keyword")
+    if not keyword:
+        keyword = ""
     keyword = "%" + keyword + "%"
     sql = "select fan_club.club_id,fan_club.club_name,worker_list.worker_name,worker_list.worker_picture " \
           "from fan_club,worker_list " \
