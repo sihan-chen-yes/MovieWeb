@@ -1061,5 +1061,16 @@ def showTopFiveMovies(request):
 
 def showFiveTopics(request):
     num = 5
-    data = getTopics()[:num]
-    return JsonResponse(data,safe=False)
+    sql = "select * from topic_list"
+    results = select(sql)
+    data = []
+    for result in results:
+        film_id = result[1]
+        sql1 = "select film_name from film_info where film_id = '%s'" % (film_id)
+        name = select(sql1)
+        result = result + (name[0][0], )
+        data.append(generateDictData(result, topic_list_name_list + ["film_name"]))
+
+    ndata = data[-num:]
+    ndata.reverse()
+    return JsonResponse(ndata,safe=False)
