@@ -65,6 +65,7 @@ urlpatterns = [
 
     path('movieSquare/showRecommendedMovies',views.showRecommendedMovies,name="showRecommendedMovies"),
     path('movieSquare/showAllWorkers', views.showAllWorkers, name="showAllWorkers"),
+    path('movieSquare/showFiveTopics', views.showFiveTopics, name="showFiveTopics"),
 
     path('movieSquare/moviePage/workerPage/showSingleWorker', views.showSingleWorker, name="showSingleWorker"),
 

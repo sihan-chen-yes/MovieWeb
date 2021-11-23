@@ -202,9 +202,26 @@
                             </a>
                         </div>
                     <p style="margin-top:20px">
-                        <a v-on:click="toFanClub(club.club_id)" style="font-size:18px;color:#272727;font-weight:bold;float:center;margin-left:30px">[[club.club_name]]</a>
+                        <a v-on:click="toFanClub(club.club_id)" style="font-size:18px;color:#272727;font-weight:bold;float:center;margin-left:15px">[[club.club_name]]</a>
                         <div class="index-con" style="margin-top:30px;margin-bottom:10px;background-color: #2689FF;">
-                            <a class="user" style="margin-left:55px;color:#FFF;font-size:13px;text-align:center">[[club.worker_name]]</a>
+                            <a class="user" style="margin-left:30px;color:#FFF;font-size:13px;text-align:center">[[club.worker_name]]</a>
+                        </div>
+                    </p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="post-right-item">
+                <h4 class="post-right-title">精彩话题</h4>
+                <ul class="ori-list" style="">
+                    <li class="clearfix" data-id="63114" v-for="topic in topics" style="">
+                    <p style="">
+                        <a class="ori-title" v-on:click="toTopicPage(topic.topic_id)">[[topic.title]]</a>
+                        <div class="en-wrap ori-intro">[[topic.topic_text]]</div>
+                        <span></span>
+                        <div class="ori-user">
+                            <a class="name odt">[[topic.user_id]]</a>
+                            发布于&nbsp;&nbsp;<a v-on:click="toMoviePage(topic.film_id)">[[topic.film_name]]</a>&nbsp;&nbsp;&nbsp;[[topic.topic_time]]
                         </div>
                     </p>
                     </li>
@@ -233,12 +250,13 @@
                 isClub: false,
                 isWorker: false,
                 fiveClubs: [],
-                isSearchingWorker: false
-
+                isSearchingWorker: false,
+                topics: []
             },
             mounted:function () {
                 this.showAll()
                 this.showFiveClubs()
+                this.showFiveTopics()
             },
             methods:{
                 showFiveClubs(){
@@ -276,7 +294,6 @@
                 showAll() {
                     axios.get("{% url 'showMovieRanks' %}").then(response=>{
                             this.movies = response.data
-                            console.log(this.movies)
                         }),err=>{
                             console.log(err);
                         };
@@ -361,7 +378,25 @@
                 toWorkerPage(worker_id) {
                     window.sessionStorage.setItem("worker_id",worker_id)
                     window.location.href = "{% url 'workerPage' %}"
-                }
+                },
+                showFiveTopics() {
+                    axios.get("{% url 'showFiveTopics' %}",{
+                        params:{
+                        }
+                    }).then(response=>{
+                        this.topics = response.data
+                        for (var i = 0; i < this.topics.length; i++)
+                            {
+                              this.topics[i].topic_time=this.topics[i].topic_time.replace(/T/g, ' ').replace(/.[\d]{3}Z/, ' ');
+                            }
+                    }),err=>{
+                        console.log(err);
+                    };
+                },
+                toTopicPage(topic_id) {
+                    window.sessionStorage.setItem("topic_id",topic_id)
+                    window.location.href = "{% url 'topicPage' %}"
+                },
             }
         });
 </script>
