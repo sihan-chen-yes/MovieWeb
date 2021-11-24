@@ -49,11 +49,11 @@
 
                 <div class="layui-input-block">
                     <input type="hidden" id="img_url">
-                    <input type="file" onchange="showImg()" id="img_file"><img src="" alt="" id="img_id" style="width: 100px">
+                    <input type="file" onchange="showImg()" id="img_file" style="display:none"><img src="" alt="" id="img_id" style="width: 100px">
   				</div>
 
-    <button type="button" class="login-btn"  v-on:click="addWorker">
-        添加影人
+    <button type="button" class="login-btn"  onclick="document.getElementById('img_file').click()">
+        影人图片
     </button>
 
             <button type="button" class="login-btn"  v-on:click="addWorker">
