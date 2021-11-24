@@ -371,7 +371,6 @@ def showTopics(request):
     for result in results:
         sql1 = "select user_picture from user_list where user_id = '%s'" % (result[2])
         picture = select(sql1)
-        print(picture)
         if(picture[0][0] == None):
             ret = result + ("https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg", )
         else:
@@ -396,7 +395,6 @@ def showBroadcasts(request):
     for result in results:
         sql1 = "select user_picture from user_list where user_id = '%s'" % (result[2])
         picture = select(sql1)
-        print(picture)
         if(picture[0][0] == None):
             ret = result + ("https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg", )
         else:
@@ -423,7 +421,6 @@ def showSingleTopic(request):
     for result in results:
         sql1 = "select user_picture from user_list where user_id = '%s'" % (result[2])
         picture = select(sql1)
-        print(picture)
         if(picture[0][0] == None):
             ret = result + ("https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg", )
         else:
