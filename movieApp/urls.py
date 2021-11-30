@@ -85,5 +85,10 @@ urlpatterns = [
     path('fanClub/showRelatedClubs', views.showRelatedClubs, name="showRelatedClubs"),
 
     path('movieAddingPage/', views.movieAddingPage, name="movieAddingPage"),
+    path('addWorkerForMovie/', views.addWorkerForMovie, name="addWorkerForMovie"),
+    path('addWorkerForMovie/searchWorkerByName', views.searchWorkerByName, name="searchWorkerByName"),
+    path('addWorkerForMovie/addWorkerToMovie', views.addWorkerToMovie, name="addWorkerToMovie"),
+
+
     path('movieAddingPage/addWorker', views.addWorker, name="addWorker"),
 ]

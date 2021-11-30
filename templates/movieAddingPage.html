@@ -29,7 +29,7 @@
 <div id="register" class="login-form">
     <div id="movieAdding">
 
-        <form method="get">
+        <form method="get" style="display:none">
 
     <label><input name="type" type="radio" value="director" checked/>导演 </label>
     <label><input name="type" type="radio" value="writer" />编剧 </label>
@@ -103,11 +103,9 @@
             addWorker() {
                 axios.get("{% url 'addWorker' %}",{
                         params:{
-                            film_id:sessionStorage.getItem("film_id"),
                             worker_name: document.getElementById('name').value,
                             worker_introduction: document.getElementById('introduction').value,
-                            worker_picture: document.getElementById('img_id').src,
-                            type: $("input[name='type']:checked").val()
+                            worker_picture: document.getElementById('img_id').src
                         }
                     }).then(response=>{
                         alert("影人添加成功！")
