@@ -697,7 +697,7 @@ ul li {
                 toMovieAddingPage() {
                 	var filmId = sessionStorage.getItem("film_id")
                 	window.sessionStorage.setItem("film_id", filmId)
-                    window.location.href = "{% url 'movieAddingPage' %}"
+                    window.location.href = "{% url 'addWorkerForMovie' %}"
                 },
                 toMoviePage(film_id) {
                     window.sessionStorage.setItem("film_id",film_id)
