@@ -68,6 +68,9 @@ def collection(request):
 def selfClub(request):
     return render(request, "selfClub.html")
 
+def addWorkerForMovie(request):
+    return render(request, "addWorkerForMovie.html")
+
 def getIp(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -371,7 +374,6 @@ def showTopics(request):
     for result in results:
         sql1 = "select user_picture from user_list where user_id = '%s'" % (result[2])
         picture = select(sql1)
-        print(picture)
         if(picture[0][0] == None):
             ret = result + ("https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg", )
         else:
@@ -396,7 +398,6 @@ def showBroadcasts(request):
     for result in results:
         sql1 = "select user_picture from user_list where user_id = '%s'" % (result[2])
         picture = select(sql1)
-        print(picture)
         if(picture[0][0] == None):
             ret = result + ("https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg", )
         else:
@@ -423,7 +424,6 @@ def showSingleTopic(request):
     for result in results:
         sql1 = "select user_picture from user_list where user_id = '%s'" % (result[2])
         picture = select(sql1)
-        print(picture)
         if(picture[0][0] == None):
             ret = result + ("https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg", )
         else:
@@ -739,9 +739,14 @@ def addWorker(request):
     worker_name = request.GET.get("worker_name")
     worker_picture = request.GET.get("worker_picture")
     worker_introduction = request.GET.get("worker_introduction")
-    film_id = request.GET.get("film_id")
+    mark = procedureCall('addWorker',[worker_name,worker_picture,worker_introduction])
+    return JsonResponse(mark,safe=False)
+
+def addWorkerToMovie(request):
+    worker_id = request.GET.get("worker_id")
     type = request.GET.get("type")
-    mark = procedureCall('addWorker',[worker_name,worker_picture,worker_introduction,film_id,type])
+    film_id = request.GET.get("film_id")
+    mark = procedureCall('addWorkerToMovie',[film_id,worker_id,type])
     return JsonResponse(mark,safe=False)
 
 def uploadPicture(request):
@@ -1074,3 +1079,12 @@ def showFiveTopics(request):
     ndata = data[-num:]
     ndata.reverse()
     return JsonResponse(ndata,safe=False)
+
+def searchWorkerByName(request):
+    data = []
+    worker_name = request.GET.get("worker_name")
+    sql = "select * from worker_list where worker_name = '%s'" % (worker_name)
+    results = select(sql)
+    for result in results:
+        data.append(generateDictData(result, worker_list_name_list))
+    return JsonResponse(data, safe=False)

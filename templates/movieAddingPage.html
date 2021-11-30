@@ -29,7 +29,7 @@
 <div id="register" class="login-form">
     <div id="movieAdding">
 
-        <form method="get">
+        <form method="get" style="display:none">
 
     <label><input name="type" type="radio" value="director" checked/>导演 </label>
     <label><input name="type" type="radio" value="writer" />编剧 </label>
@@ -49,11 +49,11 @@
 
                 <div class="layui-input-block">
                     <input type="hidden" id="img_url">
-                    <input type="file" onchange="showImg()" id="img_file"><img src="" alt="" id="img_id" style="width: 100px">
+                    <input type="file" onchange="showImg()" id="img_file" style="display:none"><img src="" alt="" id="img_id" style="width: 100px">
   				</div>
 
-    <button type="button" class="login-btn"  v-on:click="addWorker">
-        添加影人
+    <button type="button" class="login-btn"  onclick="document.getElementById('img_file').click()">
+        影人图片
     </button>
 
             <button type="button" class="login-btn"  v-on:click="addWorker">
@@ -103,11 +103,9 @@
             addWorker() {
                 axios.get("{% url 'addWorker' %}",{
                         params:{
-                            film_id:sessionStorage.getItem("film_id"),
                             worker_name: document.getElementById('name').value,
                             worker_introduction: document.getElementById('introduction').value,
-                            worker_picture: document.getElementById('img_id').src,
-                            type: $("input[name='type']:checked").val()
+                            worker_picture: document.getElementById('img_id').src
                         }
                     }).then(response=>{
                         alert("影人添加成功！")

@@ -52,6 +52,8 @@
                             <li><a href="{% url 'login' %}" onclick="delCookie()">退出登录</a></li>
                         </ul>
                     </li>
+
+                    <li><a href="{% url 'movieAddingPage' %}">添加影人</a></li>
                 </ul>
 
                 <button class="btn btn-primary btm-xs" v-on:click="normalShow()" style="float:right;margin-left:7px;">返回</button>
@@ -251,7 +253,8 @@
                 isWorker: false,
                 fiveClubs: [],
                 isSearchingWorker: false,
-                topics: []
+                topics: [],
+                symbol: sessionStorage.getItem("symbol")
             },
             mounted:function () {
                 this.showAll()
@@ -397,6 +400,9 @@
                     window.sessionStorage.setItem("topic_id",topic_id)
                     window.location.href = "{% url 'topicPage' %}"
                 },
+                toMovieAddingPage() {
+                    window.location.href = "{% url 'movieAddingPage' %}"
+                }
             }
         });
 </script>
