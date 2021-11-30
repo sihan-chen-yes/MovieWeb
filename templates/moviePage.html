@@ -186,10 +186,11 @@ ul li {
   <div class="xpcplayer-danmaku-ground">
     <div class="xpcplayer-danmaku-item xpcplayer-danmaku-item--demo"></div>
   </div>
-  <div class="xpcplayer-preview xpcplayer-preview-invisible" style="background-image: url(&quot;https://oss-xpc0.xpccdn.com/newupload/assets/article/cover/2021/10/617284be1ce76@960w_540h&quot;);">
+
+<div class="xpcplayer-preview xpcplayer-preview-invisible" style="background-image: url(&quot;https://cs.xinpianchang.com/uploadfile/article/2020/12/05/5fcadfe278c14.jpeg@960w_540h&quot;);">
   </div>
 
-    <video width="320" height="240" controls id="video" poster="../static/image/cover_new.png">
+    <video width="320" height="240" controls id="video" poster="../static/image/video-cover.jpg">
       <source v-bind:src="movieInfo.film_info.video" type="video/mp4">
       <object data="movie.mp4" width="320" height="240">
         <embed src="movie.swf" width="320" height="240">
@@ -203,17 +204,17 @@ ul li {
         </div>
 </div>
 
-<div class="filmplay-detail clearfix">
+<div class="filmplay-detail clearfix" style="margin-top:40px">
 		<div class="filmplay-detail-left" style="float:center;text-align:center;margin:0 auto;">
 
 
-    <div data-v-c38922e8="" class="m_coverpicbox" style="margin-left:-400px;float:left">
+    <div data-v-c38922e8="" class="m_coverpicbox" style="margin-left:-150px;float:left">
     <div data-v-c38922e8="" class="img_box"><a data-v-c38922e8="">
         <img v-bind:src="movieInfo.film_info.picture"></a>
         </div> <!---->
     </div> <!----> <!---->
 
-			<div class="filmplay-info" style="background:white;float:left;margin-top:30px" >
+			<div class="filmplay-info" style="background:white;float:right;margin-top:30px;margin-left:0px;width:700px;margin-right:-150px" >
 
 				<div class="filmplay-info-common left-section authorize-con-parent" style="float:none;padding-bottom:60px">
 					<div class="video-mark">
@@ -222,26 +223,26 @@ ul li {
 					<span class="authorize-con">不使用原创授权</span>
 					<div class="title-wrap">
 						<h3 class="title fs_26 fw_600 c_b_3 " style="margin-top:-5px;margin-bottom:10px">[[movieInfo.film_info.film_name]]</h3>
-
 					</div>
 
 					<div class="filmplay-intro fs_12 fw_300 c_b_9" >
 
 
-												<span class="update-time v-center" style="margin-right: 20px;font-size:14px"><i>[[movieInfo.film_info.film_date]]</i></span>
-												<span class="J_whistleblow span_whistleblow" style="font-size:14px">[[movieInfo.film_info.film_area]]</span>
+												<span class="update-time v-center" style="margin-right: 30px;font-size:14px;margin-left:50px"><i>[[movieInfo.film_info.film_date]]</i></span>
+												<span class="update-time v-center" style="margin-right: 30px;font-size:14px">[[movieInfo.film_info.film_area]]</span>
+																		<span class="update-time v-center" style="margin-right: 30px;font-size:14px">评分：[[movieInfo.film_info.film_score]]，共有[[movieInfo.film_info.film_score_people]]人评分</span>
+
 					</div>
 
 					<div style="margin-top:17px">
-						<span class="desc  fs_14 c_b_3 fw_300 ">评分:[[movieInfo.film_info.film_score]]，共有[[movieInfo.film_info.film_score_people]]人评分</span>
 					</div>
 
 					<div class="filmplay-data">
 
 
-						 <div class="panel-body" style="margin-top:-25px;float:none;margin-bottom:-340px;padding-bottom:0px;padding-top:5px" >
+						 <div class="panel-body" style="margin-top:-9px;float:none;margin-bottom:-340px;padding-bottom:0px;padding-top:5px" >
 		  	  		  <input name="starNum" id="starNum" type="hidden">
-                      <div class="starability-container" style="margin-left:170px">
+                      <div class="starability-container" style="margin-left:130px">
 	                       <fieldset class="starability-slot">
 		                        <input type="radio" id="rate_1_0_1_5" name="starLevel" value=5 v-on:click="initScoreBind(5)" />
 		                        <label for="rate_1_0_1_5" title="5星" ></label>
@@ -267,7 +268,7 @@ ul li {
 
 					</div>
 				</div>
-								<div class="filmplay-info-desc left-section" style="float:none;margin-top:70px;padding-bottom:20px;padding-top:15px">
+								<div class="filmplay-info-desc left-section" style="float:none;margin-top:50px;padding-bottom:20px;padding-top:15px">
 					<p class="desc  fs_14 c_b_3 fw_300 " style="font-size:16px;margin-bottom:0px">
 
 						[[movieInfo.film_info.introduction]]
@@ -293,13 +294,13 @@ ul li {
 				</div>
 							</div>
 
-
+<!--
     <div data-v-c38922e8="" class="m_coverpicbox" style="float:right;margin-right:-400px;">
     <div data-v-c38922e8="" class="img_box"><a data-v-c38922e8="">
         <img v-bind:src="movieInfo.film_info.picture"></a>
-        </div> <!---->
+        </div>
     </div>
-
+-->
 		<!-- 通栏广告 -->
 		<!-- <a class="create-man-banner" href="/activity/filmfest/ts-proposition?utm_source=xpcWeb&utm_medium=tonglan" target="_blank"><img src="https://oss-xpc0.xpccdn.com/Upload/edu/2018/10/095bbc471ee8871.jpg"></a> -->
 	</div>
@@ -311,7 +312,7 @@ ul li {
 
 
     <div class="filmplay-detail clearfix" style="width:1200px">
-		<div class="filmplay-detail-left" style="margin-top:30px; float:left; width:730px">
+		<div class="filmplay-detail-left" style="margin-top:20px; float:left; width:730px">
 
 
 	<div class="common-comment" id="comment-area">
@@ -401,14 +402,14 @@ ul li {
 		<!-- <a class="create-man-banner" href="/activity/filmfest/ts-proposition?utm_source=xpcWeb&utm_medium=tonglan" target="_blank"><img src="https://oss-xpc0.xpccdn.com/Upload/edu/2018/10/095bbc471ee8871.jpg"></a> -->
 	</div>
 
-    <div class="filmplay-detail-right" style="width:370px;margin-top:30px">
+    <div class="filmplay-detail-right" style="width:370px;margin-top:20px">
 			<!-- <a href="https://edu.xinpianchang.com/subject/163" target="_blank"><img style="width: 100%;margin-bottom: 20px;" src="https://oss-xpc0.xpccdn.com/Upload/edu/2019/11/145dccfd7750607.jpg" alt=""></a> -->
 			<!-- <a href="https://edu.xinpianchang.com/subject/164?from=Pcbanner" target="_blank"><img style="width: 100%;margin-bottom: 20px;" src="https://oss-xpc0.xpccdn.com/Upload/edu/2019/12/095dedb5590d490.jpg" alt=""></a> -->
 
 									<!--创作团队-->
 <div class="user-team" style="background:#fff; margin-bottom:20px;">
 	<div class="filmplay-creator right-section">
-		<div style="margin-top:-10px">
+		<div style="margin-top:0px">
 			<h3 class="fs_20 fw_600" style="margin-top:10px">影职员-导演</h3>
 			
 		</div>
