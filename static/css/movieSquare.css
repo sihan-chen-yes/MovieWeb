@@ -24,6 +24,37 @@
     margin-top: -5px;
 }
 
+.ori-title {
+    color: #333;
+    font-weight: bold;
+}
+
+.ori-intro {
+    display: block;
+    color: #666;
+    background-color: #f1f1f1;
+    padding: 8px 10px;
+    margin-top: 15px;
+    position: relative;
+    font-size: 12px;
+    font-family: '宋体';
+    border-radius: 2px;
+    line-height: 22px;
+}
+
+.en-wrap {
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.ori-user {
+    font-family: Helvetica,Arial,sans-serif;
+    margin-top: 6px;
+    text-align: right;
+    color: #333;
+    font-size: 12px;
+}
+
 .total {
     margin: 0;
     font-size: 14px;

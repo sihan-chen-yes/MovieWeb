@@ -117,6 +117,8 @@ def procedureCall(proc_name,args):
     cursor = db.cursor()
     try:
         cursor.callproc(proc_name, args)
+        res = cursor.fetchall()
+        print(res)
         db.commit()
         mark = True
     except:
@@ -737,11 +739,13 @@ def managerLoginCheck(request):
 
 def addWorker(request):
     worker_name = request.GET.get("worker_name")
+    assert worker_name
     worker_picture = request.GET.get("worker_picture")
     worker_introduction = request.GET.get("worker_introduction")
     film_id = request.GET.get("film_id")
     type = request.GET.get("type")
-    mark = procedureCall('addWorker',[worker_name,worker_picture,worker_introduction,film_id,type])
+    mark = procedureCall('test',[worker_name,worker_picture,worker_introduction,film_id,type])
+
     return JsonResponse(mark,safe=False)
 
 def uploadPicture(request):
@@ -1061,5 +1065,16 @@ def showTopFiveMovies(request):
 
 def showFiveTopics(request):
     num = 5
-    data = getTopics()[:num]
-    return JsonResponse(data,safe=False)
+    sql = "select * from topic_list"
+    results = select(sql)
+    data = []
+    for result in results:
+        film_id = result[1]
+        sql1 = "select film_name from film_info where film_id = '%s'" % (film_id)
+        name = select(sql1)
+        result = result + (name[0][0], )
+        data.append(generateDictData(result, topic_list_name_list + ["film_name"]))
+
+    ndata = data[-num:]
+    ndata.reverse()
+    return JsonResponse(ndata,safe=False)
