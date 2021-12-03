@@ -51,57 +51,22 @@ ul li {
 
 
 
-
+<div  id="movieInfo">
 
 <div class="header-common fixed-header complex-header light-color header-v2  pa-normal" id="index-wrap">
+
 	<div class="header-con">
-		<a class="logo v-center" href="/?from=navigator">
-			<span class="logo-wrap white-logo">
-                <img src="https://qzapp.qlogo.cn/qzapp/100467464/899D76BF67491655C4F4A02D15BDFB93/100?id=1929754789" width="height:10px;width:10px">
-            </span>
+		<a class="user-face hover-elem J_login_user">
+			      <div class="user-face-con">
+					          <img src="../static/image/look_new.jpg" style="width:45px;height:35px">
+
+              </div>
 		</a>
     <ul class="fs_16 fw_300 nav-list clearfix v-center">
   <li class="nav-item ">
-    <a href="/">首页</a>
+    <a href="/managerLogin">管理</a>
   </li>
-        <!--
-  <li class="nav-item hover-elem ">
-    <i class="icon-arrow-down"></i>
-    <a href="/channel/index/sort-like?from=navigator">发现</a>
-    <div class="common-hover-wrap issue-hover-wrap issue-hover-wrap-wide">
-      <div class="hover-box">
-        <ul class="list">
-          <li class="nav-dropdown-item">
-            <a class="nav-sublist-title fs_14 fw_600 c_b_3" href="/channel/index/sort-like?from=navigator">作品<i class="icon-arrow-right"></i></a>
-            <ul class="nav-sublist">
-              <li class="nav-sublist-item"><a href="/channel/index/id-1/sort-like?from=navigator">广告</a></li>
-              <li class="nav-sublist-item"><a href="/channel/index/id-16/sort-like?from=navigator">宣传片</a></li>
-              <li class="nav-sublist-item"><a href="/channel/index/id-31/sort-like?from=navigator">剧情短片</a></li>
-              <li class="nav-sublist-item"><a href="/channel/index/id-49/sort-like?from=navigator">纪录</a></li>
-              <li class="nav-sublist-item"><a href="/channel/index/id-76/sort-like?from=navigator">创意</a></li>
-              <li class="nav-sublist-item"><a href="/channel/index/id-27/sort-like?from=navigator">音乐</a></li>
-            </ul>
-          </li>
-          <li class="line"></li>
-          <li class="nav-dropdown-item">
-            <a class="nav-sublist-title fs_14 fw_600 c_b_3" href="/user/stars?from=navigator">创作人/机构<i class="icon-arrow-right"></i></a>
-          </li>
-          <li class="line"></li>
-          <li class="nav-dropdown-item">
-            <a class="nav-sublist-title fs_14 fw_600 c_b_3" href="/exp?from=navigator">文章<i class="icon-arrow-right"></i></a>
-          </li>
-          <li class="line"></li>
-          <li class="nav-dropdown-item">
-            <a class="nav-sublist-title fs_14 fw_600 c_b_3" target="_blank" href="https://www.vmovier.com?from=navigator">场库 - 高品质短片精选<i class="icon-arrow-right"></i></a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </li>
-        -->
-  <!-- <li class="nav-item hover-elem ">
-    <a href="/user/stars?from=navigator">找人/机构</a>
-  </li> -->
+
   <li class="nav-item ">
     <a href="{% url 'movieSquare' %}">广场</a>
   </li>
@@ -121,40 +86,19 @@ ul li {
 
   <li class="user-face hover-elem J_login_user">
     <a href="{% url 'selfPage' %}">
-      <div class="user-face-con">
-        <img src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg@60w_60h_1e_1c">
+      <div class="user-face-con" style="margin-top:0px">
+		          <img src="https://cs.xinpianchang.com/user_center_xpc_line/user_avatar_12431481.jpg@60w_60h_1e_1c">
+
               </div>
     </a>
-    <div class="common-hover-wrap user-hover-wrap">
-      <div class="hover-box add-hover-box-height">
-        <ul class="list">
-                    <li><a href="/user/space/id-12431481/sort-pick">个人主页</a></li>
-                              <li><a href="/user/collect/ts-article">收藏夹</a></li>
-          <li class="beta"><a href="/user/articles_private">私密视频</a></li>
-          <li class="line"></li>
-          <li><a href="https://edu.xinpianchang.com/mycourse" target="_blank">我的课程</a></li>
-          <li><a href="/account/stock">已购素材</a></li>
-                    <li><a href="/account/order">我的订单</a></li>
-          <li><a href="/account/package">我的套餐</a></li>
-          <li><a href="/account/coupon">我的优惠券</a></li>
-          <li><a href="/trade/cart">我的购物车</a></li>
-          <li class="line"></li>
-                      <li>
-              <a href="/verification">认证</a>
-            </li>
-                              <li class="communitySetting"><a href="/user/setting" target="_blank">社区设置</a></li>
-          <li><a href="https://passport.xinpianchang.com/settings" target="_blank">账号设置</a></li>
-          <li><a href="/user/login/ts-out">退出登录</a></li>
-        </ul>
-      </div>
-    </div>
+
   </li>
   <li class="upload-btn">
-      <a href="/upload/index/ts-upload_index?from=topNavigation">我的</a>
+      <a>我的</a>
       <div class="upload-list-wrap">
         <ul class="upload-list">
-          <li class="icon-Upload-Video"><a href="{% url 'selfPage' %}">个人主页</a></li>
-          <li class="icon-Private"><a href="{% url 'login' %}">退出登录</a></li>
+          <li class="icon-Upload-Video"><a href="{% url 'selfPage' %}" style="padding-right:44px">个人主页</a></li>
+          <li class="icon-Private"><a href="{% url 'login' %}" style="padding-right:44px">退出登录</a></li>
         </ul>
       </div>
   </li>
@@ -165,7 +109,7 @@ ul li {
 
 
 
-<div class="filmplay-container" id="movieInfo">
+<div class="filmplay-container">
 
 <div class="play-box" style="background: url(&quot;https://oss-xpc0.xpccdn.com/newupload/assets/article/cover/2021/10/617284be1ce76@960w_540h_50-30bl_1e_1c&quot;) center center / cover no-repeat; ">
 		<div class="banner-linear">
@@ -186,10 +130,11 @@ ul li {
   <div class="xpcplayer-danmaku-ground">
     <div class="xpcplayer-danmaku-item xpcplayer-danmaku-item--demo"></div>
   </div>
-  <div class="xpcplayer-preview xpcplayer-preview-invisible" style="background-image: url(&quot;https://oss-xpc0.xpccdn.com/newupload/assets/article/cover/2021/10/617284be1ce76@960w_540h&quot;);">
+
+<div class="xpcplayer-preview xpcplayer-preview-invisible" >
   </div>
 
-    <video width="320" height="240" controls id="video" poster="../static/image/cover_new.png">
+    <video width="320" height="240" controls id="video" poster="../static/image/video-cover.jpg">
       <source v-bind:src="movieInfo.film_info.video" type="video/mp4">
       <object data="movie.mp4" width="320" height="240">
         <embed src="movie.swf" width="320" height="240">
@@ -203,17 +148,17 @@ ul li {
         </div>
 </div>
 
-<div class="filmplay-detail clearfix">
+<div class="filmplay-detail clearfix" style="margin-top:40px">
 		<div class="filmplay-detail-left" style="float:center;text-align:center;margin:0 auto;">
 
 
-    <div data-v-c38922e8="" class="m_coverpicbox" style="margin-left:-400px;float:left">
+    <div data-v-c38922e8="" class="m_coverpicbox" style="margin-left:-150px;float:left">
     <div data-v-c38922e8="" class="img_box"><a data-v-c38922e8="">
         <img v-bind:src="movieInfo.film_info.picture"></a>
         </div> <!---->
     </div> <!----> <!---->
 
-			<div class="filmplay-info" style="background:white;float:left;margin-top:30px" >
+			<div class="filmplay-info" style="background:white;float:right;margin-top:10px;margin-left:0px;width:700px;margin-right:-150px" >
 
 				<div class="filmplay-info-common left-section authorize-con-parent" style="float:none;padding-bottom:60px">
 					<div class="video-mark">
@@ -222,26 +167,26 @@ ul li {
 					<span class="authorize-con">不使用原创授权</span>
 					<div class="title-wrap">
 						<h3 class="title fs_26 fw_600 c_b_3 " style="margin-top:-5px;margin-bottom:10px">[[movieInfo.film_info.film_name]]</h3>
-
 					</div>
 
 					<div class="filmplay-intro fs_12 fw_300 c_b_9" >
 
 
-												<span class="update-time v-center" style="margin-right: 20px;font-size:14px"><i>[[movieInfo.film_info.film_date]]</i></span>
-												<span class="J_whistleblow span_whistleblow" style="font-size:14px">[[movieInfo.film_info.film_area]]</span>
+												<span class="update-time v-center" style="margin-right: 30px;font-size:14px;margin-left:50px"><i>[[movieInfo.film_info.film_date]]</i></span>
+												<span class="update-time v-center" style="margin-right: 30px;font-size:14px">[[movieInfo.film_info.film_area]]</span>
+																		<span class="update-time v-center" style="margin-right: 30px;font-size:14px">评分: [[movieInfo.film_info.film_score]]，共有 [[movieInfo.film_info.film_score_people]] 人评分</span>
+
 					</div>
 
 					<div style="margin-top:17px">
-						<span class="desc  fs_14 c_b_3 fw_300 ">评分:[[movieInfo.film_info.film_score]]，共有[[movieInfo.film_info.film_score_people]]人评分</span>
 					</div>
 
 					<div class="filmplay-data">
 
 
-						 <div class="panel-body" style="margin-top:-25px;float:none;margin-bottom:-340px;padding-bottom:0px;padding-top:5px" >
+						 <div class="panel-body" style="margin-top:-9px;float:none;margin-bottom:-340px;padding-bottom:0px;padding-top:5px" >
 		  	  		  <input name="starNum" id="starNum" type="hidden">
-                      <div class="starability-container" style="margin-left:170px">
+                      <div class="starability-container" style="margin-left:130px">
 	                       <fieldset class="starability-slot">
 		                        <input type="radio" id="rate_1_0_1_5" name="starLevel" value=5 v-on:click="initScoreBind(5)" />
 		                        <label for="rate_1_0_1_5" title="5星" ></label>
@@ -267,8 +212,8 @@ ul li {
 
 					</div>
 				</div>
-								<div class="filmplay-info-desc left-section" style="float:none;margin-top:70px;padding-bottom:20px;padding-top:15px">
-					<p class="desc  fs_14 c_b_3 fw_300 " style="font-size:16px;margin-bottom:0px">
+								<div class="filmplay-info-desc left-section" style="float:none;margin-top:50px;padding-bottom:20px;padding-top:15px">
+					<p class="desc  fs_14 c_b_3 fw_300 " style="font-size:17px;margin-bottom:0px">
 
 						[[movieInfo.film_info.introduction]]
 										</p>
@@ -293,13 +238,13 @@ ul li {
 				</div>
 							</div>
 
-
+<!--
     <div data-v-c38922e8="" class="m_coverpicbox" style="float:right;margin-right:-400px;">
     <div data-v-c38922e8="" class="img_box"><a data-v-c38922e8="">
         <img v-bind:src="movieInfo.film_info.picture"></a>
-        </div> <!---->
+        </div>
     </div>
-
+-->
 		<!-- 通栏广告 -->
 		<!-- <a class="create-man-banner" href="/activity/filmfest/ts-proposition?utm_source=xpcWeb&utm_medium=tonglan" target="_blank"><img src="https://oss-xpc0.xpccdn.com/Upload/edu/2018/10/095bbc471ee8871.jpg"></a> -->
 	</div>
@@ -311,7 +256,7 @@ ul li {
 
 
     <div class="filmplay-detail clearfix" style="width:1200px">
-		<div class="filmplay-detail-left" style="margin-top:30px; float:left; width:730px">
+		<div class="filmplay-detail-left" style="margin-top:20px; float:left; width:730px">
 
 
 	<div class="common-comment" id="comment-area">
@@ -401,14 +346,14 @@ ul li {
 		<!-- <a class="create-man-banner" href="/activity/filmfest/ts-proposition?utm_source=xpcWeb&utm_medium=tonglan" target="_blank"><img src="https://oss-xpc0.xpccdn.com/Upload/edu/2018/10/095bbc471ee8871.jpg"></a> -->
 	</div>
 
-    <div class="filmplay-detail-right" style="width:370px;margin-top:30px">
+    <div class="filmplay-detail-right" style="width:370px;margin-top:20px">
 			<!-- <a href="https://edu.xinpianchang.com/subject/163" target="_blank"><img style="width: 100%;margin-bottom: 20px;" src="https://oss-xpc0.xpccdn.com/Upload/edu/2019/11/145dccfd7750607.jpg" alt=""></a> -->
 			<!-- <a href="https://edu.xinpianchang.com/subject/164?from=Pcbanner" target="_blank"><img style="width: 100%;margin-bottom: 20px;" src="https://oss-xpc0.xpccdn.com/Upload/edu/2019/12/095dedb5590d490.jpg" alt=""></a> -->
 
 									<!--创作团队-->
 <div class="user-team" style="background:#fff; margin-bottom:20px;">
 	<div class="filmplay-creator right-section">
-		<div style="margin-top:-10px">
+		<div style="margin-top:0px">
 			<h3 class="fs_20 fw_600" style="margin-top:10px">影职员-导演</h3>
 			
 		</div>
@@ -529,7 +474,7 @@ ul li {
 
 </div>
 
-
+</div>
 
 <script>
 
