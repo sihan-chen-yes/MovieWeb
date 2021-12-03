@@ -7,7 +7,7 @@
     <title>movieAddingPage</title>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
     {% load static %}
-    <link type="text/css" rel="stylesheet" href="{% static "css/login.css" %}">
+	<link type="text/css" rel="stylesheet" href="{% static "css/topicCreatingPage.css" %}">
     <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
@@ -17,24 +17,64 @@
 </head>
 <body>
 
- <div class="layui-form-item" id="movieAdding">
-                    <form method="get">
-    请选择影人类型<br /><br />
+
+<div class="banner"></div>
+<div class="banner-mask"></div>
+<div class="login user-center-wrapper">
+<div class="login-text">
+       新增影人:)
+</div>
+
+
+<div id="register" class="login-form">
+    <div id="movieAdding">
+
+        <form method="get" style="display:none">
+
     <label><input name="type" type="radio" value="director" checked/>导演 </label>
     <label><input name="type" type="radio" value="writer" />编剧 </label>
     <label><input name="type" type="radio" value="actor" />演员 </label>
+            <br/><br/><br/>
     </form>
-                <input id="name" placeholder="请输入影人姓名">
-                <textarea id="introduction" placeholder="请输入影人简介"></textarea>
-                <label class="layui-form-label">图片地址</label>
+
+    <div class="form-item" style="margin-top:0px">
+        <input type="text" name="" class="login-input" placeholder="请输入影人姓名" spellcheck="false" id="name">
+
+    </div>
+
+    <div class="form-item">
+
+        <textarea class="login-input" id="introduction" placeholder="请介绍该影人"  spellcheck="false" style="height:130px"></textarea>
+    </div>
+
                 <div class="layui-input-block">
                     <input type="hidden" id="img_url">
-                    <input type="file" onchange="showImg()" id="img_file"><img src="" alt="" id="img_id" style="width: 100px">
+                    <input type="file" onchange="showImg()" id="img_file" style="display:none"><img src="" alt="" id="img_id" style="width: 100px">
   				</div>
-     <button v-on:click="output" hidden>测试</button>
-     <button v-on:click="addWorker">确认添加</button>
+
+    <button type="button" class="login-btn"  onclick="document.getElementById('img_file').click()">
+        影人图片
+    </button>
+
+            <button type="button" class="login-btn"  v-on:click="addWorker">
+        添加影人
+    </button>
+
+        </div>
+
+
+
+
 
  </div>
+
+
+</div>
+</div>
+
+
+
+
 
 
 <script>
@@ -63,11 +103,9 @@
             addWorker() {
                 axios.get("{% url 'addWorker' %}",{
                         params:{
-                            film_id:sessionStorage.getItem("film_id"),
                             worker_name: document.getElementById('name').value,
                             worker_introduction: document.getElementById('introduction').value,
-                            worker_picture: document.getElementById('img_id').src,
-                            type: $("input[name='type']:checked").val()
+                            worker_picture: document.getElementById('img_id').src
                         }
                     }).then(response=>{
                         alert("影人添加成功！")
