@@ -233,8 +233,21 @@
                 this.show();
                 this.showPersonalThemes();
                 this.showJoinedClubs();
+                this.queryRight();
             },
             methods:{
+                 queryRight(){
+                        axios.get("{% url 'queryRight' %}",{
+                                params:{
+
+                                }
+                            }).then(response=>{
+                                this.symbol = response.data
+                                console.log(this.symbol)
+                            }),err=>{
+                                console.log(err);
+                            };
+                 },
                  showJoinedClubs() {
                     if (this.symbol == 'user') {
                         axios.get("{% url 'showJoinedClubs' %}",{

@@ -184,9 +184,22 @@
                 this.showBroadcasts(); //展示所有广播的内容
                 this.showClubs();
                 this.showSelfInfo();
+                this.queryRight();
             },
 
             methods:{
+                queryRight(){
+                        axios.get("{% url 'queryRight' %}",{
+                                params:{
+
+                                }
+                            }).then(response=>{
+                                this.symbol = response.data
+                                console.log(this.symbol)
+                            }),err=>{
+                                console.log(err);
+                            };
+                 },
                 deleteBroadcast(broadcast_id){
                         axios.get("{% url 'deleteBroadcast' %}",{
                             params:{
