@@ -208,11 +208,19 @@ def loginCheck(request):
     id = request.GET.get("id")
     pwd = request.GET.get("pwd")
     data = {
-        "allowed" : True,
-        "idWrong" : False,
-        'pwdWrong' : False,
-        "illegal" : False,
+        "allowed": True,
+        "idWrong": False,
+        "pwdWrong":False,
+        "illegal":False
     }
+    if not is_legal([id]):
+        data = {
+            "allowed": False,
+            "idWrong": False,
+            "pwdWrong": False,
+            "illegal": True
+        }
+        return JsonResponse(data,safe=False)
     sql = "select * from user_list where user_id = '%s'" %(id)
     results = select(sql)
     #记录mark
@@ -237,12 +245,20 @@ def registerApply(request):
     id = request.GET.get("id")
     name = request.GET.get("name")
     pwd = request.GET.get("pwd")
-
     data = {
         "allowed": True,
         "idWrong": False,
-        "nameWrong":False
+        "nameWrong":False,
+        "illegal":False
     }
+    if not is_legal([id,name]):
+        data = {
+            "allowed": False,
+            "idWrong": False,
+            "nameWrong": False,
+            "illegal": True
+        }
+        return JsonResponse(data,safe=False)
     # 记录mark
     sql = "select * from user_list where user_id = '%s'" % (id)
     results = select(sql)
@@ -765,8 +781,17 @@ def managerRegisterApply(request):
     data = {
         "allowed": True,
         "idWrong": False,
-        "nameWrong":False
+        "nameWrong":False,
+        "illegal": False
     }
+    if not is_legal([manager_id,manager_name]):
+        data = {
+            "allowed": False,
+            "idWrong": False,
+            "nameWrong": False,
+            "illegal": True
+        }
+        return JsonResponse(data,safe=False)
     # 记录mark
     sql = "select * from manager_list where manager_id = '%s'" % (manager_id)
     results = select(sql)
@@ -796,14 +821,22 @@ def managerLoginCheck(request):
     '''管理员登陆校验'''
     manager_id = request.GET.get("manager_id")
     password = request.GET.get("password")
-
-    sql = "select * from manager_list where manager_id = '%s'" % (manager_id)
-    results = select(sql)
     data = {
         "allowed": True,
         "idWrong": False,
-        'pwdWrong': False
+        'pwdWrong': False,
+        "illegal":False
     }
+    if not is_legal([manager_id]):
+        data = {
+            "allowed": False,
+            "idWrong": False,
+            "nameWrong": False,
+            "illegal": True
+        }
+        return JsonResponse(data,safe=False)
+    sql = "select * from manager_list where manager_id = '%s'" % (manager_id)
+    results = select(sql)
     # 记录mark
     if results:
         row = results[0]

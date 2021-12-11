@@ -64,8 +64,22 @@
                 topic_time: new Date(),
                 symbol: sessionStorage.getItem("symbol")
             },
-
+            mounted:function () {
+                this.queryRight();
+            },
             methods:{
+                 queryRight(){
+                        axios.get("{% url 'queryRight' %}",{
+                                params:{
+
+                                }
+                            }).then(response=>{
+                                this.symbol = response.data
+                                console.log(this.symbol)
+                            }),err=>{
+                                console.log(err);
+                            };
+                 },
                 addTopic() {
                     if(this.title == ""){
                         alert("请输入话题标题")
