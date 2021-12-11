@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect
 from django.http.response import JsonResponse
 import pandas as pd
 import numpy as np
+import re
 # Create your views here.
 
 
@@ -206,13 +207,14 @@ def loginCheck(request):
     '''登陆校验'''
     id = request.GET.get("id")
     pwd = request.GET.get("pwd")
-    sql = "select * from user_list where user_id = '%s'" %(id)
-    results = select(sql)
     data = {
         "allowed" : True,
         "idWrong" : False,
-        'pwdWrong' : False
+        'pwdWrong' : False,
+        "illegal" : False,
     }
+    sql = "select * from user_list where user_id = '%s'" %(id)
+    results = select(sql)
     #记录mark
     if results:
         row = results[0]
@@ -1178,3 +1180,11 @@ def searchWorkerByName(request):
 def queryRight(request):
     data = request.session.get("symbol")
     return JsonResponse(data,safe=False)
+
+def is_legal(content):
+    '''检查特殊符号'''
+    pattern = re.compile(r'\\*-|/|\*|#\\*')
+    for e in content:
+        if pattern.findall(e):
+            return False
+    return True
