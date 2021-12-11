@@ -273,12 +273,6 @@ def registerApply(request):
         data["allowed"] = False
         data["nameWrong"] = True
         return JsonResponse(data, safe=False)
-    if data["allowed"]:
-        request.session["login"] = True
-        # 记录登陆状态
-        request.session["id"] = id
-        # 记录账号id
-        request.session["symbol"] = "user"
     sql = "insert into user_list(user_id,user_name,password) values('%s','%s','%s')" % (id,name,pwd)
     data = insert(sql)
     return JsonResponse(data, safe=False)
@@ -847,12 +841,6 @@ def managerLoginCheck(request):
     else:
         data["allowed"] = False
         data["idWrong"] = True
-    if data["allowed"]:
-        request.session["login"] = True
-        # 记录登陆状态
-        request.session["id"] = manager_id
-        # 记录账号id
-        request.session["symbol"] = "manager"
     return JsonResponse(data, safe=False)
 
 def addWorker(request):
@@ -1217,6 +1205,7 @@ def queryRight(request):
 def is_legal(content):
     '''检查特殊符号'''
     pattern = re.compile(r'\\*-|/|\*|#\\*')
+
     for e in content:
         if pattern.findall(e):
             return False
