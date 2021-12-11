@@ -3,6 +3,8 @@ from django.shortcuts import render,redirect
 from django.http.response import JsonResponse
 import pandas as pd
 import numpy as np
+import re
+import hashlib
 # Create your views here.
 
 
@@ -205,14 +207,23 @@ def generateDictData(result,name_list):
 def loginCheck(request):
     '''登陆校验'''
     id = request.GET.get("id")
-    pwd = request.GET.get("pwd")
+    pwd = sha256hex(request.GET.get("pwd"))
+    data = {
+        "allowed": True,
+        "idWrong": False,
+        "pwdWrong":False,
+        "illegal":False
+    }
+    if not is_legal([id]):
+        data = {
+            "allowed": False,
+            "idWrong": False,
+            "pwdWrong": False,
+            "illegal": True
+        }
+        return JsonResponse(data,safe=False)
     sql = "select * from user_list where user_id = '%s'" %(id)
     results = select(sql)
-    data = {
-        "allowed" : True,
-        "idWrong" : False,
-        'pwdWrong' : False
-    }
     #记录mark
     if results:
         row = results[0]
@@ -234,13 +245,21 @@ def registerApply(request):
     '''注册申请'''
     id = request.GET.get("id")
     name = request.GET.get("name")
-    pwd = request.GET.get("pwd")
-
+    pwd = sha256hex(request.GET.get("pwd"))
     data = {
         "allowed": True,
         "idWrong": False,
-        "nameWrong":False
+        "nameWrong":False,
+        "illegal":False
     }
+    if not is_legal([id,name]):
+        data = {
+            "allowed": False,
+            "idWrong": False,
+            "nameWrong": False,
+            "illegal": True
+        }
+        return JsonResponse(data,safe=False)
     # 记录mark
     sql = "select * from user_list where user_id = '%s'" % (id)
     results = select(sql)
@@ -255,12 +274,6 @@ def registerApply(request):
         data["allowed"] = False
         data["nameWrong"] = True
         return JsonResponse(data, safe=False)
-    if data["allowed"]:
-        request.session["login"] = True
-        # 记录登陆状态
-        request.session["id"] = id
-        # 记录账号id
-        request.session["symbol"] = "user"
     sql = "insert into user_list(user_id,user_name,password) values('%s','%s','%s')" % (id,name,pwd)
     data = insert(sql)
     return JsonResponse(data, safe=False)
@@ -758,13 +771,22 @@ def managerRegisterApply(request):
     '''管理员登陆注册'''
     manager_id = request.GET.get("manager_id")
     manager_name = request.GET.get("manager_name")
-    password = request.GET.get("password")
+    password = sha256hex(request.GET.get("password"))
 
     data = {
         "allowed": True,
         "idWrong": False,
-        "nameWrong":False
+        "nameWrong":False,
+        "illegal": False
     }
+    if not is_legal([manager_id,manager_name]):
+        data = {
+            "allowed": False,
+            "idWrong": False,
+            "nameWrong": False,
+            "illegal": True
+        }
+        return JsonResponse(data,safe=False)
     # 记录mark
     sql = "select * from manager_list where manager_id = '%s'" % (manager_id)
     results = select(sql)
@@ -793,15 +815,23 @@ def managerRegisterApply(request):
 def managerLoginCheck(request):
     '''管理员登陆校验'''
     manager_id = request.GET.get("manager_id")
-    password = request.GET.get("password")
-
-    sql = "select * from manager_list where manager_id = '%s'" % (manager_id)
-    results = select(sql)
+    password = sha256hex(request.GET.get("password"))
     data = {
         "allowed": True,
         "idWrong": False,
-        'pwdWrong': False
+        'pwdWrong': False,
+        "illegal":False
     }
+    if not is_legal([manager_id]):
+        data = {
+            "allowed": False,
+            "idWrong": False,
+            "nameWrong": False,
+            "illegal": True
+        }
+        return JsonResponse(data,safe=False)
+    sql = "select * from manager_list where manager_id = '%s'" % (manager_id)
+    results = select(sql)
     # 记录mark
     if results:
         row = results[0]
@@ -812,12 +842,6 @@ def managerLoginCheck(request):
     else:
         data["allowed"] = False
         data["idWrong"] = True
-    if data["allowed"]:
-        request.session["login"] = True
-        # 记录登陆状态
-        request.session["id"] = manager_id
-        # 记录账号id
-        request.session["symbol"] = "manager"
     return JsonResponse(data, safe=False)
 
 def addWorker(request):
@@ -1178,3 +1202,16 @@ def searchWorkerByName(request):
 def queryRight(request):
     data = request.session.get("symbol")
     return JsonResponse(data,safe=False)
+
+def is_legal(content):
+    '''检查特殊符号'''
+    pattern = re.compile(r'\\*-|/|\*|#\\*')
+    for e in content:
+        if pattern.findall(e):
+            return False
+    return True
+
+def sha256hex(data):
+    sha256 = hashlib.sha256()
+    sha256.update(data.encode())
+    return sha256.hexdigest()
