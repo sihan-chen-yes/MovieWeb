@@ -7,6 +7,9 @@ urlpatterns = [
     path('register/',views.register,name="register"),
     path('login/loginCheck/',views.loginCheck,name="loginCheck"),
     path('userEdit/',views.userEdit,name="userEdit"),
+    path('userEdit/queryRight', views.queryRight, name="queryRight"),
+
+
     path('userEdit/showAllThemes',views.showAllThemes,name="showAllThemes"),
     path('register/registerApply',views.registerApply,name="registerApply"),
     path('uesrEdit/edit',views.edit,name="edit"),
@@ -21,10 +24,16 @@ urlpatterns = [
     path('selfPage',views.selfPage,name="selfPage"),
     path('selfPage/queryRight',views.queryRight,name="queryRight"),
     path('collection', views.collection, name="collection"),
+    path('collection/queryRight', views.queryRight, name="queryRight"),
+
     path('selfClub', views.selfClub, name="selfClub"),
+    path('selfClub/queryRight', views.queryRight, name="queryRight"),
+
     path('selfPage/showJoinedClubs', views.showJoinedClubs, name="showJoinedClubs"),
     path('movieSquare',views.movieSuqare,name="movieSquare"),
     path('movieSquare/showMovieRanks', views.showMovieRanks, name="showMovieRanks"),
+    path('movieSquare/queryRight', views.queryRight, name="queryRight"),
+
     path('movieSquare/moviePage',views.moviePage,name="moviePage"),
     path('movieSquare/workerPage', views.workerPage, name="workerPage"),
     path('movieSquare/showFiveClubs', views.showFiveClubs, name="showFiveClubs"),
@@ -42,14 +51,21 @@ urlpatterns = [
 
     path('movieSquare/moviePage/topicPage', views.topicPage, name="topicPage"),
     path('movieSquare/moviePage/workerPage', views.workerPage, name="workerPage"),
+    path('movieSquare/moviePage/workerPage/queryRight', views.queryRight, name="queryRight"),
+
     path('movieSquare/moviePage/workerPage/addClub', views.addClub, name="addClub"),
     path('movieSquare/moviePage/topicPage/addBroadcast', views.addBroadcast, name="addBroadcast"),
     path('movieSquare/moviePage/topicCreatingPage', views.topicCreatingPage, name="topicCreatingPage"),
     path('movieSquare/moviePage/topicCreatingPage/addTopic', views.addTopic, name="addTopic"),
+    path('movieSquare/moviePage/topicCreatingPage/queryRight', views.queryRight, name="queryRight"),
+
+    path('movieSquare/moviePage/topicPage/queryRight', views.queryRight, name="queryRight"),
     path('movieSquare/moviePage/topicPage/showSingleTopic', views.showSingleTopic, name="showSingleTopic"),
     path('movieSquare/moviePage/topicPage/showBroadcasts', views.showBroadcasts, name="showBroadcasts"),
     path('movieSquare/moviePage/deleteTopic', views.deleteTopic, name="deleteTopic"),
+    path('movieSquare/moviePage/queryRight', views.queryRight, name="queryRight"),
     path('movieSquare/moviePage/score', views.score, name="score"),
+
     path('movieSquare/moviePage/topicPage/deleteBroadcast', views.deleteBroadcast, name="deleteBroadcast"),
 
     path('searchMovieByName',views.searchMovieByName,name="searchMovieByName"),
@@ -78,6 +94,7 @@ urlpatterns = [
     path('managerRegister/managerRegisterApply', views.managerRegisterApply, name="managerRegisterApply"),
 
     path('fanClub/', views.fanClub, name="fanClub"),
+    path('fanClub/queryRight', views.queryRight, name="queryRight"),
     path('fanClub/showFans', views.showFans, name="showFans"),
     path('fanClub/clubCheck', views.clubCheck, name="clubCheck"),
     path('fanClub/showWorker', views.showWorker, name="showWorker"),

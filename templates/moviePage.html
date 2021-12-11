@@ -75,7 +75,7 @@ ul li {
     <a href="{% url 'selfPage' %}">主页</a>
   </li>
   <li class="nav-item ">
-    <a href="{% url 'login' %}">注销</a>
+    <a href="{% url 'logout' %}">注销</a>
   </li>
 
 
@@ -98,7 +98,7 @@ ul li {
       <div class="upload-list-wrap">
         <ul class="upload-list">
           <li class="icon-Upload-Video"><a href="{% url 'selfPage' %}" style="padding-right:44px">个人主页</a></li>
-          <li class="icon-Private"><a href="{% url 'login' %}" style="padding-right:44px">退出登录</a></li>
+          <li class="icon-Private"><a href="{% url 'logout' %}" style="padding-right:44px">退出登录</a></li>
         </ul>
       </div>
   </li>
@@ -500,9 +500,22 @@ ul li {
                 this.showWorkers();
                 this.showMovieThemes();
                 this.showRelatedMovies();
+                this.queryRight();
             },
 
             methods:{
+                 queryRight(){
+                        axios.get("{% url 'queryRight' %}",{
+                                params:{
+
+                                }
+                            }).then(response=>{
+                                this.symbol = response.data
+                                console.log(this.symbol)
+                            }),err=>{
+                                console.log(err);
+                            };
+                 },
                 initScoreBind(radio) {
                     document.getElementById("starNum").value = radio
                     console.log(radio)

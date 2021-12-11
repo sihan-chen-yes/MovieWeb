@@ -48,7 +48,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="/selfPage">个人主页</a></li>
-                            <li><a href="/" onclick="delCookie()">退出登录</a></li>
+                            <li><a href="{% url 'logout' %}" onclick="delCookie()">退出登录</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -393,9 +393,22 @@
             this.showSingleWorker()
             this.showParticipatedMovies()
             this.showRelatedWorkers()
+            this.queryRight()
         },
 
         methods:{
+               	queryRight(){
+                        axios.get("{% url 'queryRight' %}",{
+                                params:{
+
+                                }
+                            }).then(response=>{
+                                this.symbol = response.data
+                                console.log(this.symbol)
+                            }),err=>{
+                                console.log(err);
+                            };
+                 },
              showParticipatedMovies(){
                 axios.get("{% url 'showParticipatedMovies' %}",{
                         params:{
