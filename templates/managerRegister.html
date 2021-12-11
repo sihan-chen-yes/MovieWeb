@@ -60,6 +60,7 @@
                 name:null,
                 pwd:null,
                 pwdAgain:null,
+                illegal: false
             },
             methods:{
                 back() {
@@ -87,6 +88,7 @@
                             this.allowed = response.data["allowed"]
                             this.idWrong = response.data["idWrong"]
                             this.nameWrong = response.data["nameWrong"]
+                            this.illegal = response.data["illegal"]
                             if (this.allowed === true) {
                                 alert("注册成功！请登录")
                                 window.location.href = "{% url 'managerLogin'%}"
@@ -94,6 +96,8 @@
                                 alert("账号已存在！")
                             } else if (this.nameWrong === true) {
                                 alert("用户名已存在！")
+                            } else if (this.illegal === true) {
+                                alert("存在非法字符！")
                             } else {
                                 alert("注册成功！请登录")
                                 window.location.href = "{% url 'managerLogin'%}"

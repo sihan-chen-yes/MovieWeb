@@ -60,6 +60,7 @@
                 pwdWrong:false,
                 id:null,
                 pwd:null,
+                illegal: false
             },
             methods:{
                 log() {
@@ -77,6 +78,7 @@
                             this.allowed = response.data["allowed"]
                             this.idWrong = response.data["idWrong"]
                             this.pwdWrong = response.data["pwdWrong"]
+                            this.illegal = response.data["illegal"]
                             if (this.allowed === true) {
                                 window.sessionStorage.setItem("id",this.id)
                                 window.sessionStorage.setItem("symbol","user")
@@ -85,6 +87,8 @@
                                 alert("账号不存在，请注册")
                             } else if (this.pwdWrong === true) {
                                 alert("密码错误！")
+                            } else if (this.illegal === true) {
+                                alert("存在非法字符！")
                             }
                         }),err=>{
                             console.log(err);
