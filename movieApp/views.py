@@ -4,6 +4,7 @@ from django.http.response import JsonResponse
 import pandas as pd
 import numpy as np
 import re
+import hashlib
 # Create your views here.
 
 
@@ -206,7 +207,7 @@ def generateDictData(result,name_list):
 def loginCheck(request):
     '''登陆校验'''
     id = request.GET.get("id")
-    pwd = request.GET.get("pwd")
+    pwd = sha256hex(request.GET.get("pwd"))
     data = {
         "allowed": True,
         "idWrong": False,
@@ -244,7 +245,7 @@ def registerApply(request):
     '''注册申请'''
     id = request.GET.get("id")
     name = request.GET.get("name")
-    pwd = request.GET.get("pwd")
+    pwd = sha256hex(request.GET.get("pwd"))
     data = {
         "allowed": True,
         "idWrong": False,
@@ -770,7 +771,7 @@ def managerRegisterApply(request):
     '''管理员登陆注册'''
     manager_id = request.GET.get("manager_id")
     manager_name = request.GET.get("manager_name")
-    password = request.GET.get("password")
+    password = sha256hex(request.GET.get("password"))
 
     data = {
         "allowed": True,
@@ -814,7 +815,7 @@ def managerRegisterApply(request):
 def managerLoginCheck(request):
     '''管理员登陆校验'''
     manager_id = request.GET.get("manager_id")
-    password = request.GET.get("password")
+    password = sha256hex(request.GET.get("password"))
     data = {
         "allowed": True,
         "idWrong": False,
@@ -1205,8 +1206,12 @@ def queryRight(request):
 def is_legal(content):
     '''检查特殊符号'''
     pattern = re.compile(r'\\*-|/|\*|#\\*')
-
     for e in content:
         if pattern.findall(e):
             return False
     return True
+
+def sha256hex(data):
+    sha256 = hashlib.sha256()
+    sha256.update(data.encode())
+    return sha256.hexdigest()
