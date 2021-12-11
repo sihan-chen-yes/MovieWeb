@@ -3,6 +3,7 @@ from . import views
 #url配置
 urlpatterns = [
     path('',views.login,name="login"),
+    path('logout',views.logout,name="logout"),
     path('register/',views.register,name="register"),
     path('login/loginCheck/',views.loginCheck,name="loginCheck"),
     path('userEdit/',views.userEdit,name="userEdit"),
@@ -18,6 +19,7 @@ urlpatterns = [
     path('selfPage/show',views.show,name="show"),
     path('selfPage/showManager', views.showManager, name="showManager"),
     path('selfPage',views.selfPage,name="selfPage"),
+    path('selfPage/queryRight',views.queryRight,name="queryRight"),
     path('collection', views.collection, name="collection"),
     path('selfClub', views.selfClub, name="selfClub"),
     path('selfPage/showJoinedClubs', views.showJoinedClubs, name="showJoinedClubs"),

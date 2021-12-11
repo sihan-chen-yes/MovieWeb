@@ -1,5 +1,5 @@
 import pymysql
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http.response import JsonResponse
 import pandas as pd
 import numpy as np
@@ -23,53 +23,117 @@ fan_club_name_list = ["club_id","club_name"]
 
 #分别定位到不同的html页面
 def login(request):
+    '''进入登陆页面 如果以及登陆自动跳转selfPage'''
     # ip = getIp(request)
-    return render(request, "login.html")
+    login = request.session.get("login",False)
+    #获取登陆状态
+    if login:
+        return redirect("/selfPage")
+    else:
+        return render(request, "login.html")
+
+def logout(request):
+    '''退出登陆 跳转登陆界面'''
+    request.session.flush()
+    return redirect("/")
 
 def register(request):
+    '''进入注册页面'''
     return render(request, "register.html")
 
 def managerLogin(request):
+    '''管理员登陆页面'''
     return render(request, "managerLogin.html")
 
 def managerRegister(request):
+    '''管理员注册页面'''
     return render(request, "managerRegister.html")
 
 def userEdit(request):
-    return render(request,"userEdit.html")
+    '''用户编辑信息页面'''
+    login = request.session.get("login", False)
+    if login:
+        return render(request,"userEdit.html")
+    else:
+        return redirect("/")
 
 def selfPage(request):
-    return render(request,"selfPage.html")
+    '''进入个人页面'''
+    login = request.session.get("login", False)
+    if login:
+        return render(request,"selfPage.html")
+    else:
+        return redirect("/")
 
 def movieSuqare(request):
-    return render(request,"movieSquare.html")
+    login = request.session.get("login", False)
+    if login:
+        return render(request, "movieSquare.html")
+    else:
+        return redirect("/")
 
 def moviePage(request):
-    return render(request,"moviePage.html")
+    login = request.session.get("login", False)
+    if login:
+        return render(request, "moviePage.html")
+    else:
+        return redirect("/")
 
 def topicPage(request):
-    return render(request,"topicPage.html")
+    login = request.session.get("login", False)
+    if login:
+        return render(request, "topicPage.html")
+    else:
+        return redirect("/")
 
 def topicCreatingPage(request):
-    return render(request,"topicCreatingPage.html")
+    login = request.session.get("login", False)
+    if login:
+        return render(request, "topicCreatingPage.html")
+    else:
+        return redirect("/")
 
 def workerPage(request):
-    return render(request,"workerPage.html")
+    login = request.session.get("login", False)
+    if login:
+        return render(request, "workerPage.html")
+    else:
+        return redirect("/")
 
 def fanClub(request):
-    return render(request,"fanClub.html")
+    login = request.session.get("login", False)
+    if login:
+        return render(request, "fanClub.html")
+    else:
+        return redirect("/")
 
 def movieAddingPage(request):
-    return render(request, "movieAddingPage.html")
+    login = request.session.get("login", False)
+    if login:
+        return render(request, "movieAddingPage.html")
+    else:
+        return redirect("/")
 
 def collection(request):
-    return render(request, "collection.html")
+    login = request.session.get("login", False)
+    if login:
+        return render(request, "collection.html")
+    else:
+        return redirect("/")
 
 def selfClub(request):
-    return render(request, "selfClub.html")
+    login = request.session.get("login", False)
+    if login:
+        return render(request, "selfClub.html")
+    else:
+        return redirect("/")
 
 def addWorkerForMovie(request):
-    return render(request, "addWorkerForMovie.html")
+    login = request.session.get("login", False)
+    if login:
+        return render(request, "addWorkerForMovie.html")
+    else:
+        return redirect("/")
 
 def getIp(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -120,6 +184,8 @@ def procedureCall(proc_name,args):
     cursor = db.cursor()
     try:
         cursor.callproc(proc_name, args)
+        res = cursor.fetchall()
+        print(res)
         db.commit()
         mark = True
     except:
@@ -140,7 +206,6 @@ def loginCheck(request):
     '''登陆校验'''
     id = request.GET.get("id")
     pwd = request.GET.get("pwd")
-
     sql = "select * from user_list where user_id = '%s'" %(id)
     results = select(sql)
     data = {
@@ -157,6 +222,12 @@ def loginCheck(request):
     else:
         data["allowed"] = False
         data["idWrong"] = True
+    if data["allowed"]:
+        request.session["login"] = True
+        # 记录登陆状态
+        request.session["id"] = id
+        # 记录账号id
+        request.session["symbol"] = "user"
     return JsonResponse(data, safe=False)
 
 def registerApply(request):
@@ -184,7 +255,12 @@ def registerApply(request):
         data["allowed"] = False
         data["nameWrong"] = True
         return JsonResponse(data, safe=False)
-
+    if data["allowed"]:
+        request.session["login"] = True
+        # 记录登陆状态
+        request.session["id"] = id
+        # 记录账号id
+        request.session["symbol"] = "user"
     sql = "insert into user_list(user_id,user_name,password) values('%s','%s','%s')" % (id,name,pwd)
     data = insert(sql)
     return JsonResponse(data, safe=False)
@@ -194,7 +270,7 @@ def edit(request):
     gender = request.GET.get("gender")
     email = request.GET.get("email")
     phone = request.GET.get("phone")
-    id = request.GET.get("id")
+    id = request.session.get("id")
     themes = request.GET.get("themes")
     #前端传入是字符串 转化成list
     tempThemes = themes
@@ -224,7 +300,7 @@ def editManager(request):
     gender = request.GET.get("gender")
     email = request.GET.get("email")
     phone = request.GET.get("phone")
-    id = request.GET.get("id")
+    id = request.session.get("id")
 
     sql = "update manager_list set gender = '%s',email = '%s',phone = '%s' where manager_id = '%s'" % (gender,email,phone,id)
     mark = update(sql)
@@ -268,8 +344,7 @@ def showMovie(request=None,film_id=None):
 
 def show(request):
     '''显示用户收藏的电影以及用户信息'''
-    id = request.GET.get("id")
-
+    id = request.session.get("id")
     data = {}
     data["film_info"] = []
     sql = "select * from user_collection where user_id = '%s'" % (id)
@@ -301,7 +376,7 @@ def show(request):
 
 def showManager(request):
     '''显示管理员收藏的电影以及用户信息'''
-    id = request.GET.get("id")
+    id = request.session.get("id")
     data = {}
     sql = "select * from manager_list where manager_id = '%s'" %(id)
     user_results = select(sql)
@@ -320,7 +395,7 @@ def showManager(request):
     return JsonResponse(data,safe=False)
 
 def collect(request):
-    user_id = request.GET.get("id")
+    user_id = request.session.get("id")
     film_id = request.GET.get("film_id")
     sql = "select * from user_collection where user_id = '%s' and film_id = '%s'" % (user_id,film_id)
     results = select(sql)
@@ -332,7 +407,7 @@ def collect(request):
     return JsonResponse(mark, safe=False)
 
 def cancelCollect(request):
-    user_id = request.GET.get("id")
+    user_id = request.session.get("id")
     film_id = request.GET.get("film_id")
     sql = "select * from user_collection where user_id = '%s' and film_id = '%s'" % (user_id, film_id)
     results = select(sql)
@@ -435,7 +510,7 @@ def showSingleTopic(request):
 def addTopic(request):
     '''增加话题'''
     film_id = request.GET.get("film_id")
-    user_id = request.GET.get("user_id")
+    user_id = request.session.get("id")
     title = request.GET.get("title")
     topic_text = request.GET.get("topic_text")
     topic_time = pd.to_datetime(request.GET.get("topic_time"))
@@ -448,7 +523,7 @@ def addTopic(request):
 def addBroadcast(request):
     '''增加子话题'''
     topic_id = request.GET.get("topic_id")
-    user_id = request.GET.get("user_id")
+    user_id = request.session.get("id")
     broadcast_text = request.GET.get("broadcast_text")
     broadcast_time = pd.to_datetime(request.GET.get("broadcast_time"))
     sql = "insert into broadcast_list(topic_id, user_id, broadcast_text, broadcast_time) values('%s','%s','%s','%s')" % \
@@ -474,9 +549,8 @@ def deleteBroadcast(request):
 def score(request):
     '''增加电影评分'''
     film_id = request.GET.get("film_id")
-    user_id = request.GET.get("user_id")
+    user_id = request.session.get("id")
     score_number = request.GET.get("score_number")
-    mark = False
     #先检查之前是否评分过
     sql = "select * from user_score where user_id = '%s' and film_id = '%s'" % (user_id,film_id)
     results = select(sql)
@@ -632,7 +706,7 @@ def showSingleWorker(request=None,worker_id=None):
 
 def showPersonalThemes(request):
     '''显示个人主题'''
-    user_id = request.GET.get("user_id")
+    user_id = request.session.get("id")
     sql = "select user_theme.theme_id,theme_name from user_theme,theme_list " \
           "where user_id = '%s' and user_theme.theme_id = theme_list.theme_id" % (user_id)
     results = select(sql)
@@ -662,7 +736,7 @@ def showMovieThemes(request=None,film_id=None):
 
 def showRecommendedMovies(request):
     '''根据用户的偏好主题推荐电影'''
-    user_id = request.GET.get("id")
+    user_id = request.session.get("id")
     sql = "select film_id from user_theme,film_theme " \
           "where user_id = '%s' and user_theme.theme_id = film_theme.theme_id" %(user_id)
     results = (np.unique(select(sql))).tolist()
@@ -705,7 +779,12 @@ def managerRegisterApply(request):
         data["allowed"] = False
         data["nameWrong"] = True
         return JsonResponse(data, safe=False)
-
+    if data["allowed"]:
+        request.session["login"] = True
+        # 记录登陆状态
+        request.session["id"] = manager_id
+        # 记录账号id
+        request.session["symbol"] = "manager"
     sql = "insert into manager_list(manager_id,manager_name,password) values('%s','%s','%s')"\
           % (manager_id,manager_name,password)
     insert(sql)
@@ -733,10 +812,17 @@ def managerLoginCheck(request):
     else:
         data["allowed"] = False
         data["idWrong"] = True
+    if data["allowed"]:
+        request.session["login"] = True
+        # 记录登陆状态
+        request.session["id"] = manager_id
+        # 记录账号id
+        request.session["symbol"] = "manager"
     return JsonResponse(data, safe=False)
 
 def addWorker(request):
     worker_name = request.GET.get("worker_name")
+    assert worker_name
     worker_picture = request.GET.get("worker_picture")
     worker_introduction = request.GET.get("worker_introduction")
     mark = procedureCall('addWorker',[worker_name,worker_picture,worker_introduction])
@@ -750,7 +836,7 @@ def addWorkerToMovie(request):
     return JsonResponse(mark,safe=False)
 
 def uploadPicture(request):
-    user_id = request.GET.get("user_id")
+    user_id = request.session.get("id")
     user_picture = request.GET.get("user_picture")
     sql = "select * from user_list where user_id = '%s'" % (user_id)
     mark = False
@@ -779,7 +865,7 @@ def addClub(request):
 
 def joinClub(request):
     '''将用户移入粉丝团'''
-    user_id = request.GET.get("user_id")
+    user_id = request.session.get("id")
     club_id = request.GET.get("club_id")
     sql = "select * from fan_club where club_id = '%s'" % (club_id)
     results = select(sql)
@@ -792,7 +878,7 @@ def joinClub(request):
 
 def quitClub(request):
     '''将用户移出粉丝团'''
-    user_id = request.GET.get("user_id")
+    user_id = request.session.get("id")
     club_id = request.GET.get("club_id")
     sql = "select * from user_in_club where user_id = '%s' and club_id = '%s'" % (user_id,club_id)
     results = select(sql)
@@ -844,7 +930,7 @@ def showClubs(request):
 
 def showJoinedClubs(request):
     '''显示用户已经加入的粉丝团'''
-    user_id = request.GET.get("user_id")
+    user_id = request.session.get("id")
     data = []
     sql = "select fan_club.club_id,fan_club.club_name," \
           "worker_list.worker_id,worker_list.worker_name,worker_list.worker_picture,worker_list.worker_introduction " \
@@ -857,7 +943,7 @@ def showJoinedClubs(request):
     return JsonResponse(data, safe=False)
 
 def clubCheck(request):
-    user_id = request.GET.get("user_id")
+    user_id = request.session.get("id")
     club_id = request.GET.get("club_id")
     data = {}
     data["inClub"] = True
@@ -1088,3 +1174,7 @@ def searchWorkerByName(request):
     for result in results:
         data.append(generateDictData(result, worker_list_name_list))
     return JsonResponse(data, safe=False)
+
+def queryRight(request):
+    data = request.session.get("symbol")
+    return JsonResponse(data,safe=False)
