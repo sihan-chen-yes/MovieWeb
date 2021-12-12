@@ -9,7 +9,7 @@ import hashlib
 
 
 db_user = "root"
-db_password = "123"
+db_password = "61lyx520837"
 database = "movie"
 host = "localhost"
 #表头
