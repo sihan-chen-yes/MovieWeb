@@ -53,7 +53,7 @@
                         </ul>
                     </li>
 
-                    <li><a href="{% url 'movieAddingPage' %}">添加影人</a></li>
+                    <li v-if="this.symbol == 'manager'"><a href="{% url 'movieAddingPage' %}">添加影人</a></li>
                 </ul>
 
                 <button class="btn btn-primary btm-xs" v-on:click="normalShow()" style="float:right;margin-left:7px;">返回</button>
