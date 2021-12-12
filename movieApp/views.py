@@ -801,12 +801,6 @@ def managerRegisterApply(request):
         data["allowed"] = False
         data["nameWrong"] = True
         return JsonResponse(data, safe=False)
-    if data["allowed"]:
-        request.session["login"] = True
-        # 记录登陆状态
-        request.session["id"] = manager_id
-        # 记录账号id
-        request.session["symbol"] = "manager"
     sql = "insert into manager_list(manager_id,manager_name,password) values('%s','%s','%s')"\
           % (manager_id,manager_name,password)
     insert(sql)
@@ -842,6 +836,12 @@ def managerLoginCheck(request):
     else:
         data["allowed"] = False
         data["idWrong"] = True
+    if data["allowed"]:
+        request.session["login"] = True
+        # 记录登陆状态
+        request.session["id"] = manager_id
+        # 记录账号id
+        request.session["symbol"] = "manager"
     return JsonResponse(data, safe=False)
 
 def addWorker(request):
